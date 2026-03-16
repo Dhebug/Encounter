@@ -1783,10 +1783,15 @@ check_if_movable                    ; if (itemPtr->flags & ITEM_FLAG_IMMOVABLE)
     lda (_gStreamItemPtr),y         ; Load itemPtr->flags
     and #ITEM_FLAG_IMMOVABLE
     beq check_if_needs_container
-    
-    lda #<_gTextErrorCannotDo       ; This item cannot be moved
-    ldx #>_gTextErrorCannotDo
-    jmp _PrintErrorMessageAsmAX
+
+    ; Dispatch to immovable item messages (allows custom "why" per item)
+    lda _gCurrentItem
+    sta _param0
+    lda #<_gImmovableItemMappingsArray
+    sta _param1+0
+    lda #>_gImmovableItemMappingsArray
+    sta _param1+1
+    jmp _DispatchStream
 
 check_if_needs_container
     ldy #5                          ; Usable containers flags offset

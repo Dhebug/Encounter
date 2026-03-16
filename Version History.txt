@@ -401,3 +401,4 @@
 - The mortar and the petrol can now be inspected
 - The Tardis has now moved to a much more logical location
 - Applied Jasmin specific fixes found by Chema, Iss and Mininaller
+- Added custom messages about why some items can't be taken (too heavy, too far, etc...)

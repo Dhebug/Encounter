@@ -7041,19 +7041,6 @@ dog_net
     JUMP(_ErrorNothingToCatch)
 .)
 
-_ErrorNoFishing
-.(
-    CLEAR_TEXT_AREA(5)
-#ifdef LANGUAGE_FR
-    INFO_MESSAGE("Jamais aimé la pêche...")
-#elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Aldri likt å fiske...")
-#else
-    INFO_MESSAGE("Never did like fishing...")
-#endif    
-    END_AND_REFRESH
-.)
-
 
 _ErrorTooRisky
 .(
@@ -7082,19 +7069,6 @@ _ErrorNothingToCatch
     END_AND_REFRESH
 .)
 
-
-_ErrorNoStealing
-.(
-    CLEAR_TEXT_AREA(5)
-#ifdef LANGUAGE_FR
-    INFO_MESSAGE("Doucement. Je suis pas un voleur.")
-#elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Rolig nå. Jeg er ingen tyv.")
-#else
-    INFO_MESSAGE("Steady on. I'm no thief.")
-#endif    
-    END_AND_REFRESH
-.)
 
 
 
@@ -7295,9 +7269,6 @@ _gTakeItemMappingsArray
     VALUE_MAPPING(e_ITEM_ProtectionSuit    , _TakeProtectionSuit)
     VALUE_MAPPING(e_ITEM_Hose              , _TakeHose)
     VALUE_MAPPING(e_ITEM_Net               , _TakeNet)
-    VALUE_MAPPING(e_ITEM_Fish              , _ErrorNoFishing)
-    VALUE_MAPPING(e_ITEM_Oric              , _ErrorNoStealing)
-    VALUE_MAPPING(e_ITEM_GameConsole       , _ErrorNoStealing)
     VALUE_MAPPING(255                      , _TakeCommon)     ; Default option
 
 
@@ -7437,6 +7408,164 @@ _TakeCommon
 .)
 
 
+/* MARK: Immovable 🛄
+
+██╗███╗   ███╗███╗   ███╗ ██████╗ ██╗   ██╗ █████╗ ██████╗ ██╗     ███████╗  
+██║████╗ ████║████╗ ████║██╔═══██╗██║   ██║██╔══██╗██╔══██╗██║     ██╔════╝  
+██║██╔████╔██║██╔████╔██║██║   ██║██║   ██║███████║██████╔╝██║     █████╗    
+██║██║╚██╔╝██║██║╚██╔╝██║██║   ██║╚██╗ ██╔╝██╔══██║██╔══██╗██║     ██╔══╝    
+██║██║ ╚═╝ ██║██║ ╚═╝ ██║╚██████╔╝ ╚████╔╝ ██║  ██║██████╔╝███████╗███████╗  
+╚═╝╚═╝     ╚═╝╚═╝     ╚═╝ ╚═════╝   ╚═══╝  ╚═╝  ╚═╝╚═════╝ ╚══════╝╚══════╝  */
+
+; Dispatched when trying to TAKE an immovable item.
+; Allows custom messages explaining why items can't be taken.
+_gImmovableItemMappingsArray
+    VALUE_MAPPING(e_ITEM_LargeDove         , _ImmovableDove)
+    VALUE_MAPPING(e_ITEM_Dog               , _ImmovableLiving)
+    VALUE_MAPPING(e_ITEM_Thug              , _ImmovableLiving)
+    VALUE_MAPPING(e_ITEM_YoungGirl         , _ImmovableLiving)
+    VALUE_MAPPING(e_ITEM_HeavySafe         , _ImmovableTooHeavy)
+    VALUE_MAPPING(e_ITEM_Fridge            , _ImmovableTooHeavy)
+    VALUE_MAPPING(e_ITEM_Car               , _ImmovableTooHeavy)
+    VALUE_MAPPING(e_ITEM_TVCabinet         , _ImmovableTooHeavy)
+    VALUE_MAPPING(e_ITEM_CellarWindow      , _ImmovableAttached)
+    VALUE_MAPPING(e_ITEM_NormalWindow      , _ImmovableAttached)
+    VALUE_MAPPING(e_ITEM_Medicinecabinet   , _ImmovableAttached)
+    VALUE_MAPPING(e_ITEM_Curtain           , _ImmovableAttached)
+    VALUE_MAPPING(e_ITEM_GunCabinet        , _ImmovableAttached)
+    VALUE_MAPPING(e_ITEM_AlarmSwitch       , _ImmovableAttached)
+    VALUE_MAPPING(e_ITEM_AlarmPanel        , _ImmovableAttached)
+    VALUE_MAPPING(e_ITEM_SecurityDoor      , _ImmovableAttached)
+    VALUE_MAPPING(e_ITEM_UnitedKingdomMap  , _ImmovableAttached)
+    VALUE_MAPPING(e_ITEM_AlarmIndicator    , _ImmovableAttached)
+    VALUE_MAPPING(e_ITEM_Drawer            , _ImmovableAttached)
+    VALUE_MAPPING(e_ITEM_CarBoot           , _ImmovablePartOfCar)
+    VALUE_MAPPING(e_ITEM_CarDoor           , _ImmovablePartOfCar)
+    VALUE_MAPPING(e_ITEM_CarTank           , _ImmovablePartOfCar)
+    VALUE_MAPPING(e_ITEM_Tombstone         , _ImmovableNotSerious)
+    VALUE_MAPPING(e_ITEM_HoleInDoor        , _ImmovableNotSerious)
+    VALUE_MAPPING(e_ITEM_Church            , _ImmovableNotSerious)
+    VALUE_MAPPING(e_ITEM_Well              , _ImmovableNotSerious)
+    VALUE_MAPPING(e_ITEM_Tree              , _ImmovableNotSerious)
+    VALUE_MAPPING(e_ITEM_FishPond          , _ImmovableNotSerious)
+    VALUE_MAPPING(e_ITEM_FrontDoor         , _ImmovableNotSerious)
+    VALUE_MAPPING(e_ITEM_PanicRoomWindow   , _ImmovableNotSerious)
+    VALUE_MAPPING(e_ITEM_Graffiti          , _ImmovableNotSerious)
+    VALUE_MAPPING(e_ITEM_RoadSign          , _ImmovableNotSerious)
+    VALUE_MAPPING(e_ITEM_Pit               , _ImmovableNotSerious)
+    VALUE_MAPPING(e_ITEM_Heap              , _ImmovableNotSerious)
+    VALUE_MAPPING(e_ITEM_Trashcan          , _ImmovableNotSerious)
+    VALUE_MAPPING(e_ITEM_Fish              , _ImmovableNoFishing)
+    VALUE_MAPPING(e_ITEM_Computer          , _ImmovableNoStealing)
+    VALUE_MAPPING(e_ITEM_Television        , _ImmovableNoStealing)
+    VALUE_MAPPING(e_ITEM_Oric              , _ImmovableNoStealing)
+    VALUE_MAPPING(e_ITEM_GameConsole       , _ImmovableNoStealing)
+    VALUE_MAPPING(255                      , _ImmovableDefault)   ; Default: generic message
+
+
+_ImmovableDove
+.(
+    ; Is the dove on the ground eating? (bread or cut apples present)
+    JUMP_IF_TRUE(_ScareDoveAway,CHECK_ITEM_LOCATION(e_ITEM_Bread,e_LOC_WOODEDAVENUE))
+    JUMP_IF_TRUE(_ScareDoveAway,CHECK_ITEM_LOCATION(e_ITEM_Apple,e_LOC_WOODEDAVENUE))
+    ; Dove is still up in the tree
+#ifdef LANGUAGE_FR
+    ERROR_MESSAGE("La colombe est hors de portée")
+#elif defined(LANGUAGE_NO)
+    ERROR_MESSAGE("Duen er utenfor rekkevidde")
+#else
+    ERROR_MESSAGE("The dove is out of reach")
+#endif
+    END_AND_PARTIAL_REFRESH
+.)
+
+
+_ImmovableLiving
+#ifdef LANGUAGE_FR
+    ERROR_MESSAGE("Il vaut mieux ne pas essayer...")
+#elif defined(LANGUAGE_NO)
+    ERROR_MESSAGE("Bedre å ikke prøve...")
+#else
+    ERROR_MESSAGE("Better not try that...")
+#endif
+    END_AND_PARTIAL_REFRESH
+
+
+_ImmovableTooHeavy
+#ifdef LANGUAGE_FR
+    ERROR_MESSAGE("C'est bien trop lourd")
+#elif defined(LANGUAGE_NO)
+    ERROR_MESSAGE("Det er altfor tungt")
+#else
+    ERROR_MESSAGE("That's way too heavy")
+#endif
+    END_AND_PARTIAL_REFRESH
+
+
+_ImmovableAttached
+#ifdef LANGUAGE_FR
+    ERROR_MESSAGE("C'est solidement fixé")
+#elif defined(LANGUAGE_NO)
+    ERROR_MESSAGE("Det sitter godt fast")
+#else
+    ERROR_MESSAGE("It's firmly attached")
+#endif
+    END_AND_PARTIAL_REFRESH
+
+
+_ImmovablePartOfCar
+#ifdef LANGUAGE_FR
+    ERROR_MESSAGE("Ça fait partie de la voiture")
+#elif defined(LANGUAGE_NO)
+    ERROR_MESSAGE("Det er en del av bilen")
+#else
+    ERROR_MESSAGE("It's part of the car")
+#endif
+    END_AND_PARTIAL_REFRESH
+
+
+_ImmovableNotSerious
+#ifdef LANGUAGE_FR
+    ERROR_MESSAGE("C'est pas sérieux...")
+#elif defined(LANGUAGE_NO)
+    ERROR_MESSAGE("Det er ikke seriøst...")
+#else
+    ERROR_MESSAGE("Seriously?")
+#endif
+    END_AND_PARTIAL_REFRESH
+
+
+_ImmovableNoFishing
+#ifdef LANGUAGE_FR
+    ERROR_MESSAGE("Jamais aimé la pêche...")
+#elif defined(LANGUAGE_NO)
+    ERROR_MESSAGE("Aldri likt å fiske...")
+#else
+    ERROR_MESSAGE("Never did like fishing...")
+#endif
+    END_AND_PARTIAL_REFRESH
+
+
+_ImmovableNoStealing
+#ifdef LANGUAGE_FR
+    ERROR_MESSAGE("Doucement. Je suis pas un voleur.")
+#elif defined(LANGUAGE_NO)
+    ERROR_MESSAGE("Rolig nå. Jeg er ingen tyv.")
+#else
+    ERROR_MESSAGE("Steady on. I'm no thief.")
+#endif
+    END_AND_PARTIAL_REFRESH
+
+
+_ImmovableDefault
+#ifdef LANGUAGE_FR
+    ERROR_MESSAGE("Je ne peux pas faire ça")
+#elif defined(LANGUAGE_NO)
+    ERROR_MESSAGE("Jeg kan ikke gjøre det")
+#else
+    ERROR_MESSAGE("I can't do that")
+#endif
+    END_AND_PARTIAL_REFRESH
 
 
 _ShowProtectionSuit
