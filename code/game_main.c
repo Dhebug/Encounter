@@ -222,7 +222,7 @@ void ShowHelp()
 
 void DrawArrowsBottom()
 {
-    // The redefined charcters to draw the bottom part of the directional arrows \v/
+    // The redefined characters to draw the bottom part of the directional arrows \v/
 	poke(0xbb80+16*40+16,9);                      // ALT charset
 	memcpy((char*)0xbb80+16*40+17,";<=>?@",6);
 }
