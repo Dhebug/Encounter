@@ -3368,7 +3368,8 @@ _InspectDove
     ; If the dove is in the inventory or in the net, then inspect it shows some other message.
     JUMP_IF_FALSE(dove_not_happy,CHECK_ITEM_FLAG(e_ITEM_LargeDove,ITEM_FLAG_IMMOVABLE))
     JUMP_IF_TRUE(dove_eating,CHECK_ITEM_LOCATION(e_ITEM_Bread,e_LOC_WOODEDAVENUE))
-    
+    JUMP_IF_TRUE(dove_eating,CHECK_ITEM_LOCATION(e_ITEM_Apple,e_LOC_WOODEDAVENUE))
+
     ; Else it is happy chirping around
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Elle roucoule sur une branche haute")
@@ -6694,7 +6695,7 @@ _SubBreadCommon
     IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_WOODEDAVENUE),in_the_woods)
         SET_ITEM_LOCATION(e_ITEM_Bread,e_LOC_CURRENT)
         // Is the dove still there?
-        IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_LargeDove,e_LOC_GONE_FOREVER),dove_present)
+        IF_FALSE(CHECK_ITEM_LOCATION(e_ITEM_LargeDove,e_LOC_GONE_FOREVER),dove_present)
             // The bird is now possible to catch
             INCREASE_SCORE(POINTS_GAVE_BREAD_TO_DOVE)
             PLAY_SOUND(_Swoosh)
@@ -6756,7 +6757,7 @@ _SubApplesCommon
     // Are we in the woods?
     IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_WOODEDAVENUE),in_the_woods)
         // Is the dove still there?
-        IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_LargeDove,e_LOC_GONE_FOREVER),dove_present)
+        IF_FALSE(CHECK_ITEM_LOCATION(e_ITEM_LargeDove,e_LOC_GONE_FOREVER),dove_present)
             SET_ITEM_LOCATION(e_ITEM_Apple,e_LOC_CURRENT)
             // Are the apples cut?
             IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_Apple,ITEM_FLAG_TRANSFORMED),apple_cut)
@@ -6793,11 +6794,11 @@ _SubDoveEating
 .(
     DISPLAY_IMAGE(LOADER_PICTURE_DOVE_EATING_BREADCRUMBS)
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Bon. C'est le moment.")
+    INFO_MESSAGE("Il me faut de quoi l'attraper...")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Nå er sjansen min.")
+    INFO_MESSAGE("Jeg trenger noe å fange den med...")
 #else
-    INFO_MESSAGE("Right. Now's my chance.")
+    INFO_MESSAGE("I need something to catch it...")
 #endif    
     RETURN
 .)
@@ -6958,11 +6959,11 @@ _ScareDoveAway
 .(
     CLEAR_TEXT_AREA(5)
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Bravo. Elle s'est envolée.")
+    INFO_MESSAGE("Bravo. La colombe s'est envolée.")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Flott. Skremte den vekk.")
+    INFO_MESSAGE("Flott. Skremte duen vekk.")
 #else
-    INFO_MESSAGE("Brilliant. Scared it off.")
+    INFO_MESSAGE("Brilliant. Scared the dove off.")
 #endif    
     SET_ITEM_LOCATION(e_ITEM_LargeDove,e_LOC_GONE_FOREVER)
     WAIT_KEYPRESS
@@ -6999,11 +7000,12 @@ _ThrowNet
 _UseNet
 .(
     // We can use the net to trap the dove in the wooded avenue if she is on the ground eating the bread or the apples
-    JUMP_IF_FALSE(dove_net,CHECK_PLAYER_LOCATION(e_LOC_WOODEDAVENUE))
-    JUMP_IF_FALSE(dove_net,CHECK_ITEM_LOCATION(e_ITEM_LargeDove,e_LOC_WOODEDAVENUE))
-    JUMP_IF_TRUE(throw_net,CHECK_ITEM_LOCATION(e_ITEM_Bread,e_LOC_WOODEDAVENUE))
-    JUMP_IF_FALSE(dove_tree,CHECK_ITEM_LOCATION(e_ITEM_Apple,e_LOC_WOODEDAVENUE))
-throw_net    
+    JUMP_IF_FALSE(end_dove_net,CHECK_PLAYER_LOCATION(e_LOC_WOODEDAVENUE))
+    JUMP_IF_FALSE(end_dove_net,CHECK_ITEM_LOCATION(e_ITEM_LargeDove,e_LOC_WOODEDAVENUE))
+    JUMP_IF_TRUE(dove_net,CHECK_ITEM_LOCATION(e_ITEM_Bread,e_LOC_WOODEDAVENUE))
+    JUMP_IF_FALSE(_ImmovableDove,CHECK_ITEM_LOCATION(e_ITEM_Apple,e_LOC_WOODEDAVENUE))  ; If the dove is still in the tree, indicate we can't do that
+    JUMP_IF_FALSE(_ImmovableDove,CHECK_ITEM_FLAG(e_ITEM_Apple,ITEM_FLAG_TRANSFORMED))   ; If the dove is still in the tree, indicate we can't do that
+dove_net
         SET_ITEM_LOCATION(e_ITEM_Net,e_LOC_CURRENT)                      ; Only useful for the Use Net, else it stays in the inventory
         INCREASE_SCORE(POINTS_CAPTURED_THE_DOVE)
         UNLOCK_ACHIEVEMENT(ACHIEVEMENT_CAPTURED_THE_DOVE)
@@ -7020,19 +7022,15 @@ throw_net
         SET_ITEM_DESCRIPTION(e_ITEM_LargeDove,"a stuck _dove")
 #endif
         END_AND_REFRESH
-dove_tree
-        // If the dove is still in the tree, indicate we can't do that
-        GOSUB(_SubErrorTooHigh)              
-        END_AND_REFRESH
-dove_net    
+end_dove_net
 
     // If the player tries to trap the fish we just display some error message
-    JUMP_IF_TRUE(_ErrorNoFishing,CHECK_PLAYER_LOCATION(e_LOC_FISHPND))
+    JUMP_IF_TRUE(_ImmovableNoFishing,CHECK_PLAYER_LOCATION(e_LOC_FISHPND))
 
     // If the player tries to trap the dog we just display some error message
-    JUMP_IF_FALSE(dog_net,CHECK_PLAYER_LOCATION(e_LOC_ENTRANCEHALL))
+    JUMP_IF_FALSE(end_dog_net,CHECK_PLAYER_LOCATION(e_LOC_ENTRANCEHALL))
     JUMP_IF_FALSE(_ErrorTooRisky,CHECK_ITEM_FLAG(e_ITEM_Dog,ITEM_FLAG_DISABLED))
-dog_net    
+end_dog_net
 
     // If the dove is in the net then we need to free it
     JUMP_IF_TRUE(_DropDove,CHECK_ITEM_CONTAINER(e_ITEM_LargeDove,e_ITEM_Net))

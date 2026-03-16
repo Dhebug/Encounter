@@ -58,7 +58,7 @@ _gItems
     ITEM_NORMAL( _gTextItemHandheldGame          ,e_LOC_CHILDBEDROOM    ,ITEM_FLAG_DEFAULT)                         // e_ITEM_HandheldGame
     ITEM_NORMAL( _gTextItemRollOfToiletPaper     ,e_LOC_TINY_WC         ,ITEM_FLAG_DEFAULT)                         // e_ITEM_ToiletRoll    
     ITEM_NORMAL( _gTextItemHose                  ,e_LOC_FISHPND         ,ITEM_FLAG_DEFAULT)                         // e_ITEM_Hose             
-    ITEM_NORMAL( _gTextItemGameConsole           ,e_LOC_GAMESROOM       ,ITEM_FLAG_DEFAULT)                         // e_ITEM_GameConsole
+    ITEM_NORMAL( _gTextItemGameConsole           ,e_LOC_GAMESROOM       ,ITEM_FLAG_IMMOVABLE)                       // e_ITEM_GameConsole
     ITEM_NORMAL( _gTextItemMedicineCabinet       ,e_LOC_KITCHEN         ,ITEM_FLAG_IMMOVABLE|ITEM_FLAG_CLOSED)      // e_ITEM_Medicinecabinet
     ITEM_NORMAL( _gTextItemYoungGirl             ,e_LOC_HOSTAGE_ROOM    ,ITEM_FLAG_IMMOVABLE|ITEM_FLAG_DISABLED)    // e_ITEM_YoungGirl        
     ITEM_NORMAL( _gTextItemFuse                  ,e_LOC_NONE            ,ITEM_FLAG_DEFAULT)                         // e_ITEM_Fuse                 
@@ -95,7 +95,7 @@ _gItems
     ITEM_NORMAL( _gTextItemTrashCan              ,e_LOC_DARKALLEY       ,ITEM_FLAG_IMMOVABLE)                       // e_ITEM_Trashcan
     ITEM_NORMAL( _gTextItemTombstone             ,e_LOC_PARKING_PLACE   ,ITEM_FLAG_IMMOVABLE)                       // e_ITEM_Tombstone
     ITEM_NORMAL( _gTextItemFishpond              ,e_LOC_FISHPND         ,ITEM_FLAG_IMMOVABLE)                       // e_ITEM_FishPond
-    ITEM_NORMAL( _gTextItemFish                  ,e_LOC_FISHPND         ,ITEM_FLAG_DEFAULT)                         // e_ITEM_Fish
+    ITEM_NORMAL( _gTextItemFish                  ,e_LOC_FISHPND         ,ITEM_FLAG_IMMOVABLE)                       // e_ITEM_Fish
     ITEM_NORMAL( _gTextItemApple                 ,e_LOC_ORCHARD         ,ITEM_FLAG_DEFAULT)                         // e_ITEM_Apple
     ITEM_NORMAL( _gTextItemTree                  ,e_LOC_OUTSIDE_PIT     ,ITEM_FLAG_IMMOVABLE)                       // e_ITEM_Tree
     ITEM_NORMAL( _gTextItemPit                   ,e_LOC_OUTSIDE_PIT     ,ITEM_FLAG_IMMOVABLE)                       // e_ITEM_Pit
@@ -103,7 +103,7 @@ _gItems
     ITEM_NORMAL( _gTextItemNormalWindow          ,e_LOC_NONE            ,ITEM_FLAG_IMMOVABLE)                       // e_ITEM_NormalWindow
     ITEM_NORMAL( _gTextItemAlarmIndicator        ,e_LOC_SUNLOUNGE       ,ITEM_FLAG_IMMOVABLE)                       // e_ITEM_AlarmIndicator
     ITEM_NORMAL( _gTextItemComputer              ,e_LOC_STUDY_ROOM      ,ITEM_FLAG_IMMOVABLE)                       // e_ITEM_Computer
-    ITEM_NORMAL( _gTextItemOricComputer          ,e_LOC_NONE            ,ITEM_FLAG_DEFAULT)                         // e_ITEM_Oric
+    ITEM_NORMAL( _gTextItemOricComputer          ,e_LOC_NONE            ,ITEM_FLAG_IMMOVABLE)                       // e_ITEM_Oric
     ITEM_NORMAL( _gTextItemClosedTVCabinet       ,e_LOC_GAMESROOM       ,ITEM_FLAG_IMMOVABLE|ITEM_FLAG_CLOSED)      // e_ITEM_TVCabinet
     ITEM_NORMAL( _gTextItemBatteries             ,e_LOC_NONE            ,ITEM_FLAG_DEFAULT)                         // e_ITEM_Batteries
     ITEM_NORMAL( _gTextItemClosedDrawer          ,e_LOC_GUESTBEDROOM    ,ITEM_FLAG_IMMOVABLE|ITEM_FLAG_CLOSED)      // e_ITEM_Drawer
