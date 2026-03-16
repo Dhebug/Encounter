@@ -121,7 +121,7 @@ WORDS AskInputCallback()
 void DropItem()
 {
     unsigned char itemId = gWordBuffer[1];
-	if ( (itemId>e_ITEM_COUNT_) || (gItems[itemId].location!=e_LOC_INVENTORY) )
+	if ( (itemId>=e_ITEM_COUNT_) || (gItems[itemId].location!=e_LOC_INVENTORY) )
 	{
 		PrintErrorMessage(gTextErrorDropNotHave);  // "You can only drop something you have"
 	}
