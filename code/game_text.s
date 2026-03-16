@@ -235,9 +235,9 @@ _gTextItemUnitedKingdomMap        .byt "et$_kart over Storbritannia",0
 _gTextItemHandheldGame            .byt "et$håndholdt _spill",0
 _gTextItemSedativePills           .byt "noen$sovemiddel _piller",0
 _gTextItemDartGun                 .byt "en$_dartpistol",0
-_gTextItemBlackTape               .byt "noe$svart _tape",0
+_gTextItemBlackTape               .byt "noe$svart _teip",0
 _gTextItemMortarAndPestle         .byt "en$_morter og støter",0
-_gTextItemAdhesive                .byt "noe$_lim",0
+_gTextItemAdhesive                .byt "en$_rull med teip",0
 _gTextItemAcid                    .byt "noe$sterk _syre",0
 _gTextItemSecurityDoor            .byt "en$sikkerhets _dør",0
 _gTextItemDriedOutClay            .byt "noe$tørr _leire",0
@@ -1321,7 +1321,7 @@ _SubImpressiveStaircase
     _BUBBLE_LINE(120,5,0,"Un escalier vraiment")
     _BUBBLE_LINE(150,17,0,"impressionnant")
 #elif defined(LANGUAGE_NO)
-    _BUBBLE_LINE(124,5,0,"En ganske imponerende")
+    _BUBBLE_LINE(107,5,0,"En ganske imponerende")
     _BUBBLE_LINE(187,17,0,"trapp")
 #else
     _BUBBLE_LINE(124,5,0,"Quite an impressive")
@@ -3657,7 +3657,7 @@ _InspectOricOmputer
 _InspectChemistryBook
     INCREASE_SCORE(POINTS_INSPECT_BOOK)
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Un livre épais avec des marques")
+    INFO_MESSAGE("Un livre épais avec des signets")
 #elif defined(LANGUAGE_NO)
     INFO_MESSAGE("En tykk bok med noen bokmerker")
 #else
