@@ -51,10 +51,10 @@ _gTextCredits
 
 _gTextAdditionalCredits
     .byt TEXT_CRLF,TEXT_CRLF,TEXT_CRLF
-    .byt 6,"    Test du jeu et retour d'expérience",TEXT_CRLF
-    .byt 7,"   Dom, Lukas, Phreak, Retroric, Symoon",TEXT_CRLF
+    .byt 6," Test du jeu et retour d'expérience",TEXT_CRLF
+    .byt 7,"Dom, Lukas, Phreak, Retroric, Symoon",TEXT_CRLF
     .byt TEXT_CRLF,TEXT_CRLF
-    .byt 5,"    Développeurs d'Oricutron, merci !",TEXT_CRLF
+    .byt 5,"  Développeurs d'Oricutron, merci !",TEXT_CRLF
     .byt TEXT_END
 
 _gTextGameDescription
@@ -92,10 +92,10 @@ _gTextGreetings
     .byt 3," Rax - Iss - Andre - Fabrizio - Xeron",TEXT_CRLF
     .byt 1," Dom - Jibe - Chema - Xahmol - Assinie",TEXT_CRLF
     .byt 5,"  Fabrice - h0ffman - Inufuto - Kyex",TEXT_CRLF
-    .byt 4,"   Dusan Strakl - Simon Luce - Dunric",TEXT_CRLF
-    .byt 6,"   Minter - 6502Nerd - Bieno - BobMar",TEXT_CRLF
-    .byt 7,"   Hugo Labrande - DJChloe - Romualdl",TEXT_CRLF
-    .byt 2,"     DrPsy - Totoshampoin - 8bitguy",TEXT_CRLF
+    .byt 4,"  Dusan Strakl - Simon Luce - Dunric",TEXT_CRLF
+    .byt 6,"  Minter - 6502Nerd - Bieno - BobMar",TEXT_CRLF
+    .byt 7,"  Hugo Labrande - DJChloe - Romualdl",TEXT_CRLF
+    .byt 2,"    DrPsy - Totoshampoin - 8bitguy",TEXT_CRLF
     .byt TEXT_END
 #elif defined(LANGUAGE_NO)
 
@@ -180,10 +180,10 @@ _gTextGreetings
     .byt 3," Rax - Iss - Andre - Fabrizio - Xeron",TEXT_CRLF
     .byt 1," Dom - Jibe - Chema - Xahmol - Assinie",TEXT_CRLF
     .byt 5,"  Fabrice - h0ffman - Inufuto - Kyex",TEXT_CRLF
-    .byt 4,"   Dusan Strakl - Simon Luce - Dunric",TEXT_CRLF
-    .byt 6,"   Minter - 6502Nerd - Bieno - BobMar",TEXT_CRLF
-    .byt 7,"   Hugo Labrande - DJChloe - Romualdl",TEXT_CRLF
-    .byt 2,"     DrPsy - Totoshampoin - 8bitguy",TEXT_CRLF
+    .byt 4,"  Dusan Strakl - Simon Luce - Dunric",TEXT_CRLF
+    .byt 6,"  Minter - 6502Nerd - Bieno - BobMar",TEXT_CRLF
+    .byt 7,"  Hugo Labrande - DJChloe - Romualdl",TEXT_CRLF
+    .byt 2,"    DrPsy - Totoshampoin - 8bitguy",TEXT_CRLF
     .byt TEXT_END
 #else
 _gTextHighScoreAskForName   .byt "New highscore! Your name please?  ",0
@@ -268,10 +268,10 @@ _gTextGreetings
     .byt 3," Rax - Iss - Andre - Fabrizio - Xeron",TEXT_CRLF
     .byt 1," Dom - Jibe - Chema - Xahmol - Assinie",TEXT_CRLF
     .byt 5,"  Fabrice - h0ffman - Inufuto - Kyex",TEXT_CRLF
-    .byt 4,"   Dusan Strakl - Simon Luce - Dunric",TEXT_CRLF
-    .byt 6,"   Minter - 6502Nerd - Bieno - BobMar",TEXT_CRLF
-    .byt 7,"   Hugo Labrande - DJChloe - Romualdl",TEXT_CRLF
-    .byt 2,"     DrPsy - Totoshampoin - 8bitguy",TEXT_CRLF
+    .byt 4,"  Dusan Strakl - Simon Luce - Dunric",TEXT_CRLF
+    .byt 6,"  Minter - 6502Nerd - Bieno - BobMar",TEXT_CRLF
+    .byt 7,"  Hugo Labrande - DJChloe - Romualdl",TEXT_CRLF
+    .byt 2,"    DrPsy - Totoshampoin - 8bitguy",TEXT_CRLF
     .byt TEXT_END
 
 ; Rax & Iss - Wizard's Lair, Speed Ball, Memory, Mine Sweeper, Pong, cc65 chess, FIFTEEN PUZZLE, FLAPPY ORIC, TREASURE, LUNAR MISSION, BOCCO'S ADVENTURES , ORIC XMAS 2019 

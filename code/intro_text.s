@@ -146,12 +146,12 @@ _Text_GameInstructionsPage1
 
     .byt 1,"  MOUVEMENT              VERBES",TEXT_CRLF
     .byt TEXT_CRLF
-    .byt "N:NORD S:SUD     OUVRE PRENDS/RAMASSE",TEXT_CRLF
+    .byt "N:NORD  S:SUD    OUVRE PRENDS/RAMASSE",TEXT_CRLF
     .byt "O:OUEST E:EST        FERME POSE/LACHE",TEXT_CRLF
     .byt "D:DESCENDRE           CHERCHE/FOUILLE",TEXT_CRLF
     .byt "M:MONTER     EXAMINE/INSPECTE/REGARDE",TEXT_CRLF
-    .byt "flèches/manette COMBINE UTILISE LANCE",TEXT_CRLF
-    .byt "                LIS QUITTE AIDE PAUSE",TEXT_CRLF
+    .byt "ou flèches      COMBINE UTILISE LANCE",TEXT_CRLF
+    .byt "ou manette      LIS QUITTE AIDE PAUSE",TEXT_CRLF
     .byt TEXT_CRLF
     .byt "Utilisez",4,"CTRL+HAUT/BAS",0,"ou diagonales",TEXT_CRLF
     .byt "pour monter ou descendre.",TEXT_CRLF
@@ -174,11 +174,11 @@ _Text_GameInstructionsPage1
     .byt TEXT_CRLF
     .byt 1,"   BEVEGELSE            VERB",TEXT_CRLF,TEXT_CRLF
     .byt "N:NORD U:OPP      TA/HENT LEGG/SLIPP",TEXT_CRLF
-    .byt "S:SYD D:NED      BLAND/KOMBINER BRUK",TEXT_CRLF
+    .byt "S:SYD  D:NED     BLAND/KOMBINER BRUK",TEXT_CRLF
     .byt "E:ØST           KAST SE/SJEKK/GRANSK",TEXT_CRLF
     .byt "W:VEST                LES LET/RANSAK",TEXT_CRLF
-    .byt "piltaster/styrespak    PAUSE AVSLUTT",TEXT_CRLF
-    .byt "                     HJELP ÅPNE LUKK",TEXT_CRLF
+    .byt "eller piltaster        PAUSE AVSLUTT",TEXT_CRLF
+    .byt "eller styrespak      HJELP ÅPNE LUKK",TEXT_CRLF
     .byt TEXT_CRLF
     .byt "Bruk",4,"CTRL+OPP/NED",0,"eller diagonaler",TEXT_CRLF
     .byt "for å gå opp eller ned.",TEXT_CRLF
@@ -204,8 +204,8 @@ _Text_GameInstructionsPage1
 	.byt "S:SOUTH D:DOWN     THROW COMBINE USE",TEXT_CRLF
 	.byt "E:EAST               EXAMINE/INSPECT",TEXT_CRLF
 	.byt "W:WEST             READ SEARCH/FRISK",TEXT_CRLF
-    .byt "arrows/joystick      OPEN CLOSE QUIT",TEXT_CRLF
-    .byt "                          HELP PAUSE",TEXT_CRLF
+    .byt "or arrows            OPEN CLOSE QUIT",TEXT_CRLF
+    .byt "or joystick               HELP PAUSE",TEXT_CRLF
     .byt TEXT_CRLF
     .byt "Use",4,"CTRL+UP/DOWN",0,"or diagonals to",TEXT_CRLF
     .byt "go up or down.",TEXT_CRLF
