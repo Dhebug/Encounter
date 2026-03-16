@@ -196,7 +196,7 @@
 // Flags for the items
 #define ITEM_FLAG_DEFAULT 			0    // Nothing special
 #define ITEM_FLAG_IS_CONTAINER 		1    // This item is a container
-#define ITEM_FLAG_free_to_use    	2    // - available -
+#define ITEM_FLAG_VISIBLE_IN_SCENE	2    // Item has a visible sprite in its location scene, requires full refresh on take/drop
 #define ITEM_FLAG_IMMOVABLE			4    // Impossible to move for various reasons
 #define ITEM_FLAG_LOCKED            8    // For item which are locked
 #define ITEM_FLAG_DISABLED         16    // Used to indicate that something is not active anymore (ex: Dog, Thug )

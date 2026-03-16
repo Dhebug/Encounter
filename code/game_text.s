@@ -7402,6 +7402,9 @@ _TakeCommon
 .(
     SET_ITEM_LOCATION(e_ITEM_CURRENT, e_LOC_INVENTORY)  ; The item is now in our inventory
     UNSET_ITEM_FLAGS(e_ITEM_CURRENT, ITEM_FLAG_ATTACHED)     ; If the item was attached, we detach it
+    JUMP_IF_TRUE(visible_item, CHECK_ITEM_FLAG(e_ITEM_CURRENT, ITEM_FLAG_VISIBLE_IN_SCENE))
+        END_AND_PARTIAL_REFRESH
+visible_item
     END_AND_REFRESH
 .)
 
@@ -7664,6 +7667,9 @@ _ThrowCurrentItem
 +_DropCurrentItem
     SET_ITEM_LOCATION(e_ITEM_CURRENT,e_LOC_CURRENT)
     UNSET_ITEM_FLAGS(e_ITEM_CURRENT, ITEM_FLAG_ATTACHED)     ; If the item was attached, we detach it
+    JUMP_IF_TRUE(visible_item, CHECK_ITEM_FLAG(e_ITEM_CURRENT, ITEM_FLAG_VISIBLE_IN_SCENE))
+        END_AND_PARTIAL_REFRESH
+visible_item
     END_AND_REFRESH
 .)
 

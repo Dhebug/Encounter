@@ -12,6 +12,7 @@
 #define CONTAINER_MASK4(a,b,c,d)    (CONTAINER_MASK3(a,b,c)+(1<<(d)))
 
 #define ITEM_CONTAINER(description,location)             .byt <description,>description,location,255,ITEM_FLAG_IS_CONTAINER,0
+#define ITEM_CONTAINER_FLAGS(description,location,flags) .byt <description,>description,location,255,ITEM_FLAG_IS_CONTAINER|flags,0
 #define ITEM(description,location,flags,containers)      .byt <description,>description,location,255,flags,containers
 #define ITEM_NORMAL(description,location,flags)          .byt <description,>description,location,255,flags,0
 
@@ -21,10 +22,10 @@ _gItems
     //   description                      location                    flags                      with this specific item
     // Containers
     ITEM_CONTAINER( _gTextItemTobaccoTin  ,e_LOC_LOUNGE          )  // e_ITEM_TobaccoTin           
-    ITEM_CONTAINER( _gTextItemBucket      ,e_LOC_WELL            )  // e_ITEM_Bucket               
+    ITEM_CONTAINER_FLAGS( _gTextItemBucket ,e_LOC_WELL            ,ITEM_FLAG_VISIBLE_IN_SCENE)  // e_ITEM_Bucket               
     ITEM_CONTAINER( _gTextItemCardboardBox,e_LOC_GREENHOUSE      )  // e_ITEM_CardboardBox         
     ITEM_CONTAINER( _gTextItemNet         ,e_LOC_TENNISCOURT     )  // e_ITEM_Net           
-    ITEM_CONTAINER( _gTextItemPlasticBag  ,e_LOC_MARKETPLACE     )  // e_ITEM_PlasticBag           
+    ITEM_CONTAINER_FLAGS( _gTextItemPlasticBag ,e_LOC_MARKETPLACE ,ITEM_FLAG_VISIBLE_IN_SCENE)  // e_ITEM_PlasticBag           
 
     // Items requiring containers
     ITEM( _gTextItemGunPowder             ,e_LOC_NONE            ,ITEM_FLAG_DEFAULT         ,CONTAINER_MASK4(e_ITEM_Bucket,e_ITEM_PlasticBag,e_ITEM_TobaccoTin,e_ITEM_CardboardBox))   // e_ITEM_GunPowder            
@@ -42,7 +43,7 @@ _gItems
     ITEM_NORMAL( _gTextItemCellarWindow          ,e_LOC_VEGSGARDEN      ,ITEM_FLAG_IMMOVABLE|ITEM_FLAG_CLOSED)      // e_ITEM_CellarWindow
     ITEM_NORMAL( _gTextItemFancyStones           ,e_LOC_ZENGARDEN       ,ITEM_FLAG_DEFAULT)                         // e_ITEM_FancyStones                
     ITEM_NORMAL( _gTextItemSilverKnife           ,e_LOC_VEGSGARDEN      ,ITEM_FLAG_DEFAULT)                         // e_ITEM_SilverKnife          
-    ITEM_NORMAL( _gTextItemLadder                ,e_LOC_ORCHARD         ,ITEM_FLAG_DEFAULT)                         // e_ITEM_Ladder               
+    ITEM_NORMAL( _gTextItemLadder                ,e_LOC_ORCHARD         ,ITEM_FLAG_VISIBLE_IN_SCENE)                // e_ITEM_Ladder               
     ITEM_NORMAL( _gTextItemMixTape               ,e_LOC_NONE            ,ITEM_FLAG_DEFAULT)                         // e_ITEM_MixTape         
     ITEM_NORMAL( _gTextItemAlsatianDog           ,e_LOC_LARGE_STAIRCASE ,ITEM_FLAG_IMMOVABLE)                       // e_ITEM_Dog          
     ITEM_NORMAL( _gTextItemMeat                  ,e_LOC_NONE            ,ITEM_FLAG_DEFAULT)                         // e_ITEM_Meat                 
@@ -54,9 +55,9 @@ _gItems
     ITEM_NORMAL( _gTextItemThug                  ,e_LOC_MASTERBEDROOM   ,ITEM_FLAG_IMMOVABLE)                       // e_ITEM_Thug                 
     ITEM_NORMAL( _gTextItemHeavySafe             ,e_LOC_CELLAR          ,ITEM_FLAG_IMMOVABLE|ITEM_FLAG_CLOSED)      // e_ITEM_HeavySafe            
     ITEM_NORMAL( _gTextItemHandWrittenNote       ,e_LOC_BOXROOM         ,ITEM_FLAG_DEFAULT)                         // e_ITEM_HandWrittenNote          
-    ITEM_NORMAL( _gTextItemRope                  ,e_LOC_WELL            ,ITEM_FLAG_DEFAULT)                         // e_ITEM_Rope                 
+    ITEM_NORMAL( _gTextItemRope                  ,e_LOC_WELL            ,ITEM_FLAG_VISIBLE_IN_SCENE)                // e_ITEM_Rope                 
     ITEM_NORMAL( _gTextItemHandheldGame          ,e_LOC_CHILDBEDROOM    ,ITEM_FLAG_DEFAULT)                         // e_ITEM_HandheldGame
-    ITEM_NORMAL( _gTextItemRollOfToiletPaper     ,e_LOC_TINY_WC         ,ITEM_FLAG_DEFAULT)                         // e_ITEM_ToiletRoll    
+    ITEM_NORMAL( _gTextItemRollOfToiletPaper     ,e_LOC_TINY_WC         ,ITEM_FLAG_VISIBLE_IN_SCENE)                // e_ITEM_ToiletRoll    
     ITEM_NORMAL( _gTextItemHose                  ,e_LOC_FISHPND         ,ITEM_FLAG_DEFAULT)                         // e_ITEM_Hose             
     ITEM_NORMAL( _gTextItemGameConsole           ,e_LOC_GAMESROOM       ,ITEM_FLAG_IMMOVABLE)                       // e_ITEM_GameConsole
     ITEM_NORMAL( _gTextItemMedicineCabinet       ,e_LOC_KITCHEN         ,ITEM_FLAG_IMMOVABLE|ITEM_FLAG_CLOSED)      // e_ITEM_Medicinecabinet
