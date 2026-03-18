@@ -404,3 +404,7 @@
 - Applied Jasmin specific fixes found by Chema, Iss and Mininaller
 - Added custom messages about why some items can't be taken (too heavy, too far, etc...)
 - Improved the messages and interactions related to the dove
+- Smoothed out a few wrinkles in the final game sequence
+
+1.3.1
+-

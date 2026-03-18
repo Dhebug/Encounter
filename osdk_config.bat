@@ -46,9 +46,10 @@
 :: 1.2.4 - Improved the controls when playing with Joystick, fixed a few incorrect error messages as well
 :: 1.2.5 - Updated Joystick support in Oricutron, fixed a typo, added a message when trying to use the bucket
 :: 1.2.6 - Reordered list of words, improved net handling, improved containers selection, fixes to the inventory size limits
-:: 1.2.7
+:: 1.3.0 - So many changes!
+:: 1.3.1 -
 ::
-SET VERSION=1.2.7
+SET VERSION=1.3.0
 SET BASENAME=EncounterHD
 
 :: Disk geometry parameters: These are passed to the floppy builder and will impact the floppy disk format.
