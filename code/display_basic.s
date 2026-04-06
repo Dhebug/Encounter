@@ -378,7 +378,7 @@ loop_y
   lda _param0+0
   sta (tmp0),y     ; paper color
   iny
-  lda _param0+0
+  lda _param0+1
   sta (tmp0),y     ; ink color
 
   jsr _Add40ToTmp0
