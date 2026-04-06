@@ -5892,15 +5892,22 @@ _InspectCarTank
         INFO_MESSAGE("It's closed, but not locked.")
 #endif
     ELSE(tank_closed,tank_open)
-#ifdef LANGUAGE_FR
-        INFO_MESSAGE("Il reste de l'essence dedans")
-#elif defined(LANGUAGE_NO)
-        INFO_MESSAGE("Det er fortsatt bensin i den")
-#else
-        INFO_MESSAGE("It still has petrol in it")
-#endif    
+        GOSUB(_SubTankHasPetrol)
     ENDIF(tank_open)
     END_AND_PARTIAL_REFRESH
+.)
+
+
+_SubTankHasPetrol
+.(
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Il reste de l'essence dedans")
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Det er fortsatt bensin i den")
+#else
+    INFO_MESSAGE("It still has petrol in it")
+#endif
+    RETURN
 .)
 
 
@@ -6329,6 +6336,9 @@ abandonned_car
         SET_ITEM_FLAGS(e_ITEM_Hose,ITEM_FLAG_ATTACHED)
         IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_Petrol,e_LOC_NONE),petrol)                           ; Is the petrol still not found?
             SET_ITEM_LOCATION(e_ITEM_Petrol,e_LOC_ABANDONED_CAR)                                ; It's now visible inside the car
+            GOSUB(_SubFoundSomething)
+            GOSUB(_SubTankHasPetrol)
+            WAIT_KEYPRESS
         ENDIF(petrol)
     ENDIF(not_inside_yet)
 

@@ -415,3 +415,5 @@
 - While I was at it, I made the suit now visible in the greenhouse
 - When searching a generic item, the inspect message is now displayed instead of "nothing special"
 - Taking the MixTape, Handheld Game and Roman should automatically look at them (the first time)
+- When using the hose, the player is now informed they found something because they may otherwise miss the item that just appeared in the scene
+
