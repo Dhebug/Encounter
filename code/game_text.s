@@ -2473,6 +2473,7 @@ _gCombineItemMappingsArray
     COMBINE_MAPPING(e_ITEM_Hose,e_ITEM_CarTank              ,_CombineHoseTank)
     COMBINE_MAPPING(e_ITEM_Rope,e_ITEM_Tree                 ,_CombineRopeTree)
     COMBINE_MAPPING(e_ITEM_HandheldGame,e_ITEM_Batteries    ,_CombineGameWithBatteries)
+    COMBINE_MAPPING(e_ITEM_SmallKey,e_ITEM_AlarmPanel      ,_CombineKeyWithPanel)
     VALUE_MAPPING2(255,255    ,_ErrorCannotDo)
 
 
@@ -6202,6 +6203,7 @@ snoozed_thug
     END_AND_REFRESH
 
 
+_CombineKeyWithPanel
 _UseKey
 .(
     IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_DARKCELLARROOM),cellar)                    ; Are we in the cellar?
