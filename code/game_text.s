@@ -1115,13 +1115,13 @@ _gDescriptionTennisCourt
 _gDescriptionVegetableGarden
     SET_ITEM_LOCATION(e_ITEM_CellarWindow,e_LOC_VEGSGARDEN)       ; The window is in the garden
 #ifdef LANGUAGE_FR
-_gTextItemCellarWindow = *+1
+_gTextItemCellarWindow = *+2
     SET_ITEM_DESCRIPTION(e_ITEM_CellarWindow,"une _fenêtre basse")
 #elif defined(LANGUAGE_NO)
-_gTextItemCellarWindow = *+1
+_gTextItemCellarWindow = *+2
     SET_ITEM_DESCRIPTION(e_ITEM_CellarWindow,"et kjeller _vindu")
 #else
-_gTextItemCellarWindow = *+1
+_gTextItemCellarWindow = *+2
     SET_ITEM_DESCRIPTION(e_ITEM_CellarWindow,"a cellar _window")
 #endif
     WAIT(DELAY_FIRST_BUBBLE)
