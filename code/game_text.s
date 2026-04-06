@@ -2553,6 +2553,22 @@ _CombineSulfurWithSalpetre
 .)
 
 
+_UseBatteries
+.(
+    ; Is the handheld game available around? If yes, put batteries in!
+    JUMP_IF_TRUE(_CombineGameWithBatteries,CHECK_ITEM_LOCATION(e_ITEM_HandheldGame,e_LOC_CURRENT))
+    JUMP_IF_TRUE(_CombineGameWithBatteries,CHECK_ITEM_LOCATION(e_ITEM_HandheldGame,e_LOC_INVENTORY))
+#ifdef LANGUAGE_FR
+    ERROR_MESSAGE("Rien à alimenter pour l'instant.")
+#elif defined(LANGUAGE_NO)
+    ERROR_MESSAGE("Ingenting å sette dem i akkurat nå.")
+#else
+    ERROR_MESSAGE("Nothing to put them in.")
+#endif
+    END_AND_REFRESH
+.)
+
+
 _CombineGameWithBatteries
 .(
     LOAD_MUSIC(LOADER_MUSIC_SUCCESS)
@@ -5742,6 +5758,7 @@ _gUseItemMappingsArray
     VALUE_MAPPING(e_ITEM_Bucket             , _UseBucket)
     VALUE_MAPPING(e_ITEM_Rope               , _UseRope)
     VALUE_MAPPING(e_ITEM_HandheldGame       , _UseGame)
+    VALUE_MAPPING(e_ITEM_Batteries          , _UseBatteries)
     VALUE_MAPPING(e_ITEM_Bread              , _UseBread)
     VALUE_MAPPING(e_ITEM_Apple              , _UseApples)
     VALUE_MAPPING(e_ITEM_Meat               , _UseMeat)
