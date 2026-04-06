@@ -831,7 +831,7 @@ _ByteStreamCommand_SET_ITEM_LOCATION
 store_location    
     ldy #2
     sta (_gStreamItemPtr),y      // gItems->location (+2) = location id
-    sta tmp1                     // Save the location in tmp1 (tmp0 is modified by _ByteStreamComputeItemPtr)    
+    sta tmp2                     // Save the location in tmp2 (tmp0 AND tmp1 are modified by _ByteStreamComputeItemPtr)
     
     ; If the item is in a container and the location is not the inventory, we need to empty it
     cmp #e_LOC_INVENTORY
@@ -852,7 +852,7 @@ store_location
     and #ITEM_FLAG_IS_CONTAINER
     bne end_container            // If the associated object is a container, it stays where it is
     ldy #2
-    lda tmp1                     // Reload the saved location so the transported items don't stay in the inventory
+    lda tmp2                     // Reload the saved location so the transported items don't stay in the inventory
     sta (_gStreamItemPtr),y      // gItems->location (+2) = location id
 end_container   
     
