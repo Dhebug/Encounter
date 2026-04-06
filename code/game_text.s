@@ -7,7 +7,7 @@
 
 _StartGameTextData
 
-#pragma osdk replace_characters_if LANGUAGE_FR : é:{ è:} ê:| à:@ î:i ô:^ ç:c Ç:C â:[ ù:u û:]
+#pragma osdk replace_characters_if LANGUAGE_FR : é:{ è:} ê:| à:@ î:i ô:^ ç:c Ç:C â:[ ù:u û:] Ê:E
 #pragma osdk replace_characters_if LANGUAGE_NO : æ:{ ø:} å:| Æ:A Ø:O Å:A
 
 
@@ -5691,28 +5691,40 @@ _gUseItemMappingsArray
     VALUE_MAPPING(255                       , _ErrorCannotDo)   ; Default option
 
 
-_UseOricComputer   ; view_oric_computer.png
+; Shared confirmation: "End the game: Are you sure?"
+; If player confirms (Y/O/J): RETURN to caller to proceed with quit/reset
+; If player declines: END_AND_REFRESH (never returns, game continues)
+_ConfirmEndGame
 .(
-    DISPLAY_IMAGE(LOADER_PICTURE_ORIC_COMPUTER)
+    ; Print the message on a red background to make it obvious it's dangerous
+    CLEAR_TEXT_AREA(1)
 #ifdef LANGUAGE_FR
     QUICK_MESSAGE("Fin du jeu: Êtes-vous sûr ?")
 #elif defined(LANGUAGE_NO)
     QUICK_MESSAGE("Avslutte spillet: Er du sikker?")
 #else
     QUICK_MESSAGE("End the game: Are you sure?")
-#endif    
+#endif
     WAIT_KEYPRESS
 #ifdef LANGUAGE_FR
-    IF_TRUE(CHECK_ADDRESS_VALUE(_gInputKey,"O"),confirmation)
+    JUMP_IF_FALSE(not_confirmed, CHECK_ADDRESS_VALUE(_gInputKey,"O"))
 #elif defined(LANGUAGE_NO)
-    IF_TRUE(CHECK_ADDRESS_VALUE(_gInputKey,"J"),confirmation)
+    JUMP_IF_FALSE(not_confirmed, CHECK_ADDRESS_VALUE(_gInputKey,"J"))
 #else
-    IF_TRUE(CHECK_ADDRESS_VALUE(_gInputKey,"Y"),confirmation)
-#endif    
-        QUICK_MESSAGE("RESET...")
-        CALL_NATIVE(_Reset)
-    ENDIF(confirmation)
+    JUMP_IF_FALSE(not_confirmed, CHECK_ADDRESS_VALUE(_gInputKey,"Y"))
+#endif
+    RETURN
+not_confirmed
     END_AND_REFRESH
+.)
+
+_UseOricComputer   ; view_oric_computer.png
+.(
+    DISPLAY_IMAGE(LOADER_PICTURE_ORIC_COMPUTER)
+    GOSUB(_ConfirmEndGame)
+    ; Only reached if player confirmed
+    QUICK_MESSAGE("RESET...")
+    CALL_NATIVE(_Reset)
 .)
 
 
@@ -8026,6 +8038,8 @@ _PauseGameScript
 ; Called if the player types QUIT to leave the game
 _QuitGameScript
 .(
+    GOSUB(_ConfirmEndGame)
+    ; Only reached if player confirmed
     PLAY_SOUND(_KeyClickHData)
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_GAVE_UP)
     GAME_OVER(e_SCORE_GAVE_UP)

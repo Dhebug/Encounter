@@ -409,3 +409,4 @@
 1.3.1
 - Removed the "no_picture" placeholder file
 - Optimisation: Rewrote the temporisation/navigation code in the intro to assembler to reduce the size 
+- Reused the Oric 1 BASIC reboot confirmation prompt for the QUIT command so players don't quit by mistake
