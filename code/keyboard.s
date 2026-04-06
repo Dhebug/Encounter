@@ -261,7 +261,6 @@ _WaitReleasedKey
 
 
 ; Read a single key, same as before but no repeating.
-
 _ReadKeyNoBounce
 .(
 	jsr _ReadKey

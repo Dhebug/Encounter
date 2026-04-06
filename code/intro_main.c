@@ -54,20 +54,7 @@ extern char TableRotateOffset[];
 extern char TableDitherPatternOffset[];
 
 
-enum
-{
-    INTRO_TITLE_PICTURE = 0,
-#ifdef PRODUCT_TYPE_GAME_DEMO
-    INTRO_DEMO_FEATURES,
-#endif // PRODUCT_TYPE_GAME_DEMO
-    INTRO_USER_MANUAL_PAGE1,
-    INTRO_LEADERBOARD,
-    INTRO_USER_MANUAL_PAGE2,
-    INTRO_ACHIEVEMENTS,
-    INTRO_USER_MANUAL_PAGE3,
-    INTRO_STORY,
-    _INTRO_COUNT_
-};
+#include "intro.h"
 
 char gIntroPage = INTRO_TITLE_PICTURE;
 char gShouldExit = 0;
@@ -121,86 +108,6 @@ int FadeToBlack()
     return 0;
 }
 
-
-// Some quite ugly function which waits a certain number of frames
-// while detecting key presses and returns 1 if either space or enter are pressed
-int Wait(int frameCount)
-{	
-	int k;
-
-	while (frameCount--)
-	{
-		WaitIRQ();
-
-		k=ReadKeyNoBounce();
-		if ( (k==KEY_ESC) || (k==KEY_UP) || (k==KEY_DOWN) ) 
-		{
-            gShouldExit = 1;
-			return 1;
-		}
-        else
-        if (k==KEY_LEFT)
-        {            
-            gWaitAndFadeMultiplicator = 4;    // If the player goes left, we quadruple the reading delay
-
-            gIntroPage = (gIntroPage+_INTRO_COUNT_)-2;
-            if (gIntroPage>=_INTRO_COUNT_)
-            {
-                gIntroPage-=_INTRO_COUNT_;
-            }
-            return 1;
-        }
-        else
-        if (k==KEY_RIGHT)
-        {            
-            gWaitAndFadeMultiplicator = 1;    // If the players goes right, we go back to the normal reading delay
-            return 1;
-        }
-        else
-        if (k!=0)
-        {
-            // Any other key: Show the user they should use LEFT, RIGHT or ESCAPE
-            if ((gIntroPage != INTRO_TITLE_PICTURE) && (!gGameStarting))
-            {
-                char* saveAddress=gPrintAddress;
-                gPrintWidth=40;
-                gPrintTerminator=TEXT_END;
-               	PrintStringAt(Text_KeyControls,0xbb80+40*27);
-                gPrintAddress=saveAddress;
-            }
-        }
-	}
-	return 0;
-}
-
-
-int Wait2(unsigned int frameCount,unsigned char referenceFrame)
-{	
-	int k;
-
-	while ( (VblCounter-referenceFrame) < frameCount)
-	{
-		WaitIRQ();
-
-		k=ReadKeyNoBounce();
-		if ( (k==KEY_RETURN) || (k==' ') || (k==KEY_ESC) )
-		{
-			WaitFrames(4);
-			return 1;
-		}
-	}
-	return 0;
-}
-
-
-int WaitAndFade(int frameCount)
-{
-	if (Wait(frameCount*gWaitAndFadeMultiplicator))
-    {
-        return 1;
-    }
-    return FadeToBlack();
-}
 
 // Before calling this function, CompressedTitleImage must have been properly populated with the compressed title picture
 int DisplayIntroPage()
