@@ -2012,7 +2012,7 @@ _gDescriptionMasterBedRoom
 #else
 // MARK: Child Bedroom
 _gDescriptionChildBedroom
-#ifdef TESTING_MODE
+#ifdef TESTING_MONKEY_KING
     CALL_NATIVE(_PlayMonkeyKing)
 #endif    
     WAIT(DELAY_FIRST_BUBBLE)

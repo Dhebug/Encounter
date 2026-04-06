@@ -37,6 +37,7 @@
 #endif
 
 //#define TESTING_MODE         // Comment out to play normally
+//#define TESTING_MONKEY_KING  // Comment out to play normally
 //#define DISABLE_FADES        // Comment out to enable the fancy fades
 //#define FORCE_JOYSTICK JOYSTICK_INTERFACE_IJK  // Comment out to use the normal settings system
 //#define TEST_ENDINGS         // Comment out to enable the normal outro sequence
