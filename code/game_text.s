@@ -6595,9 +6595,14 @@ _gSearchtemMappingsArray
     VALUE_MAPPING(e_ITEM_CardboardBox       , _SearchCardboardBox)
     VALUE_MAPPING(e_ITEM_TobaccoTin         , _SearchTin)
     VALUE_MAPPING(e_ITEM_TVCabinet          , _SearchTVCabinet)
-    VALUE_MAPPING(e_ITEM_Drawer             , _SearchDrawer)    
-    VALUE_MAPPING(255             , _MessageNothingSpecial)   ; Default option
+    VALUE_MAPPING(e_ITEM_Drawer             , _SearchDrawer)
+    VALUE_MAPPING(255                       , _SearchFallbackToInspect)  ; Default: try the inspect handler
 
+; If there's no dedicated search handler for an item, try the inspect handler instead.
+; This way SEARCH and LOOK/INSPECT behave the same for items that don't need special search logic.
+_SearchFallbackToInspect
+    CALL_NATIVE(_RedispatchToInspect)
+    END_AND_PARTIAL_REFRESH
 
 _SearchThug
 .(

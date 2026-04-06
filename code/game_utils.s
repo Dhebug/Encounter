@@ -1020,6 +1020,18 @@ requires_one_item
     sta _param0+0
     jmp _DispatchStream
 
+; Called from the search default handler via CALL_NATIVE.
+; Re-dispatches the current item against the inspect mapping table,
+; so SEARCH falls back to INSPECT behavior for items without a dedicated search handler.
++_RedispatchToInspect
+    lda _gCurrentItem
+    sta _param0
+    lda #<_gInspectItemMappingsArray
+    sta _param1
+    lda #>_gInspectItemMappingsArray
+    sta _param1+1
+    jmp _DispatchStream
+
 requires_two_items
     ; It's one of these case where we need one or two items
     lda _gWordBuffer+2                    ; Second item
