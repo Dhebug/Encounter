@@ -118,8 +118,6 @@ SET PARAMS=-u1 -m0 -f3 -o2
 SET PARAMS=-u1 -m0 -f0 -o2
 SET TARGET_EXTENSION=.hir
 
-%CONVERT% no_picture
-
 %CONVERT% loc_market_place
 %CONVERT% loc_seedy_alley
 %CONVERT% loc_road_stretch

@@ -380,7 +380,7 @@
 - Hopefully fixed an issue regarding counting the number of items in the inventory when trying to fetch something that requires a container
 - Optimisation: Rewrote ParseInputBuffer to assembler to reduce the size of the code
 
-1.3.0
+1.3.0 - 18 March 2026
 - Optimisation: Rewrote AskInput to assembler to reduce the size of the code
 - Optimisation: Implemented a better kerning system to display the fancy text faster
 - Optimisation: Taking or dropping items that have no visual representation do not refresh the scene
@@ -407,4 +407,4 @@
 - Smoothed out a few wrinkles in the final game sequence
 
 1.3.1
--
+- Removed the "no_picture" placeholder file
