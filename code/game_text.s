@@ -428,11 +428,11 @@ _gDescriptionMarketPlace
 
 hack_show_plastic_bag_again
     ; Is the plastic bag on the market place?
-    JUMP_IF_FALSE(no_plastic_bag,CHECK_ITEM_LOCATION(e_ITEM_PlasticBag,e_LOC_MARKETPLACE))    
+    IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_PlasticBag,e_LOC_MARKETPLACE),show_bag)
         BLIT_BLOCK(LOADER_SPRITE_ITEMS,1,4)                     ; Draw the plastic bag
                 _IMAGE(24,0)
                 _BUFFER(2,79)
-no_plastic_bag    
+    ENDIF(show_bag)    
 
     ; Is the girl here?
     JUMP_IF_FALSE(girl_not_here,CHECK_ITEM_LOCATION(e_ITEM_YoungGirl,e_LOC_MARKETPLACE))
@@ -912,15 +912,19 @@ _gDescriptionAbandonedCar
 // MARK: Old Well
 _gDescriptionOldWell
 .(
-    ; Is the Bucket near the Well?    
-    JUMP_IF_FALSE(no_bucket,CHECK_ITEM_LOCATION(e_ITEM_Bucket,e_LOC_WELL))    
-      DRAW_BITMAP(LOADER_SPRITE_ITEMS,BLOCK_SIZE(6,35),40,_SecondImageBuffer,_ImageBuffer+(40*86)+24)    ; Draw the Bucket 
-no_bucket    
-    
-    ; Is the Rope near the Well?      
-    JUMP_IF_FALSE(no_rope,CHECK_ITEM_LOCATION(e_ITEM_Rope,e_LOC_WELL))    
-      DRAW_BITMAP(LOADER_SPRITE_ITEMS,BLOCK_SIZE(7,44),40,_SecondImageBuffer+7,_ImageBuffer+(40*35)+26)  ; Draw the Rope
-no_rope    
+    ; Is the Bucket near the Well?
+    IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_Bucket,e_LOC_WELL),show_bucket)
+        BLIT_BLOCK(LOADER_SPRITE_ITEMS,6,35)                     ; Draw the Bucket
+                _IMAGE(0,0)
+                _BUFFER(24,86)
+    ENDIF(show_bucket)
+
+    ; Is the Rope near the Well?
+    IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_Rope,e_LOC_WELL),show_rope)
+        BLIT_BLOCK(LOADER_SPRITE_ITEMS,7,44)                     ; Draw the Rope
+                _IMAGE(7,0)
+                _BUFFER(26,35)
+    ENDIF(show_rope)    
 
     ; Spawn water if required
     GOSUB(_SpawnWaterIfNotEquipped)
@@ -1066,6 +1070,12 @@ _gDescriptionGreenHouse
 .(
     ; Spawn water if required
     GOSUB(_SpawnWaterIfNotEquipped)
+
+    IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_ProtectionSuit,e_LOC_GREENHOUSE),show_suit)
+        BLIT_BLOCK(LOADER_SPRITE_ITEMS,4,13)                     ; Draw the protection suit
+                _IMAGE(14,0)
+                _BUFFER(33,104)
+    ENDIF(show_suit)
 
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
@@ -1231,11 +1241,11 @@ girl_is_outside
 _gDescriptionAppleOrchard
 .(
     ; Is the ladder in the scene?
-    JUMP_IF_FALSE(no_ladder,CHECK_ITEM_LOCATION(e_ITEM_Ladder,e_LOC_CURRENT))    
+    IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_Ladder,e_LOC_CURRENT),show_ladder)
         BLIT_BLOCK(LOADER_SPRITE_ITEMS,10,16)                        ; Draw the ladder
                 _IMAGE(7,45)
                 _BUFFER(22,87)
-no_ladder    
+    ENDIF(show_ladder)    
 
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)

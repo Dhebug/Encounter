@@ -83,7 +83,7 @@ _gItems
     ITEM_NORMAL( _gTextItemLockedPanel           ,e_LOC_DARKCELLARROOM  ,ITEM_FLAG_IMMOVABLE|ITEM_FLAG_CLOSED|ITEM_FLAG_LOCKED)      // e_ITEM_AlarmPanel
     ITEM_NORMAL( _gTextItemSecurityDoor          ,e_LOC_PANIC_ROOM_DOOR ,ITEM_FLAG_IMMOVABLE)                       // e_ITEM_SecurityDoor
     ITEM_NORMAL( _gTextItemDriedOutClay          ,e_LOC_CHILDBEDROOM    ,ITEM_FLAG_DEFAULT)                         // e_ITEM_Clay
-    ITEM_NORMAL( _gTextItemProtectionSuit        ,e_LOC_GREENHOUSE      ,ITEM_FLAG_DEFAULT)                         // e_ITEM_ProtectionSuit
+    ITEM_NORMAL( _gTextItemProtectionSuit        ,e_LOC_GREENHOUSE      ,ITEM_FLAG_VISIBLE_IN_SCENE)                // e_ITEM_ProtectionSuit
     ITEM_NORMAL( _gTextItemHoleInDoor            ,e_LOC_NONE            ,ITEM_FLAG_IMMOVABLE)                       // e_ITEM_HoleInDoor
     ITEM_NORMAL( _gTextItemHighUpWindow          ,e_LOC_TILEDPATIO      ,ITEM_FLAG_IMMOVABLE|ITEM_FLAG_CLOSED)      // e_ITEM_PanicRoomWindow
     ITEM_NORMAL( _gTextItemFrontDoor             ,e_LOC_FRONT_ENTRANCE  ,ITEM_FLAG_IMMOVABLE|ITEM_FLAG_CLOSED)      // e_ITEM_FrontDoor
