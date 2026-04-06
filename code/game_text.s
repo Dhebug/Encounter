@@ -3287,16 +3287,9 @@ _InspectMap
 
 _InspectGame
 .(
-    INCREASE_SCORE(POINTS_INSPECT_GAME)    
+    INCREASE_SCORE(POINTS_INSPECT_GAME)
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_EXAMINED_THE_GAME)
-    DISPLAY_IMAGE(LOADER_PICTURE_DONKEY_KONG_TOP)
-#ifdef LANGUAGE_FR
-    INFO_MESSAGE("Les gamins en sont tous fous.")
-#elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Ungene er helt ville etter disse.")
-#else
-    INFO_MESSAGE("Kids are going crazy for these.")
-#endif
+    GOSUB(_ShowHandheldGame)
 
     IF_FALSE(CHECK_ITEM_FLAG(e_ITEM_HandheldGame,ITEM_FLAG_TRANSFORMED),no_batteries)    ; Have the batteries been installed?
         // Non functional game
@@ -3311,6 +3304,30 @@ _InspectGame
 
     WAIT_KEYPRESS
     END_AND_REFRESH
+.)
+
+
+_TakeHandheldGame
+.(
+    DO_ONCE(take_game)
+        GOSUB(_ShowHandheldGame)
+    ENDDO(take_game)
+    JUMP(_TakeCommon)
+.)
+
+
+_ShowHandheldGame
+.(
+    DISPLAY_IMAGE(LOADER_PICTURE_DONKEY_KONG_TOP)
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Les gamins en sont tous fous.")
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Ungene er helt ville etter disse.")
+#else
+    INFO_MESSAGE("Kids are going crazy for these.")
+#endif
+    WAIT_KEYPRESS
+    RETURN
 .)
 
  _InspectFuse
@@ -4449,6 +4466,20 @@ _InspectWell
 _InspectDuneBook
 _ReadDuneBook
 .(
+    GOSUB(_ShowDuneBook)
+    END_AND_REFRESH
+.)
+
+_TakeDuneBook
+.(
+    DO_ONCE(take_dune)
+        GOSUB(_ShowDuneBook)
+    ENDDO(take_dune)
+    JUMP(_TakeCommon)
+.)
+
+_ShowDuneBook
+.(
     DISPLAY_IMAGE(LOADER_PICTURE_BOOK_DUNE)
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Un Dune de 1965, rongé par les vers")
@@ -4460,8 +4491,8 @@ _ReadDuneBook
     INFO_MESSAGE("A wormed-out 1965 Dune novel")
     INFO_MESSAGE("I heard a movie was in the works?")
 #endif
-    WAIT_KEYPRESS    
-    END_AND_REFRESH
+    WAIT_KEYPRESS
+    RETURN
 .)
 
 
@@ -4554,6 +4585,20 @@ _InspectFishPond
 _InspectMixTape
 .(
     INCREASE_SCORE(POINTS_INSPECT_MIX_TAPE)
+    GOSUB(_ShowMixTape)
+    END_AND_REFRESH
+.)
+
+_TakeMixTape
+.(
+    DO_ONCE(take_mixtape)
+        GOSUB(_ShowMixTape)
+    ENDDO(take_mixtape)
+    JUMP(_TakeCommon)
+.)
+
+_ShowMixTape
+.(
     DISPLAY_IMAGE(LOADER_PICTURE_MIXTAPE)
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Les morceaux préférés de quelqu'un.")
@@ -4562,8 +4607,8 @@ _InspectMixTape
 #else
     INFO_MESSAGE("Someone's favourite tunes.")
 #endif
-    WAIT_KEYPRESS    
-    END_AND_REFRESH
+    WAIT_KEYPRESS
+    RETURN
 .)
 
 
@@ -4707,6 +4752,34 @@ _InspectProtectionSuit
     GOSUB(_ShowProtectionSuit)
     END_AND_REFRESH    
 .)
+
+
+_TakeProtectionSuit
+.(
+    DO_ONCE(take_suit)
+        GOSUB(_ShowProtectionSuit)
+    ENDDO(take_suit)
+    JUMP(_TakeCommon)
+.)
+
+
+_ShowProtectionSuit
+.(
+    DISPLAY_IMAGE(LOADER_PICTURE_PROTECTION_SUIT)
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Protection intégrale.")
+    INFO_MESSAGE("Pesticides, chimie... pratique.")
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Full kroppsbeskyttelse.")
+    INFO_MESSAGE("Plantevernmidler, kjemikalier...")
+#else
+    INFO_MESSAGE("Full body protection.")
+    INFO_MESSAGE("Pesticides, chemicals... handy.")
+#endif    
+    WAIT_KEYPRESS
+    RETURN
+.)
+
 
 
 ; From the hole in the door we can see three situations:
@@ -7300,6 +7373,9 @@ _gTakeItemMappingsArray
     VALUE_MAPPING(e_ITEM_ProtectionSuit    , _TakeProtectionSuit)
     VALUE_MAPPING(e_ITEM_Hose              , _TakeHose)
     VALUE_MAPPING(e_ITEM_Net               , _TakeNet)
+    VALUE_MAPPING(e_ITEM_MixTape           , _TakeMixTape)
+    VALUE_MAPPING(e_ITEM_DuneBook          , _TakeDuneBook)
+    VALUE_MAPPING(e_ITEM_HandheldGame      , _TakeHandheldGame)
     VALUE_MAPPING(255                      , _TakeCommon)     ; Default option
 
 
@@ -7404,11 +7480,6 @@ _SubInspectAcid
 .)
 
 
-_TakeProtectionSuit
-.(
-    GOSUB(_ShowProtectionSuit)
-    JUMP(_TakeCommon)
-.)
 
 
 _TakeHose
@@ -7602,23 +7673,6 @@ _ImmovableDefault
 #endif
     END_AND_PARTIAL_REFRESH
 
-
-_ShowProtectionSuit
-.(
-    DISPLAY_IMAGE(LOADER_PICTURE_PROTECTION_SUIT)
-#ifdef LANGUAGE_FR
-    INFO_MESSAGE("Protection intégrale.")
-    INFO_MESSAGE("Pesticides, chimie... pratique.")
-#elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Full kroppsbeskyttelse.")
-    INFO_MESSAGE("Plantevernmidler, kjemikalier...")
-#else
-    INFO_MESSAGE("Full body protection.")
-    INFO_MESSAGE("Pesticides, chemicals... handy.")
-#endif    
-    WAIT_KEYPRESS
-    RETURN
-.)
 
 
 

@@ -414,3 +414,4 @@
 - Fixed a problem where taking the protection suit would not refresh the scene
 - While I was at it, I made the suit now visible in the greenhouse
 - When searching a generic item, the inspect message is now displayed instead of "nothing special"
+- Taking the MixTape, Handheld Game and Roman should automatically look at them (the first time)

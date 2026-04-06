@@ -44,7 +44,7 @@ _gItems
     ITEM_NORMAL( _gTextItemFancyStones           ,e_LOC_ZENGARDEN       ,ITEM_FLAG_DEFAULT)                         // e_ITEM_FancyStones                
     ITEM_NORMAL( _gTextItemSilverKnife           ,e_LOC_VEGSGARDEN      ,ITEM_FLAG_DEFAULT)                         // e_ITEM_SilverKnife          
     ITEM_NORMAL( _gTextItemLadder                ,e_LOC_ORCHARD         ,ITEM_FLAG_VISIBLE_IN_SCENE)                // e_ITEM_Ladder               
-    ITEM_NORMAL( _gTextItemMixTape               ,e_LOC_NONE            ,ITEM_FLAG_DEFAULT)                         // e_ITEM_MixTape         
+    ITEM_NORMAL( _gTextItemMixTape               ,e_LOC_NONE            ,ITEM_FLAG_VISIBLE_IN_SCENE)                // e_ITEM_MixTape         
     ITEM_NORMAL( _gTextItemAlsatianDog           ,e_LOC_LARGE_STAIRCASE ,ITEM_FLAG_IMMOVABLE)                       // e_ITEM_Dog          
     ITEM_NORMAL( _gTextItemMeat                  ,e_LOC_NONE            ,ITEM_FLAG_DEFAULT)                         // e_ITEM_Meat                 
     ITEM_NORMAL( _gTextItemBread                 ,e_LOC_DININGROOM      ,ITEM_FLAG_DEFAULT)                         // e_ITEM_Bread                
@@ -56,7 +56,7 @@ _gItems
     ITEM_NORMAL( _gTextItemHeavySafe             ,e_LOC_CELLAR          ,ITEM_FLAG_IMMOVABLE|ITEM_FLAG_CLOSED)      // e_ITEM_HeavySafe            
     ITEM_NORMAL( _gTextItemHandWrittenNote       ,e_LOC_BOXROOM         ,ITEM_FLAG_DEFAULT)                         // e_ITEM_HandWrittenNote          
     ITEM_NORMAL( _gTextItemRope                  ,e_LOC_WELL            ,ITEM_FLAG_VISIBLE_IN_SCENE)                // e_ITEM_Rope                 
-    ITEM_NORMAL( _gTextItemHandheldGame          ,e_LOC_CHILDBEDROOM    ,ITEM_FLAG_DEFAULT)                         // e_ITEM_HandheldGame
+    ITEM_NORMAL( _gTextItemHandheldGame          ,e_LOC_CHILDBEDROOM    ,ITEM_FLAG_VISIBLE_IN_SCENE)                // e_ITEM_HandheldGame
     ITEM_NORMAL( _gTextItemRollOfToiletPaper     ,e_LOC_TINY_WC         ,ITEM_FLAG_VISIBLE_IN_SCENE)                // e_ITEM_ToiletRoll    
     ITEM_NORMAL( _gTextItemHose                  ,e_LOC_FISHPND         ,ITEM_FLAG_DEFAULT)                         // e_ITEM_Hose             
     ITEM_NORMAL( _gTextItemGameConsole           ,e_LOC_GAMESROOM       ,ITEM_FLAG_IMMOVABLE)                       // e_ITEM_GameConsole
@@ -108,7 +108,7 @@ _gItems
     ITEM_NORMAL( _gTextItemClosedTVCabinet       ,e_LOC_GAMESROOM       ,ITEM_FLAG_IMMOVABLE|ITEM_FLAG_CLOSED)      // e_ITEM_TVCabinet
     ITEM_NORMAL( _gTextItemBatteries             ,e_LOC_NONE            ,ITEM_FLAG_DEFAULT)                         // e_ITEM_Batteries
     ITEM_NORMAL( _gTextItemClosedDrawer          ,e_LOC_GUESTBEDROOM    ,ITEM_FLAG_IMMOVABLE|ITEM_FLAG_CLOSED)      // e_ITEM_Drawer
-    ITEM_NORMAL( _gTextItemDuneBook              ,e_LOC_GUESTBEDROOM    ,ITEM_FLAG_DEFAULT)                         // e_ITEM_DuneBook
+    ITEM_NORMAL( _gTextItemDuneBook              ,e_LOC_GUESTBEDROOM    ,ITEM_FLAG_VISIBLE_IN_SCENE)                // e_ITEM_DuneBook
 #ifdef PRODUCT_TYPE_GAME_DEMO
     ITEM_NORMAL( _gTextItemDemoReadMe            ,e_LOC_LARGE_STAIRCASE ,ITEM_FLAG_IMMOVABLE)                       // e_ITEM_DemoReadMe
 #endif // PRODUCT_TYPE_GAME_DEMO
