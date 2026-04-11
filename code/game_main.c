@@ -188,7 +188,7 @@ void ShowHelp()
 
     gPrintWidth=38;
     gPrintPos = 0;
-    SetLineAddress((char*)0xbb80+40*19+1);
+    SetLineAddress((char*)0xbb80+40*18+1);
 
     while (keywordPtr->word)   // The list is terminated by a null pointer entry
     {

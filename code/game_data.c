@@ -30,6 +30,8 @@ keyword gWordsArray[] =
 
     // Misc instructions
 #ifdef LANGUAGE_FR
+    { "X"       , e_WORD_LOOK },
+
     { "PRENDS"  , e_WORD_TAKE },
     { "RAMASSE" , e_WORD_TAKE },
     { "FOUILLE" , e_WORD_FRISK },
@@ -52,6 +54,8 @@ keyword gWordsArray[] =
     { "REGARDE" , e_WORD_LOOK },
     { "EXAMINE" , e_WORD_LOOK },
 #elif defined(LANGUAGE_NO)
+    { "X"       , e_WORD_LOOK },
+
     { "TA"      , e_WORD_TAKE },
     { "HENT"    , e_WORD_TAKE },
     { "RANSAK"  , e_WORD_FRISK },   // Ransak
@@ -75,6 +79,8 @@ keyword gWordsArray[] =
     { "SE"      , e_WORD_LOOK },
     { "GRANSK"  , e_WORD_LOOK },
 #else
+    { "X"       , e_WORD_LOOK },
+    
     { "TAKE"    , e_WORD_TAKE },
     { "GET"     , e_WORD_TAKE },
     { "FRISK"   , e_WORD_FRISK },

@@ -419,4 +419,4 @@
 - Fixed a dumb problem where the cellar window description would not display properly
 - Combining the key with the panel will now work in the same way as using the key 
 - In addition to COMBINE BATTERIES (item) you can now also just USE BATTERIES if you have the proper item ready
-
+- Added "X" as an alias for "eXamine"

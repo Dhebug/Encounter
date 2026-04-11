@@ -39,9 +39,10 @@ _gTextAnd                   .byt " et",0
 _gTextScore                 .byt 5,"Score: %d",7,0
 _gTextCarryInWhat           .byt "Transporter dans quoi ?",0
 _gTextUseShiftToHighlight   .byt TEXT_CRLF,TEXT_CRLF
-                            .byt "Naviguez avec",3,"les flèches, CTRL",7,"plus",TEXT_CRLF
-                            .byt "touches",3,"HAUT",7,"ou",3,"BAS",7,"pour grimper,",TEXT_CRLF
-                            .byt "et",3,"MAJ",7,"pour identifier les objets.",0
+                            .byt "Sélection par menu:",3,"ESPACE",7,"ou",3,"bouton",TEXT_CRLF
+                            .byt "Déplacements:",3,"Flèches",7,"ou",3,"manette",TEXT_CRLF
+                            .byt "Verticalement:",3,"CTRL",7,"plus",3,"HAUT",7,"ou",3,"BAS",TEXT_CRLF
+                            .byt "Identifier les objets:",3,"MAJUSCULE",0
                             //.byt "Note: Utilisez SHIFT pour voir les objects",0
 #elif defined(LANGUAGE_NO)
 _gTextAskInput              .byt "Greit, hvor begynner jeg...",0
@@ -51,9 +52,10 @@ _gTextAnd                   .byt " og",0
 _gTextScore                 .byt 5,"Poeng: %d",7,0
 _gTextCarryInWhat           .byt "Bær det i hva?",0
 _gTextUseShiftToHighlight   .byt TEXT_CRLF,TEXT_CRLF
-                            .byt "Bruk",3,"piltaster",7,"for å bevege deg,",3,"CTRL",TEXT_CRLF
-                            .byt "pluss",3,"OPP",7,"eller",3,"NED",7,"for å klatre,",TEXT_CRLF
-                            .byt "og",3,"SHIFT",7,"for å markere gjenstander.",0
+                            .byt "Menyvalg:",3,"MELLOMROM",7,"eller",3,"knappen",TEXT_CRLF
+                            .byt "Bevegelse:",3,"Piltaster",7,"eller",3,"styrespak",TEXT_CRLF
+                            .byt "Vertikalt:",3,"CTRL",7,"pluss",3,"OPP",7,"eller",3,"NED",TEXT_CRLF
+                            .byt "Fremhev gjenstander:",3,"SHIFT",0
 #else
 _gTextAskInput              .byt "Right, where do I start...",0
 _gTextNothingHere           .byt 3,"There is nothing of interest here",0
@@ -62,9 +64,11 @@ _gTextAnd                   .byt " and",0
 _gTextScore                 .byt 5,"Score: %d",7,0
 _gTextCarryInWhat           .byt "Carry it in what?",0
 _gTextUseShiftToHighlight   .byt TEXT_CRLF,TEXT_CRLF,
-                            .byt "Use",3,"arrow keys",7,"to move around,",3,"CTRL",TEXT_CRLF
-                            .byt "plus",3,"UP",7,"or",3,"DOWN",7,"to climb up or down,",TEXT_CRLF
-                            .byt "and press",3,"SHIFT",7,"to highlight items.",0
+                            .byt "Keywords selection menu:",3,"SPACE",7,"or",3,"fire",TEXT_CRLF
+                            ;.byt "Movement:",3,"Arrow keys",7,"or",3,"joystick",TEXT_CRLF
+                            .byt "Moving around:",3,"Arrow keys",7,"or",3,"joystick",TEXT_CRLF
+                            .byt "Vertical motion:",3,"CTRL",7,"plus",3,"UP",7,"or",3,"DOWN",TEXT_CRLF
+                            .byt "Highlight usable items:",3,"SHIFT",0
 #endif
 _EndMessagesAndPrompts
 
