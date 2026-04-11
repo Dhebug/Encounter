@@ -5169,7 +5169,8 @@ _OpenFridge
 #else
     SET_ITEM_DESCRIPTION(e_ITEM_Fridge,"an open _fridge")
 #endif
-    IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_Meat,e_LOC_NONE),meat)                          ; If the meat still hidden (in the fridge)? 
+    IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_Meat,e_LOC_NONE),meat)                          ; If the meat still hidden (in the fridge)?
+        GOSUB(_SubFoundSomething)
         SET_ITEM_LOCATION(e_ITEM_Meat,e_LOC_KITCHEN)                                   ; It's now visible inside the kitchen
     ENDIF(meat)
     END_AND_REFRESH
@@ -5190,7 +5191,8 @@ _OpenMedicineCabinet
 #else
     SET_ITEM_DESCRIPTION(e_ITEM_Medicinecabinet,"an open medicine _cabinet")
 #endif
-    IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_SedativePills,e_LOC_NONE),pills)                ; Are the pills still hidden (in the cabinet)? 
+    IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_SedativePills,e_LOC_NONE),pills)                ; Are the pills still hidden (in the cabinet)?
+        GOSUB(_SubFoundSomething)
         SET_ITEM_LOCATION(e_ITEM_SedativePills,e_LOC_KITCHEN)                          ; It's now visible inside the kitchen
     ENDIF(pills)
     END_AND_REFRESH
