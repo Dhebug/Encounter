@@ -7034,9 +7034,13 @@ acid_hole_knife
 
     // - We are in the forest and assume the player want to scare the dove
     JUMP_IF_FALSE(dove_knife,CHECK_PLAYER_LOCATION(e_LOC_WOODEDAVENUE))
-    JUMP_IF_FALSE(dove_knife,CHECK_ITEM_LOCATION(e_ITEM_LargeDove,e_LOC_WOODEDAVENUE))
-        JUMP(_ScareDoveAway)
-dove_knife    
+    JUMP_IF_TRUE(_ScareDoveAway,CHECK_ITEM_LOCATION(e_ITEM_LargeDove,e_LOC_WOODEDAVENUE))
+dove_knife
+
+    // - We are on the ladder in the cellar and the black tape is on the window
+    JUMP_IF_FALSE(tape_knife,CHECK_PLAYER_LOCATION(e_LOC_CELLAR_WINDOW))
+    JUMP_IF_TRUE(_CombineKnifeTape,CHECK_ITEM_LOCATION(e_ITEM_BlackTape,e_LOC_CELLAR_WINDOW))
+tape_knife
 
     // - We have some apples and we want to cut them down
     JUMP_IF_TRUE(apple_knife,CHECK_ITEM_FLAG(e_ITEM_Apple,ITEM_FLAG_TRANSFORMED))
@@ -7438,18 +7442,19 @@ take_bread
 .)
 
 
+_CombineKnifeTape
 _TakeBlackTape
 .(
     CLEAR_TEXT_AREA(4)
     SET_ITEM_LOCATION(e_ITEM_BlackTape, e_LOC_GONE_FOREVER)  ; The black tape cannot be reused
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("En lambeaux. Inutilisable.")
+    INFO_MESSAGE("Ruban en lambeaux. Inutilisable.")
     SET_ITEM_DESCRIPTION(e_ITEM_CellarWindow,"une _fenêtre")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Revet i filler. Ubrukelig nå.")
+    INFO_MESSAGE("Teipen revet i filler. Ubrukelig.")
     SET_ITEM_DESCRIPTION(e_ITEM_CellarWindow,"et _vindu")
 #else
-    INFO_MESSAGE("Ripped to shreds. No use now.")
+    INFO_MESSAGE("Tape ripped to shreds. No use now.")
     SET_ITEM_DESCRIPTION(e_ITEM_CellarWindow,"a _window")
 #endif
     GOSUB(_SubSetLockedPanelDescription)
