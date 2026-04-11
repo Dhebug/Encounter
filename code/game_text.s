@@ -2477,7 +2477,10 @@ _gCombineItemMappingsArray
     COMBINE_MAPPING(e_ITEM_Hose,e_ITEM_CarTank              ,_CombineHoseTank)
     COMBINE_MAPPING(e_ITEM_Rope,e_ITEM_Tree                 ,_CombineRopeTree)
     COMBINE_MAPPING(e_ITEM_HandheldGame,e_ITEM_Batteries    ,_CombineGameWithBatteries)
-    COMBINE_MAPPING(e_ITEM_SmallKey,e_ITEM_AlarmPanel      ,_CombineKeyWithPanel)
+    COMBINE_MAPPING(e_ITEM_SmallKey,e_ITEM_AlarmPanel       ,_CombineKeyWithPanel)
+    COMBINE_MAPPING(e_ITEM_SilverKnife,e_ITEM_BlackTape     ,_CombineKnifeTape)
+    COMBINE_MAPPING(e_ITEM_Adhesive,e_ITEM_GunPowder        ,_CombineNeedsFuse)
+    COMBINE_MAPPING(e_ITEM_Adhesive,e_ITEM_TobaccoTin       ,_CombineNeedsFuse)
     VALUE_MAPPING2(255,255    ,_ErrorCannotDo)
 
 
@@ -2527,6 +2530,15 @@ _CombineMeatWithPills
 #endif
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_DRUGGED_THE_MEAT)   ; Achievement!
     INCREASE_SCORE(POINTS_DRUGGED_MEAT)
+    LOAD_MUSIC(LOADER_MUSIC_SUCCESS)
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Bien. Ça devrait l'assommer.")
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Bra. Bør slå den ut.")
+#else
+    INFO_MESSAGE("Good. That should knock it out.")
+#endif
+    STOP_MUSIC()
     END_AND_REFRESH
 .)
 
@@ -2644,6 +2656,17 @@ _CombineGunPowderWithFuse
 .)
 
 
+_CombineNeedsFuse
+#ifdef LANGUAGE_FR
+    ERROR_MESSAGE("La bombe n'est pas encore prête.")
+#elif defined(LANGUAGE_NO)
+    ERROR_MESSAGE("Bomben er ikke ferdig ennå.")
+#else
+    ERROR_MESSAGE("The bomb is not complete yet.")
+#endif
+    END_AND_PARTIAL_REFRESH
+
+
 _CombineBombWithAdhesive
 .(
     SET_ITEM_LOCATION(e_ITEM_Adhesive,e_LOC_NONE)                        ; The adhesive is gone
@@ -2739,6 +2762,15 @@ _CombineClayWithWater
 #endif
     SET_ITEM_FLAGS(e_ITEM_Clay,ITEM_FLAG_TRANSFORMED)                  ; Clay is now wet
     INCREASE_SCORE(POINTS_MADE_CLAY_WET)
+    LOAD_MUSIC(LOADER_MUSIC_SUCCESS)
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Bien malléable maintenant.")
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Fin og formbar nå.")
+#else
+    INFO_MESSAGE("Nice and malleable now.")
+#endif
+    STOP_MUSIC()
     END_AND_REFRESH
 .)
 
@@ -5113,6 +5145,15 @@ _OpenCurtain
 #else
     SET_ITEM_DESCRIPTION(e_ITEM_Curtain,"an opened _curtain")
 #endif
+    LOAD_MUSIC(LOADER_MUSIC_SUCCESS)
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Une porte blindée !")
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("En pansret dør!")
+#else
+    INFO_MESSAGE("An armoured door!")
+#endif
+    STOP_MUSIC()
     END_AND_REFRESH
 .)
 

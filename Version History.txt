@@ -424,3 +424,5 @@
 - When quitting the intro, the random audio glitch before the typewriter sequence should now be gone
 - Shortened the delay between information messages and key presses to make the game feel more snappy
 - Opening the Fridge or the Cabinet should now show a "what have we here" message.
+- Interacting with the clay, adhesive or curtain now gives more feedback to the player
+
