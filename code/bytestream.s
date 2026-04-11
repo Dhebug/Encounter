@@ -224,12 +224,25 @@ search_loop
     iny
     cmp _param0         ; Does that match the ID we are looking for?
     beq _PlayMatchedStream
-    cmp #255            ; Or is it the end of the table?
+    cmp #MAPPING_REDIRECT  ; Redirect: retry with a different table?
+    beq redirect
+    cmp #MAPPING_DEFAULT   ; End of table (default handler)?
     beq _PlayMatchedStream
 
     iny                 ; Skip the callback/stream pointer
     iny
     jmp search_loop
+
+redirect
+    ; Replace the table pointer with the redirect target and restart the search
+    lda (_param1),y
+    pha
+    iny
+    lda (_param1),y
+    sta _param1+1
+    pla
+    sta _param1
+    jmp _DispatchStream
 .)
 
 
@@ -270,7 +283,7 @@ search_loop
     tax                 ; Copy to X
     lda (_param1),y     ; Check the second in the table
     iny
-    cmp #255            ; Is it the end of the table?
+    cmp #MAPPING_DEFAULT ; Is it the end of the table?
     beq end_of_table
 
     cpx _param0         ; Does that match the first ID we are looking for?

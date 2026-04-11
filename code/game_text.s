@@ -2912,7 +2912,7 @@ _gReadItemMappingsArray
 #ifdef PRODUCT_TYPE_GAME_DEMO
     VALUE_MAPPING(e_ITEM_DemoMessage        , _ReadDemoMessage)
 #endif // PRODUCT_TYPE_GAME_DEMO
-    VALUE_MAPPING(255                       , _ErrorCannotRead)             ; Default option
+    VALUE_MAPPING(MAPPING_DEFAULT                       , _ErrorCannotRead)             ; Default option
 
 
 #ifdef PRODUCT_TYPE_GAME_DEMO
@@ -3260,7 +3260,7 @@ _gInspectItemMappingsArray
 #ifdef PRODUCT_TYPE_GAME_DEMO
     VALUE_MAPPING(e_ITEM_DemoMessage        , _InspectDemoMessage)
 #endif // PRODUCT_TYPE_GAME_DEMO
-    VALUE_MAPPING(255                       , _MessageNothingSpecial)  ; Default option
+    VALUE_MAPPING(MAPPING_DEFAULT                       , _MessageNothingSpecial)  ; Default option
 
 
 _UseRoughPlan
@@ -5147,7 +5147,7 @@ _gOpenItemMappingsArray
     VALUE_MAPPING(e_ITEM_TVCabinet          , _OpenTVCabinet)        
     VALUE_MAPPING(e_ITEM_Drawer             , _OpenDrawer)
     VALUE_MAPPING(e_ITEM_Trashcan           , _OpenTrashcan)
-    VALUE_MAPPING(255                       , _ErrorCannotDo)        ; Default option
+    VALUE_MAPPING(MAPPING_DEFAULT                       , _ErrorCannotDo)        ; Default option
 
 
 _OpenSafe
@@ -5557,7 +5557,7 @@ _gCloseItemMappingsArray
     VALUE_MAPPING(e_ITEM_TVCabinet          , _CloseTVCabinet)    
     VALUE_MAPPING(e_ITEM_Drawer             , _CloseDrawer)
     VALUE_MAPPING(e_ITEM_Trashcan           , _CloseTrashcan)
-    VALUE_MAPPING(255                       , _ErrorCannotDo)            ; Default option
+    VALUE_MAPPING(MAPPING_DEFAULT                       , _ErrorCannotDo)            ; Default option
 
 
 _CloseCurtain
@@ -5793,7 +5793,7 @@ _gUseItemMappingsArray
 #ifdef PRODUCT_TYPE_GAME_DEMO
     VALUE_MAPPING(e_ITEM_DemoMessage        , _UseDemoMessage)
 #endif // PRODUCT_TYPE_GAME_DEMO
-    VALUE_MAPPING(255                       , _ErrorCannotDo)   ; Default option
+    VALUE_MAPPING(MAPPING_DEFAULT                       , _ErrorCannotDo)   ; Default option
 
 
 ; Shared confirmation: "End the game: Are you sure?"
@@ -6702,13 +6702,7 @@ _gSearchtemMappingsArray
     VALUE_MAPPING(e_ITEM_TobaccoTin         , _SearchTin)
     VALUE_MAPPING(e_ITEM_TVCabinet          , _SearchTVCabinet)
     VALUE_MAPPING(e_ITEM_Drawer             , _SearchDrawer)
-    VALUE_MAPPING(255                       , _SearchFallbackToInspect)  ; Default: try the inspect handler
-
-; If there's no dedicated search handler for an item, try the inspect handler instead.
-; This way SEARCH and LOOK/INSPECT behave the same for items that don't need special search logic.
-_SearchFallbackToInspect
-    CALL_NATIVE(_RedispatchToInspect)
-    END_AND_PARTIAL_REFRESH
+    VALUE_MAPPING(MAPPING_REDIRECT          , _gInspectItemMappingsArray)  ; No match: retry with the inspect table
 
 _SearchThug
 .(
@@ -6797,7 +6791,7 @@ _gThrowItemMappingsArray
     VALUE_MAPPING(e_ITEM_LargeDove          , _ThrowDove)
     VALUE_MAPPING(e_ITEM_Net                , _ThrowNet)
     VALUE_MAPPING(e_ITEM_CardboardBox       , _ThrowCardboardBox)
-    VALUE_MAPPING(255                       , _ThrowCurrentItem)  ; Default option
+    VALUE_MAPPING(MAPPING_DEFAULT                       , _ThrowCurrentItem)  ; Default option
 
 _DropBread
 _ThrowBread
@@ -7409,7 +7403,7 @@ _gTakeItemMappingsArray
     VALUE_MAPPING(e_ITEM_MixTape           , _TakeMixTape)
     VALUE_MAPPING(e_ITEM_DuneBook          , _TakeDuneBook)
     VALUE_MAPPING(e_ITEM_HandheldGame      , _TakeHandheldGame)
-    VALUE_MAPPING(255                      , _TakeCommon)     ; Default option
+    VALUE_MAPPING(MAPPING_DEFAULT                      , _TakeCommon)     ; Default option
 
 
 _TakeRope
@@ -7599,7 +7593,7 @@ _gImmovableItemMappingsArray
     VALUE_MAPPING(e_ITEM_Television        , _ImmovableNoStealing)
     VALUE_MAPPING(e_ITEM_Oric              , _ImmovableNoStealing)
     VALUE_MAPPING(e_ITEM_GameConsole       , _ImmovableNoStealing)
-    VALUE_MAPPING(255                      , _ImmovableDefault)   ; Default: generic message
+    VALUE_MAPPING(MAPPING_DEFAULT                      , _ImmovableDefault)   ; Default: generic message
 
 
 _ImmovableDove
@@ -7732,7 +7726,7 @@ _gDropItemMappingsArray
     VALUE_MAPPING(e_ITEM_Petrol         , _DropPetrol)
     VALUE_MAPPING(e_ITEM_LargeDove      , _DropDove)
     VALUE_MAPPING(e_ITEM_Bread          , _DropBread)
-    VALUE_MAPPING(255                   , _DropCurrentItem)  ; Default option
+    VALUE_MAPPING(MAPPING_DEFAULT                   , _DropCurrentItem)  ; Default option
 
 
 _DropWater

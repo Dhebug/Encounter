@@ -237,6 +237,8 @@
 
 
 // Value mapping
+#define MAPPING_DEFAULT          255            // Default handler when no match is found
+#define MAPPING_REDIRECT         254            // Redirect: retry search with a different table
 #define VALUE_MAPPING(value,address)            .byt value,<address,>address
 #define VALUE_MAPPING2(value1,value2,address)   .byt value1,value2,<address,>address
 #define COMBINE_MAPPING(value1,value2,address)  .byt (value1<value2)*value1+(value2<value1)*value2,(value1<value2)*value2+(value2<value1)*value1,<address,>address  // Auto-sorted; _DispatchStream2 sorts params to match
