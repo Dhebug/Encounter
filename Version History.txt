@@ -421,3 +421,5 @@
 - In addition to COMBINE BATTERIES (item) you can now also just USE BATTERIES if you have the proper item ready
 - Added "X" as an alias for "eXamine"
 - Added an indication in the loading messages that SPACE and HELP can be used to access the menu and help system
+- When quitting the intro, the random audio glitch before the typewriter sequence should now be gone
+

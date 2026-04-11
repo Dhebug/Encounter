@@ -872,6 +872,7 @@ void main()
             gIntroPage=0;
         }
 	}
+    EndMusic();
 #endif
 #endif
 
