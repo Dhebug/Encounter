@@ -441,13 +441,13 @@ _Text_TypeWriterMessage
 // Bonus texts
 #ifdef LANGUAGE_FR
 _Text_Loading_FirstTimeEver    
-    .byt "UTILISE, LACHE, LANCE, COMBINE objets.",TEXT_CRLF
-    .byt "LIS, REGARDE ou CHERCHE quelques-uns.",TEXT_CRLF
-    .byt 0
-_Text_Loading_SecondTime    
     .byt "Tuer est toujours une option, mais être",TEXT_CRLF
     .byt "pacifiste rapporte plus de points.",TEXT_CRLF
     .byt 0
+_Text_Loading_SecondTime    
+    .byt "Pressez",3,"ESPACE",7,"pour afficher le",6,"menu",TEXT_CRLF
+    .byt "Tappez",3,"AIDE",7,"pour afficher toutes",TEXT_CRLF
+    .byt "les",6,"instructions",7,"comprises par le jeu",0
 _Text_Loading_ThirdTime    
     .byt "Certains objets ont plusieurs usages...",TEXT_CRLF
     .byt "mais certains autres sont inutiles !",TEXT_CRLF
@@ -458,13 +458,13 @@ _Text_Loading_FourthTime
     .byt 0
 #elif defined(LANGUAGE_NO)
 _Text_Loading_FirstTimeEver
-    .byt "Du kan BRUK, LEGG, KAST, KOMBINER.",TEXT_CRLF
-    .byt "Noen kan du LES, UNDERSØK eller SØK.",TEXT_CRLF
-    .byt 0
-_Text_Loading_SecondTime
     .byt "Å drepe er alltid et alternativ, men",TEXT_CRLF
     .byt "pasifisme gir deg flere poeng.",TEXT_CRLF
     .byt 0
+_Text_Loading_SecondTime
+    .byt "Trykk",3,"MELLOMROM",7,"for å vise",6,"menyen",TEXT_CRLF
+    .byt "Skriv",3,"HJELP",7,"for å se alle",6,"instruksjoner",TEXT_CRLF
+    .byt "spillet forstår",0
 _Text_Loading_ThirdTime
     .byt "Noen gjenstander har flere bruksområder,",TEXT_CRLF
     .byt "andre er uten hensikt. Gjett riktig!",TEXT_CRLF
@@ -475,13 +475,13 @@ _Text_Loading_FourthTime
     .byt 0
 #else
 _Text_Loading_FirstTimeEver
-    .byt "You can USE, DROP, THROW, COMBINE items.",TEXT_CRLF
-    .byt "Some you can READ, INSPECT or SEARCH.",TEXT_CRLF
-    .byt 0
-_Text_Loading_SecondTime
     .byt "Lethality is always an option but being",TEXT_CRLF
     .byt "a pacifist will grant you more points.",TEXT_CRLF
     .byt 0
+_Text_Loading_SecondTime
+    .byt "Press",3,"SPACE",7,"to display the",6,"menu",TEXT_CRLF
+    .byt "Type",3,"HELP",7,"to show all the",6,"instructions",TEXT_CRLF
+    .byt "understood by the game",0
 _Text_Loading_ThirdTime
     .byt "Some items have multiple uses, some have",TEXT_CRLF
     .byt "no specific purpose. Try to guess right!",TEXT_CRLF

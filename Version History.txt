@@ -420,3 +420,4 @@
 - Combining the key with the panel will now work in the same way as using the key 
 - In addition to COMBINE BATTERIES (item) you can now also just USE BATTERIES if you have the proper item ready
 - Added "X" as an alias for "eXamine"
+- Added an indication in the loading messages that SPACE and HELP can be used to access the menu and help system
