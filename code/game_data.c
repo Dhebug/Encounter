@@ -4,34 +4,8 @@
 
 keyword gWordsArray[] =
 {
-    // Directions
-#ifdef LANGUAGE_FR
-    { "N", e_WORD_NORTH },
-    { "S", e_WORD_SOUTH },
-    { "E", e_WORD_EAST  },
-    { "O", e_WORD_WEST  },  // Ouest
-    { "M", e_WORD_UP    },  // Monter
-    { "D", e_WORD_DOWN  },  // Descendre
-#elif defined(LANGUAGE_NO)
-    { "N", e_WORD_NORTH },  // We keep the English words in Norwegian
-    { "S", e_WORD_SOUTH },  // The reason is taht the Oric keyboard does not have any Norwegian character
-    { "E", e_WORD_EAST  },  // So typing "OST" (Cheese) instead of "ØST" (East) would be awkward
-    { "W", e_WORD_WEST  },
-    { "U", e_WORD_UP    },
-    { "D", e_WORD_DOWN  },
-#else
-    { "N", e_WORD_NORTH },
-    { "S", e_WORD_SOUTH },
-    { "E", e_WORD_EAST  },
-    { "W", e_WORD_WEST  },
-    { "U", e_WORD_UP    },
-    { "D", e_WORD_DOWN  },
-#endif
-
     // Misc instructions
 #ifdef LANGUAGE_FR
-    { "X"       , e_WORD_LOOK },
-
     { "PRENDS"  , e_WORD_TAKE },
     { "RAMASSE" , e_WORD_TAKE },
     { "FOUILLE" , e_WORD_FRISK },
@@ -54,8 +28,6 @@ keyword gWordsArray[] =
     { "REGARDE" , e_WORD_LOOK },
     { "EXAMINE" , e_WORD_LOOK },
 #elif defined(LANGUAGE_NO)
-    { "X"       , e_WORD_LOOK },
-
     { "TA"      , e_WORD_TAKE },
     { "HENT"    , e_WORD_TAKE },
     { "RANSAK"  , e_WORD_FRISK },   // Ransak
@@ -79,8 +51,6 @@ keyword gWordsArray[] =
     { "SE"      , e_WORD_LOOK },
     { "GRANSK"  , e_WORD_LOOK },
 #else
-    { "X"       , e_WORD_LOOK },
-    
     { "TAKE"    , e_WORD_TAKE },
     { "GET"     , e_WORD_TAKE },
     { "FRISK"   , e_WORD_FRISK },
@@ -122,6 +92,36 @@ keyword gWordsArray[] =
 
     // Last instruction
     { "QUIT", e_WORD_QUIT },
+#endif
+
+    // Single letter shortcuts (at the end so full words appear first in the menu)
+#ifdef LANGUAGE_FR
+    { "N", e_WORD_NORTH },
+    { "S", e_WORD_SOUTH },
+    { "E", e_WORD_EAST  },
+    { "O", e_WORD_WEST  },  // Ouest
+    { "M", e_WORD_UP    },  // Monter
+    { "D", e_WORD_DOWN  },  // Descendre
+
+    { "X", e_WORD_LOOK  },
+#elif defined(LANGUAGE_NO)
+    { "N", e_WORD_NORTH },  // We keep the English words in Norwegian
+    { "S", e_WORD_SOUTH },  // The reason is taht the Oric keyboard does not have any Norwegian character
+    { "E", e_WORD_EAST  },  // So typing "OST" (Cheese) instead of "ØST" (East) would be awkward
+    { "W", e_WORD_WEST  },
+    { "U", e_WORD_UP    },
+    { "D", e_WORD_DOWN  },
+
+    { "X", e_WORD_LOOK  },
+#else
+    { "N", e_WORD_NORTH },
+    { "S", e_WORD_SOUTH },
+    { "E", e_WORD_EAST  },
+    { "W", e_WORD_WEST  },
+    { "U", e_WORD_UP    },
+    { "D", e_WORD_DOWN  },
+
+    { "X", e_WORD_LOOK  },
 #endif
 
     // Sentinelle
