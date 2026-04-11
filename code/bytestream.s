@@ -73,6 +73,7 @@ _ByteStreamCallbacks
     .word _ByteStreamCommand_SET_CURRENT_ITEM
     .word _ByteStreamCommand_COMMAND_CALL_NATIVE
     .word _ByteStreamCommand_COMBINE_ITEMS
+    .word _ByteStreamCommand_KEYPRESS_MESSAGE
 
 
 ; Checks if there's a stream delay active.
@@ -1373,6 +1374,14 @@ _LongWaitAfterMessage
 ; INFO_MESSAGE has the standard 75 frame, and is generally followed by WAIT(50*2), total = 175 frames
 
 ; Uses _gCurrentStream and _gStreamNextPtr
+; .byt COMMAND_KEYPRESS_MESSAGE,message,0
+_ByteStreamCommand_KEYPRESS_MESSAGE
+.(
+    jsr _ByteStreamCommand_QUICK_MESSAGE
+    jsr _WaitAfterMessage                ; 75 frame pause
+    jmp _ByteStreamCommand_WAIT_KEYPRESS ; Then wait for keypress
+.)
+
 ; .byt COMMAND_INFO_MESSAGE,message,0
 _ByteStreamCommand_INFO_MESSAGE
 .(

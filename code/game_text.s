@@ -2751,15 +2751,14 @@ _CombineCueWithRope
     UNSET_ITEM_FLAGS(e_ITEM_Rope,ITEM_FLAG_ATTACHED)                   ; If it was attached to anything, it's not anymore
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("La queue ne va pas résister...")
-    INFO_MESSAGE("Mais elle peut casser des trucs !")
+    KEYPRESS_MESSAGE("Mais elle peut casser des trucs !")
 #elif defined(LANGUAGE_NO)
     INFO_MESSAGE("Kølla er ikke sterk nok...")
-    INFO_MESSAGE("...men den kan knuse ting!")
+    KEYPRESS_MESSAGE("...men den kan knuse ting!")
 #else
     INFO_MESSAGE("The cue is not strong enough...")
-    INFO_MESSAGE("But it could break things!")
+    KEYPRESS_MESSAGE("But it could break things!")
 #endif
-    WAIT_KEYPRESS
     END_AND_REFRESH
 .)
 
@@ -3045,15 +3044,14 @@ _ReadNewsPaper
     DISPLAY_IMAGE(LOADER_PICTURE_NEWSPAPER)
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Il faut que je la trouve vite...")
-    INFO_MESSAGE("...j'espère qu'elle va bien !")
+    KEYPRESS_MESSAGE("...j'espère qu'elle va bien !")
 #elif defined(LANGUAGE_NO)
     INFO_MESSAGE("Jeg må finne henne fort...")
-    INFO_MESSAGE("...håper hun har det bra!")
+    KEYPRESS_MESSAGE("...håper hun har det bra!")
 #else
     INFO_MESSAGE("I need to find her. Quickly.")
-    INFO_MESSAGE("...I hope she's alright.")
+    KEYPRESS_MESSAGE("...I hope she's alright.")
 #endif
-    WAIT_KEYPRESS    
     END_AND_REFRESH
 
 
@@ -3064,13 +3062,12 @@ _ReadHandWrittenNote
     DISPLAY_IMAGE(LOADER_PICTURE_HANDWRITTEN_NOTE)
     GOSUB(_SubCouldComeInHandy)
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("...si je peux y accéder !")
+    KEYPRESS_MESSAGE("...si je peux y accéder !")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("...hvis jeg kommer til den!")
+    KEYPRESS_MESSAGE("...hvis jeg kommer til den!")
 #else
-    INFO_MESSAGE("...if I can get to it.")
+    KEYPRESS_MESSAGE("...if I can get to it.")
 #endif    
-    WAIT_KEYPRESS    
     END_AND_REFRESH
 
 _InspectChemistryRecipes
@@ -3080,13 +3077,12 @@ _ReadChemistryRecipes
     DISPLAY_IMAGE(LOADER_PICTURE_CHEMISTRY_RECIPES)
     GOSUB(_SubCouldComeInHandy)
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("...il faut trouver les composants.")
+    KEYPRESS_MESSAGE("...il faut trouver les composants.")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("...bare finne materialene.")
+    KEYPRESS_MESSAGE("...bare finne materialene.")
 #else
-    INFO_MESSAGE("...just need the ingredients.")
+    KEYPRESS_MESSAGE("...just need the ingredients.")
 #endif    
-    WAIT_KEYPRESS    
     END_AND_REFRESH
 
 
@@ -3296,13 +3292,12 @@ _InspectMap
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_EXAMINED_THE_MAP)
     DISPLAY_IMAGE(LOADER_PICTURE_UK_MAP)
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Bon à savoir où je suis.")
+    KEYPRESS_MESSAGE("Bon à savoir où je suis.")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Greit å vite hvor jeg er.")
+    KEYPRESS_MESSAGE("Greit å vite hvor jeg er.")
 #else
-    INFO_MESSAGE("Good to know where I am.")
+    KEYPRESS_MESSAGE("Good to know where I am.")
 #endif
-    WAIT_KEYPRESS
     END_AND_REFRESH
 
 
@@ -3341,74 +3336,68 @@ _ShowHandheldGame
 .(
     DISPLAY_IMAGE(LOADER_PICTURE_DONKEY_KONG_TOP)
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Les gamins en sont tous fous.")
+    KEYPRESS_MESSAGE("Les gamins en sont tous fous.")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Ungene er helt ville etter disse.")
+    KEYPRESS_MESSAGE("Ungene er helt ville etter disse.")
 #else
-    INFO_MESSAGE("Kids are going crazy for these.")
+    KEYPRESS_MESSAGE("Kids are going crazy for these.")
 #endif
-    WAIT_KEYPRESS
     RETURN
 .)
 
  _InspectFuse
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("A combiner avec un explosif...")
+    KEYPRESS_MESSAGE("A combiner avec un explosif...")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Kombinere med noe eksplosivt...")
+    KEYPRESS_MESSAGE("Kombinere med noe eksplosivt...")
 #else
-    INFO_MESSAGE("Pair with something explosive...")
+    KEYPRESS_MESSAGE("Pair with something explosive...")
 #endif
-    WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 
 
 _InspectBomb
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Pas mal pour une bombe maison.")
+    KEYPRESS_MESSAGE("Pas mal pour une bombe maison.")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Ikke verst for en hjemmelaget bombe.")
+    KEYPRESS_MESSAGE("Ikke verst for en hjemmelaget bombe.")
 #else
-    INFO_MESSAGE("Not bad for a homemade bomb.")
+    KEYPRESS_MESSAGE("Not bad for a homemade bomb.")
 #endif
-    WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 
 
  _InspectToiletRoll
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Long, résistant, et super absorbant")
+    KEYPRESS_MESSAGE("Long, résistant, et super absorbant")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Lang, solid og ekstra absorberende")
+    KEYPRESS_MESSAGE("Lang, solid og ekstra absorberende")
 #else
-    INFO_MESSAGE("Long, sturdy, and extra absorbent")
+    KEYPRESS_MESSAGE("Long, sturdy, and extra absorbent")
 #endif
-    WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 
 
 _InspectMatches
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Utile pour allumer un feu")
+    KEYPRESS_MESSAGE("Utile pour allumer un feu")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Kan starte en brann med det.")
+    KEYPRESS_MESSAGE("Kan starte en brann med det.")
 #else
-    INFO_MESSAGE("Could start a fire with that.")
+    KEYPRESS_MESSAGE("Could start a fire with that.")
 #endif
-    WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 
 
 _InspectLadder
 _InspectRope
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Pratique pour grimper ou descendre")
+    KEYPRESS_MESSAGE("Pratique pour grimper ou descendre")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Kan klatre opp eller ned med den.")
+    KEYPRESS_MESSAGE("Kan klatre opp eller ned med den.")
 #else
-    INFO_MESSAGE("Could climb up or down with it.")
+    KEYPRESS_MESSAGE("Could climb up or down with it.")
 #endif
-    WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 
 
@@ -3421,13 +3410,12 @@ _InspectDove
 
     ; Else it is happy chirping around
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Elle roucoule sur une branche haute")
+    KEYPRESS_MESSAGE("Elle roucoule sur une branche haute")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Den kvitrer høyt oppe på en gren")
+    KEYPRESS_MESSAGE("Den kvitrer høyt oppe på en gren")
 #else
-    INFO_MESSAGE("It's chirping high up on a branch")
+    KEYPRESS_MESSAGE("It's chirping high up on a branch")
 #endif
-    WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 
 dove_eating
@@ -3436,13 +3424,12 @@ dove_eating
 
 dove_not_happy
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Elle bouge et essaye de s'échapper")
+    KEYPRESS_MESSAGE("Elle bouge et essaye de s'échapper")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Den er misfornøyd og prøver å rømme")
+    KEYPRESS_MESSAGE("Den er misfornøyd og prøver å rømme")
 #else
-    INFO_MESSAGE("It's not happy and tries to escape")
+    KEYPRESS_MESSAGE("It's not happy and tries to escape")
 #endif
-    WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 .)
 
@@ -3450,140 +3437,129 @@ dove_not_happy
 
 _InspectFish
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Il semble aimer son bassin")
+    KEYPRESS_MESSAGE("Il semble aimer son bassin")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Den ser glad ut mens den svømmer")
+    KEYPRESS_MESSAGE("Den ser glad ut mens den svømmer")
 #else
-    INFO_MESSAGE("It seems happy swimming around")
+    KEYPRESS_MESSAGE("It seems happy swimming around")
 #endif
-    WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 
 
 _UseWater
 _InspectWater
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Elle est propre, fraiche et liquide")
+    KEYPRESS_MESSAGE("Elle est propre, fraiche et liquide")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Det er rent, friskt og flytende")
+    KEYPRESS_MESSAGE("Det er rent, friskt og flytende")
 #else
-    INFO_MESSAGE("It's clean, fresh, and liquid")
+    KEYPRESS_MESSAGE("It's clean, fresh, and liquid")
 #endif
-    WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 
 
 _InspectHose
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Sert à transférer les liquides")
+    KEYPRESS_MESSAGE("Sert à transférer les liquides")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Beregnet på å flytte væsker")
+    KEYPRESS_MESSAGE("Beregnet på å flytte væsker")
 #else
-    INFO_MESSAGE("Designed to move liquids efficiently")
+    KEYPRESS_MESSAGE("Designed to move liquids efficiently")
 #endif
-    WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 
 
 _InspectAdhesive
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Ca maintient les choses en place")
+    KEYPRESS_MESSAGE("Ca maintient les choses en place")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Beregnet på å holde ting på plass")
+    KEYPRESS_MESSAGE("Beregnet på å holde ting på plass")
 #else
-    INFO_MESSAGE("Designed to keep things in place")
+    KEYPRESS_MESSAGE("Designed to keep things in place")
 #endif
-    WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 
 
 _InspectBlackTape
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Probablement possible de l'enlever")
+    KEYPRESS_MESSAGE("Probablement possible de l'enlever")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Det bør være mulig å fjerne den")
+    KEYPRESS_MESSAGE("Det bør være mulig å fjerne den")
 #else
-    INFO_MESSAGE("It should be possible to remove it")
+    KEYPRESS_MESSAGE("It should be possible to remove it")
 #endif
-    WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 
 
 _InspectSaltpetre
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Frais, amer au goût. Du salpêtre.")
+    KEYPRESS_MESSAGE("Frais, amer au goût. Du salpêtre.")
     SET_ITEM_DESCRIPTION(e_ITEM_Saltpetre,"du$_salpêtre")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Kjølig, bitter smak. Salpeter.")
+    KEYPRESS_MESSAGE("Kjølig, bitter smak. Salpeter.")
     SET_ITEM_DESCRIPTION(e_ITEM_Saltpetre,"noe$_salpeter")
 #else
-    INFO_MESSAGE("Feels cool, bitter taste. Saltpetre.")
+    KEYPRESS_MESSAGE("Feels cool, bitter taste. Saltpetre.")
     SET_ITEM_DESCRIPTION(e_ITEM_Saltpetre,"some$_saltpetre")
 #endif
-    WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 
 
 _InspectSulphur
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Du soufre. Ce jaune est typique.")
+    KEYPRESS_MESSAGE("Du soufre. Ce jaune est typique.")
     SET_ITEM_DESCRIPTION(e_ITEM_Sulphur,"du$_soufre")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Svovel. Umulig å ta feil av gult.")
+    KEYPRESS_MESSAGE("Svovel. Umulig å ta feil av gult.")
     SET_ITEM_DESCRIPTION(e_ITEM_Sulphur,"noe$_svovel")
 #else
-    INFO_MESSAGE("Sulphur. Can't mistake that yellow.")
+    KEYPRESS_MESSAGE("Sulphur. Can't mistake that yellow.")
     SET_ITEM_DESCRIPTION(e_ITEM_Sulphur,"some$_sulphur")
 #endif
-    WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 
 
 _InspectBread
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Rassis. Devrait bien s'émietter.")
+    KEYPRESS_MESSAGE("Rassis. Devrait bien s'émietter.")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Tørt. Bør smuldre fint.")
+    KEYPRESS_MESSAGE("Tørt. Bør smuldre fint.")
 #else
-    INFO_MESSAGE("Stale. Should crumble nicely.")
+    KEYPRESS_MESSAGE("Stale. Should crumble nicely.")
 #endif
-    WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 
 
 _InspectCurtain
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Un rideau ici ? C'est étrange.")
+    KEYPRESS_MESSAGE("Un rideau ici ? C'est étrange.")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Et gardin her? Det er rart.")
+    KEYPRESS_MESSAGE("Et gardin her? Det er rart.")
 #else
-    INFO_MESSAGE("A curtain here? That's odd.")
+    KEYPRESS_MESSAGE("A curtain here? That's odd.")
 #endif
-    WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 
 
 _InspectNet
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Peut attraper des balles, etc.")
+    KEYPRESS_MESSAGE("Peut attraper des balles, etc.")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Kan fange baller, blant annet")
+    KEYPRESS_MESSAGE("Kan fange baller, blant annet")
 #else
-    INFO_MESSAGE("Can catch balls, among other things")
+    KEYPRESS_MESSAGE("Can catch balls, among other things")
 #endif
-    WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 
 
 _InspectKey
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Une étiquette indique 'Alarme'")
+    KEYPRESS_MESSAGE("Une étiquette indique 'Alarme'")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Den har en etikett: 'Alarm'")
+    KEYPRESS_MESSAGE("Den har en etikett: 'Alarm'")
 #else
-    INFO_MESSAGE("It has a label that says 'Alarm'")
+    KEYPRESS_MESSAGE("It has a label that says 'Alarm'")
 #endif
-    WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 
 
@@ -3591,13 +3567,12 @@ _InspectKey
 _InspectComputer
 .(
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Un IBM PC. On ne rigole pas ici.")
+    KEYPRESS_MESSAGE("Un IBM PC. On ne rigole pas ici.")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("En IBM PC. Her er det alvor.")
+    KEYPRESS_MESSAGE("En IBM PC. Her er det alvor.")
 #else
-    INFO_MESSAGE("An IBM PC. Business means business.")
+    KEYPRESS_MESSAGE("An IBM PC. Business means business.")
 #endif
-    WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH    
 .)
 
@@ -3605,13 +3580,12 @@ _InspectComputer
 _InspectTelevision
 .(
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Énorme. A dû coûter une fortune.")
+    KEYPRESS_MESSAGE("Énorme. A dû coûter une fortune.")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Enorm. Må ha kostet en formue.")
+    KEYPRESS_MESSAGE("Enorm. Må ha kostet en formue.")
 #else
-    INFO_MESSAGE("Massive. Must've cost a fortune.")
+    KEYPRESS_MESSAGE("Massive. Must've cost a fortune.")
 #endif
-    WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 .)
 
@@ -3619,13 +3593,12 @@ _InspectTelevision
 _InspectGameConsole
 .(
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("ColecoVision. Pas facile à trouver.")
+    KEYPRESS_MESSAGE("ColecoVision. Pas facile à trouver.")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("ColecoVision. Ikke lett å få tak i.")
+    KEYPRESS_MESSAGE("ColecoVision. Ikke lett å få tak i.")
 #else
-    INFO_MESSAGE("ColecoVision. Not easy to get here.")
+    KEYPRESS_MESSAGE("ColecoVision. Not easy to get here.")
 #endif
-    WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 .)
 
@@ -3633,13 +3606,12 @@ _InspectGameConsole
 _InspectTVCabinet
 .(
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Il y a peut-être quelque chose.")
+    KEYPRESS_MESSAGE("Il y a peut-être quelque chose.")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Kanskje noe der inne.")
+    KEYPRESS_MESSAGE("Kanskje noe der inne.")
 #else
-    INFO_MESSAGE("Might be something in there.")
+    KEYPRESS_MESSAGE("Might be something in there.")
 #endif
-    WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 .)
 
@@ -3648,13 +3620,12 @@ _InspectBatteries
 .(
     DISPLAY_IMAGE(LOADER_PICTURE_BATTERIES)
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Idéal pour montres ou petit jeux.")
+    KEYPRESS_MESSAGE("Idéal pour montres ou petit jeux.")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Bør passe de fleste småting.")
+    KEYPRESS_MESSAGE("Bør passe de fleste småting.")
 #else
-    INFO_MESSAGE("Should fit most small gadgets.")
+    KEYPRESS_MESSAGE("Should fit most small gadgets.")
 #endif
-    WAIT_KEYPRESS
     END_AND_REFRESH
 .)
 
@@ -3662,13 +3633,12 @@ _InspectBatteries
 _InspectDrawer
 .(
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Table de chevet. Quoi dedans ?")
+    KEYPRESS_MESSAGE("Table de chevet. Quoi dedans ?")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Et nattbord. Noe inni?")
+    KEYPRESS_MESSAGE("Et nattbord. Noe inni?")
 #else
-    INFO_MESSAGE("A plain nightstand. Anything inside?")
+    KEYPRESS_MESSAGE("A plain nightstand. Anything inside?")
 #endif
-    WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 .)
 
@@ -3676,13 +3646,12 @@ _InspectDrawer
 _InspectKnife
 .(
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Plus tranchant qu'il n'y parait.")
+    KEYPRESS_MESSAGE("Plus tranchant qu'il n'y parait.")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Skarpere enn den ser ut.")
+    KEYPRESS_MESSAGE("Skarpere enn den ser ut.")
 #else
-    INFO_MESSAGE("Sharper than it looks.")
+    KEYPRESS_MESSAGE("Sharper than it looks.")
 #endif
-    WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 .)
 
@@ -3691,13 +3660,12 @@ _InspectOricOmputer
 .(
     DISPLAY_IMAGE(LOADER_PICTURE_ORIC_COMPUTER)
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Un Oric 1. Tout neuf on dirait.")
+    KEYPRESS_MESSAGE("Un Oric 1. Tout neuf on dirait.")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("En Oric 1. Splitter ny ser det ut.")
+    KEYPRESS_MESSAGE("En Oric 1. Splitter ny ser det ut.")
 #else
-    INFO_MESSAGE("An Oric 1. Brand new by the looks.")
+    KEYPRESS_MESSAGE("An Oric 1. Brand new by the looks.")
 #endif
-    WAIT_KEYPRESS
     END_AND_REFRESH
 .)
 
@@ -3705,13 +3673,12 @@ _InspectOricOmputer
 _InspectChemistryBook
     INCREASE_SCORE(POINTS_INSPECT_BOOK)
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Un livre épais avec des signets")
+    KEYPRESS_MESSAGE("Un livre épais avec des signets")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("En tykk bok med noen bokmerker")
+    KEYPRESS_MESSAGE("En tykk bok med noen bokmerker")
 #else
-    INFO_MESSAGE("A thick book with some bookmarks")
+    KEYPRESS_MESSAGE("A thick book with some bookmarks")
 #endif
-    WAIT_KEYPRESS
     JUMP(_ReadChemistryBook)
 
 
@@ -3759,13 +3726,12 @@ _SubResetApplesLocation
 _InspectFancyStones
 .(
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Feng shui de poche")
+    KEYPRESS_MESSAGE("Feng shui de poche")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Lommeformat feng shui")
+    KEYPRESS_MESSAGE("Lommeformat feng shui")
 #else
-    INFO_MESSAGE("Pocket sized feng shui")
+    KEYPRESS_MESSAGE("Pocket sized feng shui")
 #endif
-    WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 .)
 
@@ -3774,15 +3740,14 @@ _InspectCue
 .(
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Bien équilibrée.")
-    INFO_MESSAGE("Pourrait casser plus que des billes.")
+    KEYPRESS_MESSAGE("Pourrait casser plus que des billes.")
 #elif defined(LANGUAGE_NO)
     INFO_MESSAGE("God balanse.")
-    INFO_MESSAGE("Kan knuse mer enn bare baller.")
+    KEYPRESS_MESSAGE("Kan knuse mer enn bare baller.")
 #else
     INFO_MESSAGE("Nicely weighted.")
-    INFO_MESSAGE("Could break more than just balls.")
+    KEYPRESS_MESSAGE("Could break more than just balls.")
 #endif
-    WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 .)
 
@@ -3830,13 +3795,12 @@ _InspectGunPowder
 _InspectPills
 .(
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("De quoi assommer quelqu'un.")
+    KEYPRESS_MESSAGE("De quoi assommer quelqu'un.")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Kan slå ut noen med disse.")
+    KEYPRESS_MESSAGE("Kan slå ut noen med disse.")
 #else
-    INFO_MESSAGE("Could knock someone out with these.")
+    KEYPRESS_MESSAGE("Could knock someone out with these.")
 #endif
-    WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 .)
 
@@ -3844,13 +3808,12 @@ _InspectPills
 _InspectMeat
 .(
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Un chien adorerait ce morceau !")
+    KEYPRESS_MESSAGE("Un chien adorerait ce morceau !")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("En hund ville elsket dette!")
+    KEYPRESS_MESSAGE("En hund ville elsket dette!")
 #else
-    INFO_MESSAGE("A dog would love this juicy morcel!")
+    KEYPRESS_MESSAGE("A dog would love this juicy morcel!")
 #endif
-    WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 .)
 
@@ -3873,13 +3836,12 @@ _InspectPit
     INFO_MESSAGE("No getting back up without help.")
 #endif
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Corde ou échelle nécessaire !")
+    KEYPRESS_MESSAGE("Corde ou échelle nécessaire !")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Tau eller stige er nødvendig!")
+    KEYPRESS_MESSAGE("Tau eller stige er nødvendig!")
 #else
-    INFO_MESSAGE("Rope or ladder necessary!")
+    KEYPRESS_MESSAGE("Rope or ladder necessary!")
 #endif
-    WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 .)
 
@@ -3887,13 +3849,12 @@ _InspectPit
 _InspectHeap
 .(
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Ca vient du trou !")
+    KEYPRESS_MESSAGE("Ca vient du trou !")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Dette var inne i gropen!")
+    KEYPRESS_MESSAGE("Dette var inne i gropen!")
 #else
-    INFO_MESSAGE("This used to be inside the pit!")
+    KEYPRESS_MESSAGE("This used to be inside the pit!")
 #endif
-    WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 .)
 
@@ -3905,15 +3866,14 @@ _InspectFridgeDoor
     DISPLAY_IMAGE(LOADER_PICTURE_FRIDGE_DOOR)
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Une famille heureuse, on dirait...")
-    INFO_MESSAGE("...où sont-ils passés ?")
+    KEYPRESS_MESSAGE("...où sont-ils passés ?")
 #elif defined(LANGUAGE_NO)
     INFO_MESSAGE("Ser ut som en lykkelig familie...")
-    INFO_MESSAGE("...hvor er de nå mon tro?")
+    KEYPRESS_MESSAGE("...hvor er de nå mon tro?")
 #else
     INFO_MESSAGE("Happy family, by the looks of it.")
-    INFO_MESSAGE("...wonder where they've gone.")
+    KEYPRESS_MESSAGE("...wonder where they've gone.")
 #endif
-    WAIT_KEYPRESS    
     END_AND_REFRESH
 .)
 
@@ -3949,13 +3909,12 @@ _InspectMedicineCabinet
 _InspectGunCabinet
 .(
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Je vois du matériel de chasse")
+    KEYPRESS_MESSAGE("Je vois du matériel de chasse")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Jeg ser jakteutstyr")
+    KEYPRESS_MESSAGE("Jeg ser jakteutstyr")
 #else
-    INFO_MESSAGE("I can see hunting equipment")
+    KEYPRESS_MESSAGE("I can see hunting equipment")
 #endif
-    WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 .)
 
@@ -3963,13 +3922,12 @@ _InspectGunCabinet
 _InspectGirl
 .(
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Elle semble indemne et soulagée")
+    KEYPRESS_MESSAGE("Elle semble indemne et soulagée")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Hun ser uskadd og lettet ut")
+    KEYPRESS_MESSAGE("Hun ser uskadd og lettet ut")
 #else
-    INFO_MESSAGE("She seems unharmed and relieved")
+    KEYPRESS_MESSAGE("She seems unharmed and relieved")
 #endif
-    WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 .)
 
@@ -3977,13 +3935,12 @@ _InspectGirl
 _InspectPistol
 .(
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("C'est un gros calibre")
+    KEYPRESS_MESSAGE("C'est un gros calibre")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Ganske stort kaliber")
+    KEYPRESS_MESSAGE("Ganske stort kaliber")
 #else
-    INFO_MESSAGE("Quite a large caliber")
+    KEYPRESS_MESSAGE("Quite a large caliber")
 #endif
-    WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 .)
 
@@ -3991,13 +3948,12 @@ _InspectPistol
 _InspectDartGun
 .(
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Ça pourrait endormir un éléphant !")
+    KEYPRESS_MESSAGE("Ça pourrait endormir un éléphant !")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Kan bedøve en elefant!")
+    KEYPRESS_MESSAGE("Kan bedøve en elefant!")
 #else
-    INFO_MESSAGE("Could knock out an elephant!")
+    KEYPRESS_MESSAGE("Could knock out an elephant!")
 #endif
-    WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 .)
 
@@ -4394,13 +4350,12 @@ _InspectPlasticBag
 +_InspectBucket
 +_InspectContainerGeneric
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Pratique pour transporter des trucs.")
+    KEYPRESS_MESSAGE("Pratique pour transporter des trucs.")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Greit å ha for å bære ting.")
+    KEYPRESS_MESSAGE("Greit å ha for å bære ting.")
 #else
-    INFO_MESSAGE("Handy for carrying things.")
+    KEYPRESS_MESSAGE("Handy for carrying things.")
 #endif
-    WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 .)
 
@@ -4457,13 +4412,12 @@ _InspectGraffiti
 _InspectChurch
 .(
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Petite église tranquille.")
+    KEYPRESS_MESSAGE("Petite église tranquille.")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Stille liten kirke.")
+    KEYPRESS_MESSAGE("Stille liten kirke.")
 #else
-    INFO_MESSAGE("Quiet little church.")
+    KEYPRESS_MESSAGE("Quiet little church.")
 #endif
-    WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 .)
 
@@ -4472,13 +4426,12 @@ _InspectWell
 .(
     DISPLAY_IMAGE(LOADER_PICTURE_INSIDE_WELL)
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Juste un vieux puits")
+    KEYPRESS_MESSAGE("Juste un vieux puits")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Bare en gammel mosegrodd brønn")
+    KEYPRESS_MESSAGE("Bare en gammel mosegrodd brønn")
 #else
-    INFO_MESSAGE("Just an old mossy well")
+    KEYPRESS_MESSAGE("Just an old mossy well")
 #endif
-    WAIT_KEYPRESS    
     END_AND_REFRESH
 .)
 
@@ -4504,15 +4457,14 @@ _ShowDuneBook
     DISPLAY_IMAGE(LOADER_PICTURE_BOOK_DUNE)
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Un Dune de 1965, rongé par les vers")
-    INFO_MESSAGE("Il paraît qu'un film est en cours!")
+    KEYPRESS_MESSAGE("Il paraît qu'un film est en cours!")
 #elif defined(LANGUAGE_NO)
     INFO_MESSAGE("En orm-spist Dune-roman fra 1965")
-    INFO_MESSAGE("Hørte at de lager film av den?")
+    KEYPRESS_MESSAGE("Hørte at de lager film av den?")
 #else
     INFO_MESSAGE("A wormed-out 1965 Dune novel")
-    INFO_MESSAGE("I heard a movie was in the works?")
+    KEYPRESS_MESSAGE("I heard a movie was in the works?")
 #endif
-    WAIT_KEYPRESS
     RETURN
 .)
 
@@ -4521,15 +4473,14 @@ _InspectMortar
 .(
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Pour les épices, normalement...")
-    INFO_MESSAGE("...pourrait servir à autre chose.")
+    KEYPRESS_MESSAGE("...pourrait servir à autre chose.")
 #elif defined(LANGUAGE_NO)
     INFO_MESSAGE("For krydder, vanligvis...")
-    INFO_MESSAGE("...kan brukes til annet også.")
+    KEYPRESS_MESSAGE("...kan brukes til annet også.")
 #else
     INFO_MESSAGE("For grinding spices, usually...")
-    INFO_MESSAGE("...could work on other things.")
+    KEYPRESS_MESSAGE("...could work on other things.")
 #endif
-    WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 .)
 
@@ -4538,13 +4489,12 @@ _ReadRoadSign
 _InspectRoadSign
 .(
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Il dit 'Creuseurs & Fils SARL'.")
+    KEYPRESS_MESSAGE("Il dit 'Creuseurs & Fils SARL'.")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Det heter 'Graverne & Sønner AS'.")
+    KEYPRESS_MESSAGE("Det heter 'Graverne & Sønner AS'.")
 #else
-    INFO_MESSAGE("It says 'Diggers & Sons Ltd.'")
+    KEYPRESS_MESSAGE("It says 'Diggers & Sons Ltd.'")
 #endif
-    WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 .)
 
@@ -4557,15 +4507,14 @@ _InspectTrashCan
     DISPLAY_IMAGE(LOADER_PICTURE_TRASH_CAN)    
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Ça sent pire que ça en a l'air.")
-    INFO_MESSAGE("Rien qui vaille la peine.")
+    KEYPRESS_MESSAGE("Rien qui vaille la peine.")
 #elif defined(LANGUAGE_NO)
     INFO_MESSAGE("Lukter verre enn det ser ut.")
-    INFO_MESSAGE("Ingenting verdt bryet.")
+    KEYPRESS_MESSAGE("Ingenting verdt bryet.")
 #else
     INFO_MESSAGE("Smells worse than it looks.")
-    INFO_MESSAGE("Nothing worth the trouble.")
+    KEYPRESS_MESSAGE("Nothing worth the trouble.")
 #endif
-    WAIT_KEYPRESS
     END_AND_REFRESH
 .)
 
@@ -4578,13 +4527,12 @@ _InspectTombstone
 
     DISPLAY_IMAGE(LOADER_PICTURE_TOMBSTONE)
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Seulement 45 ans. Quel gâchis.")
+    KEYPRESS_MESSAGE("Seulement 45 ans. Quel gâchis.")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Bare 45. For en sløsing.")
+    KEYPRESS_MESSAGE("Bare 45. For en sløsing.")
 #else
-    INFO_MESSAGE("Only 45. What a waste.")
+    KEYPRESS_MESSAGE("Only 45. What a waste.")
 #endif
-    WAIT_KEYPRESS    
     END_AND_REFRESH
 .)
 
@@ -4592,13 +4540,12 @@ _InspectTombstone
 _InspectFishPond
 .(
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Pas mal de poissons là-dedans.")
+    KEYPRESS_MESSAGE("Pas mal de poissons là-dedans.")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Ganske mange fisk der inne!")
+    KEYPRESS_MESSAGE("Ganske mange fisk der inne!")
 #else
-    INFO_MESSAGE("Plenty of fish in there.")
+    KEYPRESS_MESSAGE("Plenty of fish in there.")
 #endif
-    WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 .)
 
@@ -4622,13 +4569,12 @@ _ShowMixTape
 .(
     DISPLAY_IMAGE(LOADER_PICTURE_MIXTAPE)
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Les morceaux préférés de quelqu'un.")
+    KEYPRESS_MESSAGE("Les morceaux préférés de quelqu'un.")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Noens favoritlåter.")
+    KEYPRESS_MESSAGE("Noens favoritlåter.")
 #else
-    INFO_MESSAGE("Someone's favourite tunes.")
+    KEYPRESS_MESSAGE("Someone's favourite tunes.")
 #endif
-    WAIT_KEYPRESS
     RETURN
 .)
 
@@ -4661,13 +4607,12 @@ _InspectSafe
     ELSE(elseclose,safeopen)
         DISPLAY_IMAGE(LOADER_PICTURE_SAFE_DOOR_OPEN)
 #ifdef LANGUAGE_FR
-        INFO_MESSAGE("Quasiment rien de brisé!")
+        KEYPRESS_MESSAGE("Quasiment rien de brisé!")
 #elif defined(LANGUAGE_NO)
-        INFO_MESSAGE("Det meste er intakt!")
+        KEYPRESS_MESSAGE("Det meste er intakt!")
 #else
-        INFO_MESSAGE("Most of the stuff is intact!")
+        KEYPRESS_MESSAGE("Most of the stuff is intact!")
 #endif
-        WAIT_KEYPRESS    
         IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_Acid,e_LOC_NONE),acid)                ; If the acid still hidden (in the safe)? 
             SET_ITEM_LOCATION(e_ITEM_Acid,e_LOC_CELLAR)                          ; It's now visible inside the cellar
             GOSUB(_SubFoundSomething)
@@ -4737,15 +4682,14 @@ _InspectPanicRoomDoor
             DISPLAY_IMAGE(LOADER_PICTURE_DOOR_DIGICODE)
 #ifdef LANGUAGE_FR
             INFO_MESSAGE("Impossible de deviner le code...")
-            INFO_MESSAGE("La porte est-elle vulnérable?")
+            KEYPRESS_MESSAGE("La porte est-elle vulnérable?")
 #elif defined(LANGUAGE_NO)
             INFO_MESSAGE("Umulig å gjette koden...")
-            INFO_MESSAGE("Er kanskje selve døren sårbar?")
+            KEYPRESS_MESSAGE("Er kanskje selve døren sårbar?")
 #else
             INFO_MESSAGE("Impossible to guess that code...")
-            INFO_MESSAGE("Maybe the door itself is vulnerable?")
+            KEYPRESS_MESSAGE("Maybe the door itself is vulnerable?")
 #endif    
-        WAIT_KEYPRESS    
         ENDIF(nothing)
     ENDIF(clay)
     END_AND_REFRESH    
@@ -4789,15 +4733,14 @@ _ShowProtectionSuit
     DISPLAY_IMAGE(LOADER_PICTURE_PROTECTION_SUIT)
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Protection intégrale.")
-    INFO_MESSAGE("Pesticides, chimie... pratique.")
+    KEYPRESS_MESSAGE("Pesticides, chimie... pratique.")
 #elif defined(LANGUAGE_NO)
     INFO_MESSAGE("Full kroppsbeskyttelse.")
-    INFO_MESSAGE("Plantevernmidler, kjemikalier...")
+    KEYPRESS_MESSAGE("Plantevernmidler, kjemikalier...")
 #else
     INFO_MESSAGE("Full body protection.")
-    INFO_MESSAGE("Pesticides, chemicals... handy.")
+    KEYPRESS_MESSAGE("Pesticides, chemicals... handy.")
 #endif    
-    WAIT_KEYPRESS
     RETURN
 .)
 
@@ -5273,13 +5216,12 @@ _OpenGunCabinet
         DISPLAY_IMAGE(LOADER_PICTURE_DRAWER_GUN_CABINET)                               ; Show what we found!
         SET_ITEM_LOCATION(e_ITEM_DartGun,e_LOC_STUDY_ROOM)                             ; It's now visible inside the study room
 #ifdef LANGUAGE_FR
-        INFO_MESSAGE("Une seule fléchette, mieux que rien!")
+        KEYPRESS_MESSAGE("Une seule fléchette, mieux que rien!")
 #elif defined(LANGUAGE_NO)
-        INFO_MESSAGE("Bare en pil, bedre enn ingenting!")
+        KEYPRESS_MESSAGE("Bare en pil, bedre enn ingenting!")
 #else
-        INFO_MESSAGE("Only one dart, better than nothing!")
+        KEYPRESS_MESSAGE("Only one dart, better than nothing!")
 #endif    
-        WAIT_KEYPRESS
     ENDIF(dartgun)
     END_AND_REFRESH
 .)
@@ -5935,13 +5877,12 @@ _SubTankHasPetrol
 
 _InspectPetrol
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Ça sent fort. Encore utilisable.")
+    KEYPRESS_MESSAGE("Ça sent fort. Encore utilisable.")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Lukter sterkt. Fortsatt brukbar.")
+    KEYPRESS_MESSAGE("Lukter sterkt. Fortsatt brukbar.")
 #else
-    INFO_MESSAGE("Smells potent. Still usable.")
+    KEYPRESS_MESSAGE("Smells potent. Still usable.")
 #endif
-    WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 
 
@@ -6252,13 +6193,12 @@ _UseKey
     IF_TRUE(CHECK_PLAYER_LOCATION(e_LOC_PANIC_ROOM_DOOR),panic_room)               ; Are we in front of the panic room?
         DISPLAY_IMAGE(LOADER_PICTURE_DOOR_DIGICODE)
 #ifdef LANGUAGE_FR
-        INFO_MESSAGE("C'est une serrure numérique !")
+        KEYPRESS_MESSAGE("C'est une serrure numérique !")
 #elif defined(LANGUAGE_NO)
-        INFO_MESSAGE("Den bruker en digital lås!")
+        KEYPRESS_MESSAGE("Den bruker en digital lås!")
 #else
-        INFO_MESSAGE("It uses a digital lock!")
+        KEYPRESS_MESSAGE("It uses a digital lock!")
 #endif    
-        WAIT_KEYPRESS
         END_AND_REFRESH
     ENDIF(panic_room)
 
@@ -6666,13 +6606,12 @@ _UseGameConsole
     DISPLAY_IMAGE(LOADER_PICTURE_COLECOVISION)
 +_UseTelevision
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Tentant, mais j'ai du boulot.")
+    KEYPRESS_MESSAGE("Tentant, mais j'ai du boulot.")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Fristende, men jeg har en jobb.")
+    KEYPRESS_MESSAGE("Fristende, men jeg har en jobb.")
 #else
-    INFO_MESSAGE("Tempting, but I'm working.")
+    KEYPRESS_MESSAGE("Tempting, but I'm working.")
 #endif
-    WAIT_KEYPRESS    
     END_AND_REFRESH
 .)
 
@@ -7071,19 +7010,18 @@ _SliceApples
 .(
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Découpons les pommes...")
-    INFO_MESSAGE("...parfait pour un clafoutis.")
+    KEYPRESS_MESSAGE("...parfait pour un clafoutis.")
     SET_ITEM_DESCRIPTION(e_ITEM_Apple,"des$_pommes en morceaux")
 #elif defined(LANGUAGE_NO)
     INFO_MESSAGE("La meg skjære opp eplene...")
-    INFO_MESSAGE("...perfekt til en eplekake.")
+    KEYPRESS_MESSAGE("...perfekt til en eplekake.")
     SET_ITEM_DESCRIPTION(e_ITEM_Apple,"noen$_epler i biter")
 #else
     INFO_MESSAGE("Let's chop these apples...")
-    INFO_MESSAGE("...perfect for a clafoutis.")
+    KEYPRESS_MESSAGE("...perfect for a clafoutis.")
     SET_ITEM_DESCRIPTION(e_ITEM_Apple,"chopped _apples")   // SET_ITEM_DESCRIPTION(e_ITEM_Apple,"$chopped _apples") ???? (space in the description)
 #endif
     SET_ITEM_FLAGS(e_ITEM_Apple,ITEM_FLAG_TRANSFORMED)
-    WAIT_KEYPRESS
     END_AND_PARTIAL_REFRESH
 .)
 
@@ -7092,14 +7030,13 @@ _ScareDoveAway
 .(
     CLEAR_TEXT_AREA(5)
 #ifdef LANGUAGE_FR
-    INFO_MESSAGE("Bravo. La colombe s'est envolée.")
+    KEYPRESS_MESSAGE("Bravo. La colombe s'est envolée.")
 #elif defined(LANGUAGE_NO)
-    INFO_MESSAGE("Flott. Skremte duen vekk.")
+    KEYPRESS_MESSAGE("Flott. Skremte duen vekk.")
 #else
-    INFO_MESSAGE("Brilliant. Scared the dove off.")
-#endif    
+    KEYPRESS_MESSAGE("Brilliant. Scared the dove off.")
+#endif
     SET_ITEM_LOCATION(e_ITEM_LargeDove,e_LOC_GONE_FOREVER)
-    WAIT_KEYPRESS
     END_AND_REFRESH
 .)        
 
@@ -7494,15 +7431,14 @@ _SubInspectAcid
     DISPLAY_IMAGE(LOADER_PICTURE_CORROSIVE_LIQUID)
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Ce truc est super dangereux !")
-    INFO_MESSAGE("...ca pourrait couler un navire !")
+    KEYPRESS_MESSAGE("...ca pourrait couler un navire !")
 #elif defined(LANGUAGE_NO)
     INFO_MESSAGE("Dette er svært farlig stoff!")
-    INFO_MESSAGE("...kan gå gjennom et skips skrog!")
+    KEYPRESS_MESSAGE("...kan gå gjennom et skips skrog!")
 #else
     INFO_MESSAGE("This stuff is highly dangerous!")
-    INFO_MESSAGE("...could go through a ship's hull!")
+    KEYPRESS_MESSAGE("...could go through a ship's hull!")
 #endif
-    WAIT_KEYPRESS
     RETURN
 .)
 

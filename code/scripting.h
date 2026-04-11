@@ -50,7 +50,8 @@
 #define COMMAND_SET_CURRENT_ITEM 44
 #define COMMAND_CALL_NATIVE     45
 #define COMMAND_COMBINE_ITEMS   46
-#define _COMMAND_COUNT          47
+#define COMMAND_KEYPRESS_MESSAGE 47
+#define _COMMAND_COUNT          48
 
 // Operator opcodes
 #define OPERATOR_CHECK_ITEM_LOCATION   0
@@ -94,6 +95,10 @@
 #define INFO_MESSAGE(message)                .byt COMMAND_INFO_MESSAGE,message,0
 #define QUICK_MESSAGE(message)               .byt COMMAND_QUICK_MESSAGE,message,0
 #define ERROR_MESSAGE(message)               .byt COMMAND_ERROR_MESSAGE,message,0
+#define KEYPRESS_MESSAGE(message)            .byt COMMAND_KEYPRESS_MESSAGE,message,0
+
+#define WAIT_KEYPRESS                        .byt COMMAND_WAIT_KEYPRESS
+
 #define MAX_BUBBLE 4                         // Should find a way to assert that at compile time
 #define WHITE_BUBBLE(bubble_count)           .byt COMMAND_WHITE_BUBBLE,bubble_count
 #define BLACK_BUBBLE(bubble_count)           .byt COMMAND_BLACK_BUBBLE,bubble_count
@@ -109,8 +114,6 @@
 
 #define START_CLOCK                          .byt COMMAND_START_CLOCK
 #define STOP_CLOCK                           .byt COMMAND_STOP_CLOCK
-
-#define WAIT_KEYPRESS                        .byt COMMAND_WAIT_KEYPRESS
 
 // Items
 #define SET_CURRENT_ITEM(item)                  .byt COMMAND_SET_CURRENT_ITEM,item
