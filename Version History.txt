@@ -407,22 +407,23 @@
 - Smoothed out a few wrinkles in the final game sequence
 
 1.3.1
-- Removed the "no_picture" placeholder file
-- Optimisation: Rewrote the temporisation/navigation code in the intro to assembler to reduce the size 
-- Reused the Oric 1 BASIC reboot confirmation prompt for the QUIT command so players don't quit by mistake
-- Fixed a problem where throwing a container instead of dropping it would ends up losing the content forever (game breaking issue)
-- Fixed a problem where taking the protection suit would not refresh the scene
-- While I was at it, I made the suit now visible in the greenhouse
-- When searching a generic item, the inspect message is now displayed instead of "nothing special"
-- Taking the MixTape, Handheld Game and Roman should automatically look at them (the first time)
-- When using the hose, the player is now informed they found something because they may otherwise miss the item that just appeared in the scene
-- Fixed a dumb problem where the cellar window description would not display properly
-- Combining the key with the panel will now work in the same way as using the key 
-- In addition to COMBINE BATTERIES (item) you can now also just USE BATTERIES if you have the proper item ready
-- Added "X" as an alias for "eXamine"
-- Added an indication in the loading messages that SPACE and HELP can be used to access the menu and help system
-- When quitting the intro, the random audio glitch before the typewriter sequence should now be gone
-- Shortened the delay between information messages and key presses to make the game feel more snappy
-- Opening the Fridge or the Cabinet should now show a "what have we here" message.
-- Interacting with the clay, adhesive or curtain now gives more feedback to the player
-- It's now possible to use the knife to take away the tape
+- Bug Fix: Throwing a container instead of dropping it would permanently lose its contents (game-breaking issue)  
+- Bug Fix: Taking the protection suit no longer fails to refresh the scene  
+- Bug Fix: Fixed cellar window description not displaying properly  
+- Bug Fix: Fixed random audio glitch when quitting the intro before the typewriter sequence  
+- Improvement: Reused the Oric 1 BASIC reboot confirmation prompt for the QUIT command (prevents accidental quits)  
+- Improvement: When searching a generic item, the inspect message is now displayed instead of “nothing special”  
+- Improvement: Taking the MixTape, Handheld Game or Roman now automatically examines them (first time only)  
+- Improvement: When using the hose, the player is now clearly informed that something was found  
+- Improvement: Opening the Fridge or Cabinet now shows a “what have we here” message  
+- Improvement: Interacting with clay, adhesive or curtain now gives better feedback  
+- Improvement: It is now possible to use the knife to remove the tape  
+- Improvement: Combining the key with the panel now works the same as using the key on it  
+- Improvement: In addition to COMBINE BATTERIES, you can now simply USE BATTERIES when the proper item is ready  
+- Improvement: Added “X” as an alias for “eXamine”  
+- Improvement: Added indication in loading messages that SPACE and HELP can be used to access the menu/help system  
+- Improvement: Shortened delay between information messages and key presses (game feels snappier)  
+- Improvement: The protection suit is now visible in the greenhouse  
+- Optimisation: Rewrote temporisation/navigation code in the intro in assembler to reduce size  
+- Cleaning: Removed the unused “no_picture” placeholder file
+
