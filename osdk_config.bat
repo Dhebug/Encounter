@@ -65,7 +65,7 @@ SET EXPORT_HFE_VERSION=0
 SET EXPORT_IMD_VERSION=0
 
 :: Versions we want to build (if undefined, it will only build TEST_LANGUAGE)
-SET BUILD_LANGUAGES=EN,FR
+SET BUILD_LANGUAGES=EN,FR,NO
 SET BUILD_FREQUENCIES=60HZ,50HZ
 
 :: Version we want to launch when testing
