@@ -208,9 +208,12 @@ void ShowHelp()
             {
                 counter=0;
             }
-            gColoredSeparator[0] = (counter&1)?7:3;  // Alternate the ink colors based on the counter
 
-            PrintString(gColoredSeparator);
+            if (gPrintPos<gPrintWidth)  // We only put the color separator if there is still some room on the right
+            {
+                gColoredSeparator[0] = (counter&1)?7:3;  // Alternate the ink colors based on the counter
+                PrintString(gColoredSeparator);
+            }
         }
         ++keywordPtr;
     }
