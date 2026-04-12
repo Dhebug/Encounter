@@ -47,8 +47,9 @@
 :: 1.2.5 - Updated Joystick support in Oricutron, fixed a typo, added a message when trying to use the bucket
 :: 1.2.6 - Reordered list of words, improved net handling, improved containers selection, fixes to the inventory size limits
 :: 1.3.0 - So many changes!
-:: 1.3.1 -
-::
+:: 1.3.1 - Quite a few changes resulting of the game tests and review by YagmanX and MattBrush
+:: 1.3.2 - 
+SET VERSION=1.3.1
 SET VERSION=1.3.0
 SET BASENAME=EncounterHD
 
