@@ -32,6 +32,7 @@ _ResetInput
     sta _gInputKey
     sta _gInputShift
     sta _gInputDone
+    sta _gWordCount
 
     jmp _WaitReleasedKey            ; Remove any key in the buffer and wait for the keys to not be pressed anymoe
 .)
