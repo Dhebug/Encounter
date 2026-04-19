@@ -319,7 +319,7 @@ _Text_GameInstructionsPage3
     .byt TEXT_CRLF
     .byt "Certaines",4,"sorties",0,"sont bien cachées.",TEXT_CRLF
     .byt TEXT_CRLF
-    .byt "N'oubliez pas d'",4,"ouvrir",0,"et fouiller!",TEXT_CRLF
+    .byt "N'oubliez pas de",4,"fouiller",0,"et",4,"ouvrir!",TEXT_CRLF
     .byt TEXT_CRLF
     .byt "Tracez une",4,"carte",0,"et annotez-la.",TEXT_CRLF
     .byt TEXT_CRLF
