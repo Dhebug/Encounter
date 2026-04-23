@@ -9,7 +9,7 @@ IF "%LANGUAGE%"=="" GOTO ErCfg
 
 :: Call XA to rebuild the loader
 ECHO %ESC%[96m== Assembling bootsectors ==%ESC%[0m
-SET XAPARAMS=-DASSEMBLER=XA -DOSDKNAME=%OSDKNAME% -DFREQUENCY_%FREQUENCY% -DVERSION=%VERSION% -DPRODUCT_TYPE_%PRODUCT_TYPE% 
+SET XAPARAMS=-DASSEMBLER=XA -DOSDKNAME=%OSDKNAME% -DFREQUENCY_%FREQUENCY% -DVERSION=%VERSION% -DPRODUCT_TYPE_%PRODUCT_TYPE% -DLANGUAGE_%LANGUAGE%
 %osdk%\bin\xa %XAPARAMS% sector_1-jasmin.asm -o ..\build\files\sector_1-jasmin.o
 IF ERRORLEVEL 1 GOTO Error
 %osdk%\bin\xa %XAPARAMS% sector_2-microdisc.asm -o ..\build\files\sector_2-microdisc.o -l ..\build\files\sector_2-microdisc.symbols.txt
@@ -39,6 +39,30 @@ IF ERRORLEVEL 1 GOTO Error
 
 SET OSDKCPPFLAGSCOPY=-DLANGUAGE_%LANGUAGE% -DFREQUENCY_%FREQUENCY% -DVERSION=\"%VERSION%\" -DPRODUCT_TYPE_%PRODUCT_TYPE% 
 SET OSDKXAPARAMSCOPY=%OSDKXAPARAMS%
+SET OSDKDISK=
+
+::
+:: Kernel (resident shared code: IRQ, audio, keyboard, music player)
+::
+IF "%OSDKFILE_KERNEL%"=="" GOTO EndKernel
+ECHO.
+ECHO %ESC%[96m== Compiling the kernel ==%ESC%[0m
+
+SET OSDKLINK=-b -S ..\build\symbols_Loader -r LANGUAGE_%LANGUAGE%
+SET OSDKADDR=$400
+SET OSDKNAME=KernelProgram
+SET OSDKFILE=%OSDKFILE_KERNEL%
+SET OSDKCPPFLAGS=%OSDKCPPFLAGSCOPY% -DMODULE_KERNEL
+SET OSDKXAPARAMS=%OSDKXAPARAMSCOPY% -DMODULE_KERNEL -E ..\build\kernel_exports.h
+CALL %OSDK%\bin\make.bat %OSDKFILE%
+IF ERRORLEVEL 1 GOTO Error
+copy build\final.out ..\build\files\KernelProgram.o >NUL
+copy build\symbols ..\build\symbols_Kernel >NUL
+
+:EndKernel
+
+SET OSDKADDR=
+
 
 ::
 :: Splash program
@@ -47,18 +71,16 @@ IF "%OSDKFILE_SPLASH%"=="" GOTO EndSplash
 ECHO.
 ECHO %ESC%[96m== Compiling the splash screen ==%ESC%[0m
 
-SET OSDKLINK=-r LANGUAGE_%LANGUAGE%
-SET OSDKADDR=$400
+SET OSDKLINK=-S ..\build\symbols_Kernel -g ..\build\kernel_exports.h -t _KernelEndText -r LANGUAGE_%LANGUAGE%
 SET OSDKNAME=SplashProgram
 SET OSDKFILE=%OSDKFILE_SPLASH%
-SET OSDKDISK=
-SET OSDKCPPFLAGS=%OSDKCPPFLAGSCOPY% -DMODULE_SPLASH
-SET OSDKXAPARAMS=%OSDKXAPARAMSCOPY% -DMODULE_SPLASH
+SET OSDKCPPFLAGS=%OSDKCPPFLAGSCOPY% -DMODULE_SPLASH -DKERNEL_RESIDENT
+SET OSDKXAPARAMS=%OSDKXAPARAMSCOPY% -DMODULE_SPLASH -DKERNEL_RESIDENT
 CALL %OSDK%\bin\make.bat %OSDKFILE%
 IF ERRORLEVEL 1 GOTO Error
 copy build\final.out ..\build\files\SplashProgram.o >NUL
-copy build\symbols+..\build\symbols_Loader ..\build\symbols_SplashProgram >NUL
-IF %TEST_MODULE%==SPLASH COPY build\symbols+..\build\symbols_Loader %OSDK%\Oricutron\symbols >NUL
+copy build\symbols+..\build\symbols_Loader+..\build\symbols_Kernel ..\build\symbols_SplashProgram >NUL
+IF %TEST_MODULE%==SPLASH COPY build\symbols+..\build\symbols_Loader+..\build\symbols_Kernel %OSDK%\Oricutron\symbols >NUL
 IF %TEST_MODULE%==SPLASH SET BREAKPOINTS=%BREAKPOINTS_SPLASH%
 :EndSplash
 
@@ -70,18 +92,16 @@ IF "%OSDKFILE_INTRO%"=="" GOTO EndIntro
 ECHO.
 ECHO %ESC%[96m== Compiling the intro ==%ESC%[0m
 
-SET OSDKLINK=-r LANGUAGE_%LANGUAGE%
-SET OSDKADDR=$400
+SET OSDKLINK=-S ..\build\symbols_Kernel -g ..\build\kernel_exports.h -t _KernelEndText -r LANGUAGE_%LANGUAGE%
 SET OSDKNAME=IntroProgram
 SET OSDKFILE=%OSDKFILE_INTRO%
-SET OSDKDISK=
-SET OSDKCPPFLAGS=%OSDKCPPFLAGSCOPY% -DMODULE_INTRO
-SET OSDKXAPARAMS=%OSDKXAPARAMSCOPY% -DMODULE_INTRO
+SET OSDKCPPFLAGS=%OSDKCPPFLAGSCOPY% -DMODULE_INTRO -DKERNEL_RESIDENT
+SET OSDKXAPARAMS=%OSDKXAPARAMSCOPY% -DMODULE_INTRO -DKERNEL_RESIDENT
 CALL %OSDK%\bin\make.bat %OSDKFILE%
 IF ERRORLEVEL 1 GOTO Error
 copy build\final.out ..\build\files\IntroProgram.o >NUL
-copy build\symbols+..\build\symbols_Loader ..\build\symbols_IntroProgram >NUL
-IF %TEST_MODULE%==INTRO COPY build\symbols+..\build\symbols_Loader %OSDK%\Oricutron\symbols >NUL
+copy build\symbols+..\build\symbols_Loader+..\build\symbols_Kernel ..\build\symbols_IntroProgram >NUL
+IF %TEST_MODULE%==INTRO COPY build\symbols+..\build\symbols_Loader+..\build\symbols_Kernel %OSDK%\Oricutron\symbols >NUL
 IF %TEST_MODULE%==INTRO SET BREAKPOINTS=%BREAKPOINTS_INTRO%
 :EndIntro
 
@@ -93,18 +113,16 @@ IF "%OSDKFILE_OUTRO%"=="" GOTO EndOutro
 ECHO.
 ECHO %ESC%[96m== Compiling the outro ==%ESC%[0m
 
-SET OSDKLINK=-r LANGUAGE_%LANGUAGE%
-SET OSDKADDR=$400
+SET OSDKLINK=-S ..\build\symbols_Kernel -g ..\build\kernel_exports.h -t _KernelEndText -r LANGUAGE_%LANGUAGE%
 SET OSDKNAME=OutroProgram
 SET OSDKFILE=%OSDKFILE_OUTRO%
-SET OSDKDISK=
-SET OSDKCPPFLAGS=%OSDKCPPFLAGSCOPY% -DMODULE_OUTRO
-SET OSDKXAPARAMS=%OSDKXAPARAMSCOPY% -DMODULE_OUTRO
+SET OSDKCPPFLAGS=%OSDKCPPFLAGSCOPY% -DMODULE_OUTRO -DKERNEL_RESIDENT
+SET OSDKXAPARAMS=%OSDKXAPARAMSCOPY% -DMODULE_OUTRO -DKERNEL_RESIDENT
 CALL %OSDK%\bin\make.bat %OSDKFILE%
 IF ERRORLEVEL 1 GOTO Error
 copy build\final.out ..\build\files\OutroProgram.o >NUL
-copy build\symbols+..\build\symbols_Loader ..\build\symbols_OutroProgram >NUL
-IF %TEST_MODULE%==OUTRO COPY build\symbols+..\build\symbols_Loader %OSDK%\Oricutron\symbols >NUL
+copy build\symbols+..\build\symbols_Loader+..\build\symbols_Kernel ..\build\symbols_OutroProgram >NUL
+IF %TEST_MODULE%==OUTRO COPY build\symbols+..\build\symbols_Loader+..\build\symbols_Kernel %OSDK%\Oricutron\symbols >NUL
 IF %TEST_MODULE%==OUTRO SET BREAKPOINTS=%BREAKPOINTS_OUTRO%
 :EndOutro
 
@@ -116,18 +134,16 @@ IF "%OSDKFILE_GAME%"=="" GOTO EndGame
 ECHO.
 ECHO %ESC%[96m== Compiling the game ==%ESC%[0m
 
-SET OSDKLINK=-r LANGUAGE_%LANGUAGE%
-SET OSDKADDR=$400
+SET OSDKLINK=-S ..\build\symbols_Kernel -g ..\build\kernel_exports.h -t _KernelEndText -r LANGUAGE_%LANGUAGE%
 SET OSDKNAME=GameProgram
 SET OSDKFILE=%OSDKFILE_GAME%
-SET OSDKDISK=
-SET OSDKCPPFLAGS=%OSDKCPPFLAGSCOPY% -DMODULE_GAME
-SET OSDKXAPARAMS=%OSDKXAPARAMSCOPY% -DMODULE_GAME
+SET OSDKCPPFLAGS=%OSDKCPPFLAGSCOPY% -DMODULE_GAME -DKERNEL_RESIDENT
+SET OSDKXAPARAMS=%OSDKXAPARAMSCOPY% -DMODULE_GAME -DKERNEL_RESIDENT
 CALL %OSDK%\bin\make.bat %OSDKFILE%
 IF ERRORLEVEL 1 GOTO Error
 copy build\final.out ..\build\files\GameProgram.o >NUL
-copy build\symbols+..\build\symbols_Loader+..\build\symbols_kong ..\build\symbols_GameProgram >NUL
-::copy build\symbols+..\build\symbols_Loader ..\build\symbols_GameProgram >NUL
+::copy build\symbols+..\build\symbols_Loader+..\build\symbols_Kernel+..\build\symbols_kong ..\build\symbols_GameProgram >NUL
+copy build\symbols+..\build\symbols_Loader+..\build\symbols_Kernel ..\build\symbols_GameProgram >NUL
 IF %TEST_MODULE%==GAME COPY ..\build\symbols_GameProgram %OSDK%\Oricutron\symbols >NUL
 IF %TEST_MODULE%==GAME SET BREAKPOINTS=%BREAKPOINTS_GAME%
 :EndGame
@@ -137,9 +153,18 @@ IF %TEST_MODULE%==GAME SET BREAKPOINTS=%BREAKPOINTS_GAME%
 :: Monkey King
 ::
 ECHO.
-ECHO %ESC%[96m== Assembling Monkey King ==%ESC%[0m
-%osdk%\bin\xa -DASSEMBLER=XA -DMODULE_MONKEY_KING -DFREQUENCY_%FREQUENCY% -DDISPLAYINFO=%DISPLAYINFO% -DLANGUAGE_%LANGUAGE% monkey_king_main.s -o ..\build\files\monkey_king.o -l ..\build\symbols_kong
+ECHO %ESC%[96m== Compiling Monkey King ==%ESC%[0m
+
+SET OSDKLINK=-b -S ..\build\symbols_GameProgram -t _Minigame
+SET OSDKADDR=
+SET OSDKNAME=monkey_king
+SET OSDKFILE=monkey_king_main
+SET OSDKCPPFLAGS=%OSDKCPPFLAGSCOPY% -DMODULE_MONKEY_KING
+SET OSDKXAPARAMS=%OSDKXAPARAMSCOPY% -DMODULE_MONKEY_KING
+CALL %OSDK%\bin\make.bat %OSDKFILE%
 IF ERRORLEVEL 1 GOTO Error
+copy build\final.out ..\build\files\monkey_king.o >NUL
+copy build\symbols ..\build\symbols_kong >NUL
 
 
 ::
@@ -173,6 +198,7 @@ popd
 :Error
 ECHO.
 ECHO %ESC%[41mAn Error has happened. Build stopped%ESC%[0m
+EXIT /b 1
 
 :End
 

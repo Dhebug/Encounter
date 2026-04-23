@@ -916,6 +916,5 @@ endIntro:
 
 
 	// Quit and return to the loader
-	InitializeFileAt(LOADER_GAME_PROGRAM,LOADER_GAME_PROGRAM_ADDRESS);   // 0x400
+	InitializeFileAt(LOADER_GAME_PROGRAM,&ModuleStartText);
 }
-

@@ -636,7 +636,7 @@ _ByteStreamCommand_LOAD_MUSIC
     sta _LoaderApiAddressLow
     lda #>_ArkosMusic
     sta _LoaderApiAddressHigh
-    jsr _LoadApiLoadFileFromDirectory    
+    jsr _LoaderApiLoadFileFromDirectory    
 
 music_already_loaded
     lda _gMusicEnabled
@@ -1040,7 +1040,7 @@ _ByteStreamCommand_SET_SCENE_IMAGE
     lda _gSceneImage:sta _LoaderApiEntryIndex
     lda #<_ImageBuffer:sta _LoaderApiAddressLow
     lda #>_ImageBuffer:sta _LoaderApiAddressHigh
-    jsr _LoadApiLoadFileFromDirectory
+    jsr _LoaderApiLoadFileFromDirectory
 
     lda #1
     jmp _ByteStreamMoveByA
@@ -1621,7 +1621,7 @@ _ByteStreamCommand_DISPLAY_IMAGE_NOBLIT
     sta _LoaderApiAddressLow
     lda #>_ImageBuffer
     sta _LoaderApiAddressHigh
-    jmp _LoadApiLoadFileFromDirectory
+    jmp _LoaderApiLoadFileFromDirectory
 .)
 
 
@@ -1662,7 +1662,7 @@ _ByteStreamCommand_BITMAP
     sta _LoaderApiAddressLow
     lda #>_SecondImageBuffer
     sta _LoaderApiAddressHigh
-    jsr _LoadApiLoadFileFromDirectory    
+    jsr _LoaderApiLoadFileFromDirectory    
 
 image_already_loaded
     ; Load the coordinates and draw the sprite
@@ -1719,7 +1719,8 @@ _InitializeGraphicMode
 	sta $BB80+40*27
 
 	; Initialize the ALT charset numbers
-    MEMCPY_JMP(_MemCpy_B800_0_7DigitDisplay)
+    MEMCPY($b800+"0"*8,_gSevenDigitDisplay,8*11)
+    rts
 .)
 
 

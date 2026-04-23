@@ -1,15 +1,6 @@
 
     .text
 
-IrqTasks50hz
-.(
-    ; Process keyboard
-    jsr ReadKeyboard
-    jsr _PlayMusicFrame
-    jmp SoundUpdate50hz
-.)
-
-
 // Two no-op for input_utils.s
 _ValidateInputSpace
 _ValidateInputReturn

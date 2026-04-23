@@ -183,19 +183,22 @@ auto_result = *+1
 
 
 // MARK:IRQ 50hz
-IrqTasks50hz
+; IrqTasks50hz is now provided by the kernel.
+; The game patches _IrqCallback50hz to call the countdown timer.
+
+; Patch the kernel's IrqCallback50hz to call our countdown timer
+_PatchIrqForGame
 .(
-    ; Process keyboard
-    jsr ReadKeyboard
+    lda #<_GameCountdownTimer
+    sta _IrqCallback50hz+1     ; Patch the JSR target low byte
+    lda #>_GameCountdownTimer
+    sta _IrqCallback50hz+2     ; Patch the JSR target high byte
+    rts
+.)
 
-    ; Call the music player
-    jsr _PlayMusicFrame
-
-    ; Update the sound engine
-    jsr SoundUpdate50hz
-            
-    ; "Realtime" Clock
-    .(
+; Game-specific countdown timer, called from the kernel's IrqTasks50hz
+_GameCountdownTimer
+.(
     dec _TimeMilliseconds
     bne skip_count_down
 
@@ -203,10 +206,8 @@ IrqTasks50hz
     sta _TimeMilliseconds
 
     jsr CountSecondDown
-skip_count_down  
-    .)
-
-    rts    
+skip_count_down
+    rts
 .)
 
     .text   // could be .data if we setup the base address properly
@@ -1274,26 +1275,31 @@ done_clamping
 
     ; Blitt the buffer to the screen
     lda #<_TemporaryBuffer479
-    sta _MemCpy_BlittInventory+2
+    sta _BlittInventorySrc
     lda #>_TemporaryBuffer479
-    sta _MemCpy_BlittInventory+3
+    sta _BlittInventorySrc+1
 
     ldx _gInventoryOffset
     beq end_add
 loop_add
     clc
-    lda _MemCpy_BlittInventory+2
+    lda _BlittInventorySrc
     adc #40
-    sta _MemCpy_BlittInventory+2
-    lda _MemCpy_BlittInventory+3
+    sta _BlittInventorySrc
+    lda _BlittInventorySrc+1
     adc #0
-    sta _MemCpy_BlittInventory+3
+    sta _BlittInventorySrc+1
 
-    dex 
-    bne loop_add    
+    dex
+    bne loop_add
 
 end_add
-    MEMCPY_JMP(_MemCpy_BlittInventory)
+    jsr _InlineMemcpy
+    .word $bb80+40*18
+_BlittInventorySrc
+    .word _TemporaryBuffer479
+    .word 40*4
+    rts
 .)
 
 
@@ -1354,12 +1360,14 @@ _gColonSeparator    .byt ":",0
 ; memset((char*)TemporaryBuffer479,' ',40*10); = 400
 _ClearTemporaryBuffer479
 .(
-    MEMSET_JMP(_MemSetTemporaryBuffer479)
+    MEMSET(_TemporaryBuffer479,40*10,32)
+    rts
 .)
 
 _BlittTemporaryBuffer479
 .(
-    MEMCPY_JMP(_MemCpy__BlittTemporaryBuffer479)
+    MEMCPY($bb80+40*24,_TemporaryBuffer479,40*4)
+    rts
 .)
 
 
@@ -1581,10 +1589,10 @@ _CleanWindowIfNecessary
     lda _gShouldCleanWindow
     beq done_cleaning
 
-    MEMSET_JSR(_MemSet_CleanWindow1)
-    MEMSET_JSR(_MemSet_CleanWindow2)
-    MEMSET_JSR(_MemSet_CleanWindow3)
-    MEMSET_JSR(_MemSet_CleanWindow4)
+    MEMSET($bb80+40*18+1,39,32)
+    MEMSET($bb80+40*19+1,39,32)
+    MEMSET($bb80+40*20+1,39,32)
+    MEMSET($bb80+40*21+1,39,32)
 
     lda #0
     sta _gShouldCleanWindow
@@ -2341,7 +2349,7 @@ _PlayMonkeyKing
     sta _LoaderApiAddressLow
     lda #>_ImageBuffer
     sta _LoaderApiAddressHigh
-    jsr _LoadApiLoadFileFromDirectory    
+    jsr _LoaderApiLoadFileFromDirectory    
     
     ; Copy the image
     jsr _BlitBufferToHiresWindowInternal        ; Copy the top 5120 bytes with the image content
@@ -2352,14 +2360,14 @@ _PlayMonkeyKing
     ; $CBE0 = _ImageBuffer+3040      = 1792 bytes = Saved charsets
     ; $D2E0 = _ImageBuffer+3040+1792 =  960 bytes = 24 last lines of the HIRES picture
 
-    MEMCPY_JSR(_MemCpy_SaveHiresMemoryBottom)   ; Save the bottom half of screen memory
-    MEMCPY_JSR(_MemCpy_SaveCharsetData)         ; Save the charset area data
-    
-    MEMCPY_JSR(_MemCpy_9900_B500)               ; Move the font from TEXT to HIRES location
+    MEMCPY(_SavedData1,$a000+5120,3040)            ; Save the bottom half of screen memory
+    MEMCPY(_SavedData2,$9900,1792)                  ; Save the charset area data
 
-    MEMCPY_JSR(_MemCpy_BlittHiresImageBottom)   ; Copy the bottom 2880 bytes with the image content
+    MEMCPY($b500,$9900,8*96)                        ; Move the font from TEXT to HIRES location
 
-    MEMCPY_JSR(_MemCpy_MoveBottomGraphics)      ; Preserve the bottom part of the image
+    MEMCPY($a000+5120,_ImageBuffer+5120,2880)       ; Copy the bottom 2880 bytes with the image content
+
+    MEMCPY(_SavedData3,_ImageBuffer+8000,960)       ; Preserve the bottom part of the image
 
     ; Erase graphics in the lower border to avoid glitches during loading
     ldx #40*3-1
@@ -2376,36 +2384,17 @@ loop_1
     sta _LoaderApiAddressLow
     lda #>_Minigame
     sta _LoaderApiAddressHigh
-    jsr _LoadApiLoadFileFromDirectory
-
-    ;jsr _Panic
-
-    ; Patch the import vectors
-    lda #<_ReadKeyNoBounce
-    sta _Minigame+3+1
-    lda #>_ReadKeyNoBounce
-    sta _Minigame+3+2
-
-    lda #<_PlaySoundAsmXY
-    sta _Minigame+6+1
-    lda #>_PlaySoundAsmXY
-    sta _Minigame+6+2
-
-    lda #<_VSync
-    sta _Minigame+9+1
-    lda #>_VSync
-    sta _Minigame+9+2
-   
+    jsr _LoaderApiLoadFileFromDirectory
 
     ; Launch the game
     jsr _Minigame
 
     ; Restore whatever graphics mode we had
-    MEMCPY_JSR(_MemCpy_RestoreHiresMemoryBottom)   ; Restore the bottom half of screen memory
-    MEMCPY_JSR(_MemCpy_RestoreCharsetData)         ; Restore the bottom charset area data
+    MEMCPY($a000+5120,_SavedData1,3040)               ; Restore the bottom half of screen memory
+    MEMCPY($9900,_SavedData2,1792)                     ; Restore the bottom charset area data
 
     ; Force clear the upper memory buffers
-    MEMSET_JSR(_MemSet_CleanTopMemory)            ; Clean the masking buffer
+    MEMSET(_ImageBuffer,_ArkosMusic-_ImageBuffer,64)   ; Clean the masking buffer
     jsr _BlitBufferToHiresWindowInternal          ; Copy the top 5120 bytes with the image content
 
     ; Invalidate the cached data 

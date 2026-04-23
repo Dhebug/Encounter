@@ -283,7 +283,8 @@ _TextAsm
   beq was_text
 
 was_hires
-  MEMSET_VALUE_JSR(_MemSet_A000_BFE0,_param0+0)
+  lda _param0+0
+  MEMSET_A($a000,$bfe0-$a000)
 
   lda #ATTRIBUTE_TEXT
   sta $bfdf
@@ -291,14 +292,15 @@ was_hires
   jsr _WaitIRQ
   jsr _WaitIRQ
 
-  MEMCPY_JSR(_MemCpy_B500_9900)
+  MEMCPY($b500,$9900,8*96)
 
   lda #0
   sta _gIsHires
   beq common2
 
-was_text  
-  MEMSET_VALUE_JSR(_MemSet_BB80_BFE0,_param0+0)
+was_text
+  lda _param0+0
+  MEMSET_A($bb80,$bfe0-$bb80)
   ;jmp common2
 
 common2
@@ -340,14 +342,16 @@ _HiresAsm
   lda _gIsHires
   bne was_hires_already
 
-  MEMCPY_JSR(_MemCpy_9900_B500)
+  MEMCPY($9900,$b500,8*96)
 
   lda #1
   sta _gIsHires
 
 was_hires_already
-  MEMSET_VALUE_JSR(_MemSet_BB80_BFE0,_param0+0)     // First fill the TEXT area with the paper color
-  MEMSET_VALUE_JSR(_MemSet_A000_BFE0,_param0+0)     // Then fill the rest of the screen (including the charsets)
+  lda _param0+0
+  MEMSET_A($bb80,$bfe0-$bb80)                        // First fill the TEXT area with the paper color
+  lda _param0+0
+  MEMSET_A($a000,$bfe0-$a000)                        // Then fill the rest of the screen (including the charsets)
 
   lda #ATTRIBUTE_HIRES
   sta $bfdf
@@ -487,54 +491,3 @@ KeyboardLayoutScanCode  .byt 8*6+5,8*2+5,8*1+6,8*6+7,8*6+0,8*3+2,8*2+0
 
 
 
-_MemsetTableSystem
-.(
-    ; memsetAsm($a000,_param0+0,$bfe0-$a000)
-    lda _MemSetDataBase+0,x:ldy #0:sta (sp),y:iny:lda _MemSetDataBase+1,x:sta (sp),y
-    lda _MemSetDataBase+2,x:iny:sta (sp),y:iny:lda #0:sta (sp),y
-    lda _MemSetDataBase+3,x:iny:sta (sp),y:iny:lda _MemSetDataBase+4,x:sta (sp),y
-    jmp _memset                                                            ; - about 29 bytes
-.)
-
-_MemcpyTableSystem
-.(
-    ; memcpyAsm($b500,$9900,8*96)
-    lda _MemCpyDataBase+0,x:ldy #0:sta (sp),y:iny:lda _MemCpyDataBase+1,x:sta (sp),y
-    lda _MemCpyDataBase+2,x:iny:sta (sp),y:iny:lda _MemCpyDataBase+3,x:sta (sp),y
-    lda _MemCpyDataBase+4,x:iny:sta (sp),y:iny:lda _MemCpyDataBase+5,x:sta (sp),y
-    jmp _memcpy  
-.)
-
-_MemSetDataBase
-_MemSetTemporaryBuffer479   MEMSET_ENTRY(_TemporaryBuffer479,32,40*10)
-_MemSet_A000_BFE0           MEMSET_ENTRY($a000,0,$bfe0-$a000)
-_MemSet_BB80_BFE0           MEMSET_ENTRY($bb80,0,$bfe0-$bb80)
-
-_MemCpyDataBase
-_MemCpy_B500_9900               MEMCPY_ENTRY($b500,$b9900,8*96)
-_MemCpy_9900_B500               MEMCPY_ENTRY($b9900,$b500,8*96)
-#ifdef MODULE_GAME
-_MemCpy_B800_0_7DigitDisplay        MEMCPY_ENTRY($b800+"0"*8,_gSevenDigitDisplay,8*11)
-_MemCpy__BlittTemporaryBuffer479    MEMCPY_ENTRY($bb80+40*24,_TemporaryBuffer479,40*4)
-
-_MemSet_CleanWindow1        MEMSET_ENTRY($bb80+40*18+1,32,39)
-_MemSet_CleanWindow2        MEMSET_ENTRY($bb80+40*19+1,32,39)
-_MemSet_CleanWindow3        MEMSET_ENTRY($bb80+40*20+1,32,39)
-_MemSet_CleanWindow4        MEMSET_ENTRY($bb80+40*21+1,32,39)
-
-_MemSet_CleanTopMemory      MEMSET_ENTRY(_ImageBuffer,64,_ArkosMusic-_ImageBuffer)
-
-_MemCpy_BlittInventory      MEMCPY_ENTRY($bb80+40*18,_TemporaryBuffer479,40*4)
-
-; Monkey King stuff
-_MemCpy_BlittHiresImageBottom       MEMCPY_ENTRY($a000+5120,_ImageBuffer+5120,2880)     ; Bottom half of the image -> screen
-
-_MemCpy_SaveHiresMemoryBottom       MEMCPY_ENTRY(_SavedData1,$a000+5120,3040)           ; Save the bottom part of screen memory
-_MemCpy_RestoreHiresMemoryBottom    MEMCPY_ENTRY($a000+5120,_SavedData1,3040)           ; Restore the bottom part of screen memory
-
-_MemCpy_SaveCharsetData             MEMCPY_ENTRY(_SavedData2,$9900,1792)           ; Save the charset area data
-_MemCpy_RestoreCharsetData          MEMCPY_ENTRY($9900,_SavedData2,1792)           ; Restore the bottom charset area data
-
-_MemCpy_MoveBottomGraphics          MEMCPY_ENTRY(_SavedData3,_ImageBuffer+8000,960)     ; Copy the last 24 lines of the image to a saved buffer
-
-#endif

@@ -245,6 +245,8 @@ void Initializations()
 
 	// Install the 50hz IRQ
 	System_InstallIRQ_SimpleVbl();
+	// Patch kernel IRQ to include game countdown timer
+	asm("jsr _PatchIrqForGame");
 #ifdef FORCE_JOYSTICK
     gJoystickType=FORCE_JOYSTICK;
 #endif
@@ -321,6 +323,6 @@ void main()
 	System_RestoreIRQ_SimpleVbl();
 
 	// Quit and go to the high scores/credits
-	InitializeFileAt(LOADER_OUTRO_PROGRAM,0x400);
+	InitializeFileAt(LOADER_OUTRO_PROGRAM,&ModuleStartText);
 }
 

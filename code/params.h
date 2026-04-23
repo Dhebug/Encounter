@@ -1,3 +1,5 @@
+#ifndef _PARAMS_H_INCLUDED
+#define _PARAMS_H_INCLUDED
 //
 // Misc settings for the game testing
 //
@@ -125,5 +127,12 @@
 #define MEMCPY_ENTRY(address1,address2,size)   .byt <address1,>address1,<address2,>address2,<size,>size
 #define MEMCPY_JMP(label)                   ldx #<(label-_MemCpyDataBase):jmp _MemcpyTableSystem
 #define MEMCPY_JSR(label)                   ldx #<(label-_MemCpyDataBase):jsr _MemcpyTableSystem
+
+// Inline parameter versions — params embedded after JSR, no tables needed.
+// These call the existing _memset/_memcpy from the kernel via (sp).
+#define MEMSET(address,size,value)          jsr _InlineMemset:.word address:.byt value,0:.word size
+#define MEMCPY(dest,source,size)            jsr _InlineMemcpy:.word dest:.word source:.word size
+#define MEMSET_A(address,size)              jsr _InlineMemsetA:.word address:.word 0:.word size
 #endif
 
+#endif // _PARAMS_H_INCLUDED

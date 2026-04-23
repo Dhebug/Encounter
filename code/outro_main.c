@@ -661,6 +661,6 @@ EndCredits:
     PsgStopSoundAndForceUpdate();
 
 	// Quit and return to the intro
-	InitializeFileAt(LOADER_INTRO_PROGRAM,0x400);
+	InitializeFileAt(LOADER_INTRO_PROGRAM,&ModuleStartText);
 }
 

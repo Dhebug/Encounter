@@ -28,15 +28,6 @@ _maxVerticalSourceOffset .dsb 2
 
     .text
 
-IrqTasks50hz
-.(
-    ; Process keyboard
-    jsr ReadKeyboard
-    jsr _PlayMusicFrame
-    jmp SoundUpdate50hz
-.)
-
-
 ; No-op to avoid a linker bug
 _PrintInformationMessageAsm
     rts

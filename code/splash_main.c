@@ -506,7 +506,7 @@ void main()
     SaveFileAt(LOADER_HIGH_SCORES,&gSaveGameFile);
 
 	// Quit and return to the loader
-	InitializeFileAt(LOADER_INTRO_PROGRAM,LOADER_INTRO_PROGRAM_ADDRESS);   // 0x400
+	InitializeFileAt(LOADER_INTRO_PROGRAM,&ModuleStartText);
 }
 
 #endif

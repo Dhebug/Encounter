@@ -13,7 +13,7 @@
 
 #define SPRITE(value)  value-_FirstSprite
 
-; Game speed 
+; Game speed
 #define GAME_SPEED_UP       250
 #define GAME_DELAY          64     ; Used for the global movement and the jump
 #define CRANE_DELAY         32
@@ -42,7 +42,7 @@
 
 	.zero
 
-	*= $1
+	*= _KernelZeroPageEnd
 
 _zp_start_
 
@@ -90,18 +90,19 @@ _zp_end_
 
 
 	.text
-    
-    *=$d6a0     ; _Minigame
 
-_BottomGraphics = $D2E0
+; Kernel function aliases (symbols imported via -S ..\build\symbols_GameProgram)
+_BottomGraphics = _SavedData3
 
-_main           jmp real_start   ; +0
-read_keyboard   jmp $1234        ; +3
-play_sound      jmp $1234        ; +6
-VSync           jmp $1234        ; +9
+_main
+    ; Save zero page to page 2 ($0200) before we clobber it
+    ldx #0
+_save_zp_loop
+    lda $00,x
+    sta $0200,x
+    inx
+    bne _save_zp_loop
 
-
-real_start    
     ; Initialize charset with the background image
     jsr _RefineCharacters
     jsr _DisplayCharsetMatrix
@@ -193,7 +194,13 @@ exit_menu_loop
     ldx menu_option
     cpx #MENU_QUIT
     bne start_game
-    ; Quit back to Encounter
+    ; Restore zero page from page 2 before returning to Encounter
+    ldx #0
+_restore_zp_loop
+    lda $0200,x
+    sta $00,x
+    inx
+    bne _restore_zp_loop
     rts
 
 start_game    
@@ -235,7 +242,7 @@ end_game_speed
 	; Stay into the game loop while the hero still has some live to spare
 	;
 game_loop
-    jsr VSync
+    jsr _VSync
 	jsr ScoreDisplay
 
 	jsr MoveHero
@@ -560,7 +567,7 @@ LongDelay
 .(
     ldy #25
 loop    
-    jsr VSync
+    jsr _VSync
     dey
     bne loop
     rts
@@ -1163,14 +1170,14 @@ check_end
 
 _FlushKey
 .(
-    jsr read_keyboard
+    jsr _ReadKeyNoBounce
     bne _FlushKey
     rts
 .)
 
 _WaitKey
 .(
-    jsr read_keyboard
+    jsr _ReadKeyNoBounce
     beq _WaitKey
     rts
 .)
@@ -1178,7 +1185,7 @@ _WaitKey
 
 HandleKeys
 .(
-    jsr read_keyboard
+    jsr _ReadKeyNoBounce
     cpx #KEY_LEFT
     beq HeroMoveLeft
     cpx #KEY_RIGHT
@@ -2244,21 +2251,21 @@ Bleep
 .(
     ldX #<_GameTickData
     ldy #>_GameTickData
-    jmp play_sound
+    jmp _PlaySoundAsmXY
 .)
 
 Bloop
 .(
     ldX #<_JumpData
     ldy #>_JumpData
-    jmp play_sound
+    jmp _PlaySoundAsmXY
 .)
 
 Success
 .(
     ldX #<_SuccessData
     ldy #>_SuccessData
-    jmp play_sound
+    jmp _PlaySoundAsmXY
 .)
 
 
@@ -2455,7 +2462,7 @@ EndData
 ;
 ; Allign the content of BSS section to a byte boudary
 ;
-	.dsb 256-(*&255)
+	.align 256
 
 _BssStart_
 
@@ -2467,7 +2474,12 @@ SpriteRequestedState	.dsb SPRITE_COUNT		; 0=not displayed 1=displayed
 
 
 _BssEnd_
-	.dsb 256-(*&255)    ; This will be overwriten
+	.align 256    ; This will be overwriten
 _BssEndClear_
 
-#include "last_module.s"
+#if DISPLAYINFO=1
+#print Remaining space before loader = (FLOPPY_LOADER_RESIDENT_ADDRESS - *)
+#if ( * > FLOPPY_LOADER_RESIDENT_ADDRESS )
+#error - Monkey King data exceeds loader resident area
+#endif
+#endif

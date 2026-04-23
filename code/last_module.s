@@ -1,10 +1,13 @@
+#include "../build/floppy_description.h"
 
+#ifndef KERNEL_RESIDENT
     .zero
 
 ; Used by both the intro and the game
 _param0 .dsb 2
 _param1 .dsb 2
 _param2 .dsb 2
+#endif
 
     .text
 
@@ -103,6 +106,7 @@ _TemporaryBuffer479   .dsb 479      ; Can be used as a temporary scratch pad for
 * = $BB80+40*16
 _TEXT_BOTTOM_VIEW__START
 
+#ifndef KERNEL_RESIDENT
 * = $BFE0                           ; The 32 bytes of RAM between the end of the screen and the start of the ROM
 _32_Bytes_BufferStart
 _gScore                 .dsb 2         ; Current highscore for the player
@@ -120,6 +124,7 @@ _gMonkeyKingFastBestScoreBCD    .dsb 2        ; Best score (fast mode) of the pl
 _gMonkeyKingSlowSessionBest     .dsb 2        ; Best score (slow mode) of the player in that session (normal format)
 _gMonkeyKingFastSessionBest     .dsb 2        ; Best score (fast mode) of the player in that session (normal format)
 _32_Bytes_BufferRemaining
+#endif // !KERNEL_RESIDENT
 
 * = $C000             ; Start of the ROM/Overlay ram
 
@@ -163,9 +168,11 @@ _SecondImageBuffer          .dsb 40*128   ; A second buffer that can store a ful
 _gInputBuffer               .dsb 40
 #endif
 
+#ifndef KERNEL_RESIDENT
 ; Audio system loop buffers (used by all four modules)
 _PsgPlayLoopCount	    .dsb 10      ; 10 levels of loops
 _PsgPlayLoopPosition    .dsb 10      ; 10 levels of loops
+#endif
 
 // Commented out because this overwrites the loader
 //#define OSDK_CUSTOM_STACK 

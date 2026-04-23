@@ -8,9 +8,9 @@
 #define LOADER_SYSTEM_TYPE_JASMIN    1
 
 #ifdef ASSEMBLER    // 6502 Assembler API
-#define LoadFileAt(fileIndex,address)          lda #fileIndex:sta _LoaderApiEntryIndex:lda #<address:sta _LoaderApiAddressLow:lda #>address:sta _LoaderApiAddressHigh:jsr _LoadApiLoadFileFromDirectory
-#define SaveFileAt(fileIndex,address)          lda #fileIndex:sta _LoaderApiEntryIndex:lda #<address:sta _LoaderApiAddressLow:lda #>address:sta _LoaderApiAddressHigh:jsr _LoadApiSaveFileFromDirectory
-#define InitializeFileAt(fileIndex,address)    lda #fileIndex:sta _LoaderApiEntryIndex:lda #<address:sta _LoaderApiAddressLow:lda #>address:sta _LoaderApiAddressHigh:jsr _LoadApiInitializeFileFromDirectory
+#define LoadFileAt(fileIndex,address)          lda #fileIndex:sta _LoaderApiEntryIndex:lda #<address:sta _LoaderApiAddressLow:lda #>address:sta _LoaderApiAddressHigh:jsr _LoaderApiLoadFileFromDirectory
+#define SaveFileAt(fileIndex,address)          lda #fileIndex:sta _LoaderApiEntryIndex:lda #<address:sta _LoaderApiAddressLow:lda #>address:sta _LoaderApiAddressHigh:jsr _LoaderApiSaveFileFromDirectory
+#define InitializeFileAt(fileIndex,address)    lda #fileIndex:sta _LoaderApiEntryIndex:lda #<address:sta _LoaderApiAddressLow:lda #>address:sta _LoaderApiAddressHigh:jsr _LoaderApiInitializeFileFromDirectory
 
 #else               // C Compiler API
 extern unsigned char LoaderApiSystemType;  //  0=Microdisc, 1=Jasmin
@@ -26,10 +26,12 @@ extern unsigned int LoaderApiFileSize;
 
 extern unsigned char LoaderApiFileStartSector;
 
-#define LoadFileAt(fileIndex,address)          LoaderApiEntryIndex=fileIndex;LoaderApiAddress=(void*)address;LoadApiLoadFileFromDirectory();
-#define SaveFileAt(fileIndex,address)          LoaderApiEntryIndex=fileIndex;LoaderApiAddress=(void*)address;LoadApiSaveFileFromDirectory();
-#define InitializeFileAt(fileIndex,address)    LoaderApiEntryIndex=fileIndex;LoaderApiAddress=(void*)address;LoadApiInitializeFileFromDirectory();
+extern char ModuleStartText;  // Assembly label — use &ModuleStartText for the address value
 
-#define LoadFileUncompressedAt(fileIndex,address,compressedSize)  LoaderApiEntryIndex=fileIndex;LoadApiInitializeFileFromDirectory();LoaderApiAddress=(void*)address;LoaderApiFileSize=compressedSize;LoaderApiFileStartSector&=127;LoaderApiLoadFile();
+#define LoadFileAt(fileIndex,address)          LoaderApiEntryIndex=fileIndex;LoaderApiAddress=(void*)address;LoaderApiLoadFileFromDirectory();
+#define SaveFileAt(fileIndex,address)          LoaderApiEntryIndex=fileIndex;LoaderApiAddress=(void*)address;LoaderApiSaveFileFromDirectory();
+#define InitializeFileAt(fileIndex,address)    LoaderApiEntryIndex=fileIndex;LoaderApiAddress=(void*)address;LoaderApiInitializeFileFromDirectory();
+
+#define LoadFileUncompressedAt(fileIndex,address,compressedSize)  LoaderApiEntryIndex=fileIndex;LoaderApiInitializeFileFromDirectory();LoaderApiAddress=(void*)address;LoaderApiFileSize=compressedSize;LoaderApiFileStartSector&=127;LoaderApiLoadFile();
 
 #endif

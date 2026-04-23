@@ -122,7 +122,13 @@ SET OSDKEMULPARAMS=%SET OSDKEMULPARAMS%-R soft --scanlines off
 :: After a module has been built once, and as long as the files are not deleted, you can
 :: then comment out the line to speed up compile time.
 :: Obviously remember to enable them again else the changes you make will not be rebuilt!
-SET OSDKFILE_SPLASH=splash_main splash_utils display_basic loader_api irq audio keyboard distorter costable akyplayer last_module
-SET OSDKFILE_INTRO=intro_main score common intro_utils intro_text loader_api irq audio keyboard time display_basic akyplayer last_module
-SET OSDKFILE_GAME=game_main input_utils bytestream common game_data game_items game_locations game_text game_utils loader_api irq audio keyboard time display_basic display akyplayer last_module
-SET OSDKFILE_OUTRO=outro_main score outro_text  input_utils common outro_utils loader_api irq audio keyboard display_basic display akyplayer last_module
+SET OSDKFILE_KERNEL=kernel_main audio keyboard akyplayer display_basic kernel_last_module
+SET OSDKFILE_SPLASH=kernel_zp_reserve splash_main splash_utils distorter costable last_module
+SET OSDKFILE_INTRO=kernel_zp_reserve intro_main score intro_utils intro_text time last_module
+SET OSDKFILE_GAME=kernel_zp_reserve game_main input_utils bytestream game_data game_items game_locations game_text game_utils time display last_module
+SET OSDKFILE_OUTRO=kernel_zp_reserve outro_main score outro_text input_utils outro_utils display last_module
+
+
+::SET OSDKVERBOSITY=2
+::SET OSDKMACRO=-O
+::SET OSDKMACROEXPAND=1

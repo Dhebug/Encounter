@@ -1,4 +1,7 @@
 
+#ifndef _SCRIPTING_H_INCLUDED
+#define _SCRIPTING_H_INCLUDED
+
 #define DELAY_FIRST_BUBBLE      25
 #define DELAY_INFO_MESSAGE      50*4
 
@@ -252,3 +255,5 @@
 #define FLAG_MAPPING_DEFAULT             0      // Just a simple C or assembler function to call
 #define FLAG_MAPPING_STREAM              4      // 0 = Function pointer,  1 = Stream pointer
 #define FLAG_MAPPING_STREAM_CALLBACK     8      // No item at all, just a stream callback
+
+#endif // _SCRIPTING_H_INCLUDED

@@ -881,83 +881,52 @@ _SaveFileFromDirectory
 	jmp _WriteData
 
 
+;
+; API function aliases — modules call these via imported symbols
+; Both naming conventions preserved for backward compatibility:
+;   _LoaderApi*  = labels used internally by the loader
+;   _LoadApi*    = shorter names used by C macros in loader_api.h
+;
+_LoaderApiInitializeFileFromDirectory = _InitializeFileFromDirectory
+_LoaderApiLoadFileFromDirectory       = _LoadFileFromDirectory
+_LoaderApiSaveFileFromDirectory       = _SaveFileFromDirectory
+_LoaderApiLoadingAnimation            = _RefreshAccessIndicator
+_LoaderApiSaveData                    = _WriteData
+_LoaderApiLoadFile                    = _LoadData
+
+
 _EndLoaderCode
 
 ;
 ; This is free memory that can be used, when it reaches zero then the loader start address should be changed
 ;
 
-    .dsb $FFDE - _EndLoaderCode
+    .dsb $FFF1 - _EndLoaderCode
 
 _Vectors
 
-#if ( _Vectors <> $FFDE )
+#if ( _Vectors <> $FFF1 )
 #error - Vector address is incorrect, loader will crash
 #else
 
 ;
-; Here are the functions that the user can call from his own application
+; API variables — 9 bytes packed at $FFF1-$FFF9
 ;
-_LoaderApiInitializeFileFromDirectory  .byt OPCODE_JMP,<_InitializeFileFromDirectory,>_InitializeFileFromDirectory    ; $FFDE-$FFE0
-_LoaderApiLoadFileFromDirectory		   .byt OPCODE_JMP,<_LoadFileFromDirectory,>_LoadFileFromDirectory                ; $FFE1-$FFE3
-_LoaderApiSaveFileFromDirectory	       .byt OPCODE_JMP,<_SaveFileFromDirectory,>_SaveFileFromDirectory                ; $FFE4-$FFE6
+_LoaderApiEntryIndex        .byt 0                                  ; $FFF1 - ID of the file to load
+_LoaderApiSystemType        .byt 0                                  ; $FFF2 - 0=Microdisc, 1=Jasmin
 
-
-_LoaderApiEntryIndex	        .byt 0                                  ; $FFE7 - ID of the file to load
-_LoaderApiSystemType            .byt 0                                  ; $FFE8 - 0=Microdisc, 1=Jasmin
-
-; Chema: WriteSupport
-_LoaderApiLoadingAnimation      .byt OPCODE_JMP,<_RefreshAccessIndicator,>_RefreshAccessIndicator   ; $FFE9-$FFEB
-_LoaderApiSaveData              .byt OPCODE_JMP,<_WriteData,>_WriteData   ; $FFEC-$FFEE
-
-#ifdef ENABLE_SPLASH
-_LoaderApiFileStartSector       .byt LOADER_SPLASH_PROGRAM_SECTOR       ; $FFEF
-_LoaderApiFileStartTrack        .byt LOADER_SPLASH_PROGRAM_TRACK        ; $FFF0
+; Boot the kernel first — it handles dispatching to the correct module
+_LoaderApiFileStartSector   .byt LOADER_KERNEL_PROGRAM_SECTOR       ; $FFF3
+_LoaderApiFileStartTrack    .byt LOADER_KERNEL_PROGRAM_TRACK        ; $FFF4
 
 _LoaderApiFileSize
-_LoaderApiFileSizeLow           .byt <LOADER_SPLASH_PROGRAM_SIZE        ; $FFF1
-_LoaderApiFileSizeHigh          .byt >LOADER_SPLASH_PROGRAM_SIZE        ; $FFF2
+_LoaderApiFileSizeLow       .byt <LOADER_KERNEL_PROGRAM_SIZE        ; $FFF5
+_LoaderApiFileSizeHigh      .byt >LOADER_KERNEL_PROGRAM_SIZE        ; $FFF6
 
-; Could have a JMP here as well to launch the loaded program
-_LoaderApiJump                  .byt OPCODE_JMP                         ; $FFF3
+_LoaderApiJump              .byt OPCODE_JMP                         ; $FFF7
 _LoaderApiAddress
-_LoaderApiAddressLow            .byt <LOADER_SPLASH_PROGRAM_ADDRESS     ; $FFF4
-_LoaderApiAddressHigh           .byt >LOADER_SPLASH_PROGRAM_ADDRESS     ; $FFF5
-_LoaderXxxxxx_available         .byt 0                                  ; $FFF6
-_LoaderApiLoadFile              .byt OPCODE_JMP,<_LoadData,>_LoadData     ; $FFF7-$FFF9
-#else
-#ifdef ENABLE_INTRO
-_LoaderApiFileStartSector       .byt LOADER_INTRO_PROGRAM_SECTOR        ; $FFEF
-_LoaderApiFileStartTrack        .byt LOADER_INTRO_PROGRAM_TRACK         ; $FFF0
-
-_LoaderApiFileSize
-_LoaderApiFileSizeLow           .byt <LOADER_INTRO_PROGRAM_SIZE         ; $FFF1
-_LoaderApiFileSizeHigh          .byt >LOADER_INTRO_PROGRAM_SIZE         ; $FFF2
-
-; Could have a JMP here as well to launch the loaded program
-_LoaderApiJump                  .byt OPCODE_JMP                         ; $FFF3
-_LoaderApiAddress
-_LoaderApiAddressLow            .byt <LOADER_INTRO_PROGRAM_ADDRESS      ; $FFF4
-_LoaderApiAddressHigh           .byt >LOADER_INTRO_PROGRAM_ADDRESS      ; $FFF5
-_LoaderXxxxxx_available         .byt 0                                  ; $FFF6
-_LoaderApiLoadFile              .byt OPCODE_JMP,<_LoadData,>_LoadData     ; $FFF7-$FFF9
-#else  // Directly load the game
-_LoaderApiFileStartSector       .byt LOADER_GAME_PROGRAM_SECTOR         ; $FFEF
-_LoaderApiFileStartTrack        .byt LOADER_GAME_PROGRAM_TRACK          ; $FFF0
-
-_LoaderApiFileSize
-_LoaderApiFileSizeLow           .byt <LOADER_GAME_PROGRAM_SIZE          ; $FFF1
-_LoaderApiFileSizeHigh          .byt >LOADER_GAME_PROGRAM_SIZE          ; $FFF2
-
-; Could have a JMP here as well to launch the loaded program
-_LoaderApiJump                  .byt OPCODE_JMP                         ; $FFF3
-_LoaderApiAddress
-_LoaderApiAddressLow            .byt <LOADER_GAME_PROGRAM_ADDRESS       ; $FFF4
-_LoaderApiAddressHigh           .byt >LOADER_GAME_PROGRAM_ADDRESS       ; $FFF5
-_LoaderXxxxxx_available         .byt 0                                  ; $FFF6
-_LoaderApiLoadFile              .byt OPCODE_JMP,<_LoadData,>_LoadData     ; $FFF7-$FFF9
-#endif
-#endif
+_LoaderApiAddressLow        .byt <LOADER_KERNEL_PROGRAM_ADDRESS     ; $FFF8
+_LoaderApiAddressHigh       .byt >LOADER_KERNEL_PROGRAM_ADDRESS     ; $FFF9
 
 ;
 ; These three HAVE to be at these precise adresses, they map to hardware registers
