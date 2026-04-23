@@ -17,11 +17,18 @@ IF ERRORLEVEL 1 GOTO Error
 %osdk%\bin\xa %XAPARAMS% sector_3.asm -o ..\build\files\sector_3.o
 IF ERRORLEVEL 1 GOTO Error
 
-IF NOT "%DISK_WITH_BITMAP%"=="1" GOTO EndBitmapSector
-ECHO %ESC%[96m== Assembling Sedoric compatible bitmap ==%ESC%[0m
-%osdk%\bin\xa %XAPARAMS% sector_bitmap.asm -o ..\build\files\sector_bitmap.o
+IF NOT "%DISK_SEDORIC_COPYABLE%"=="1" GOTO EndSedoricSectors
+ECHO %ESC%[96m== Assembling Sedoric compatible information ==%ESC%[0m
+:: Assemble sector_sedoric_directory FIRST and export its Entries* labels as xa equates so sector_sedoric_bitmap can #include them to auto-compute the file count.
+%osdk%\bin\xa %XAPARAMS% sector_sedoric_directory.asm -o ..\build\files\sector_sedoric_directory.o -E ..\build\files\sector_sedoric_directory.equ -P Entries
 IF ERRORLEVEL 1 GOTO Error
-:EndBitmapSector
+%osdk%\bin\xa %XAPARAMS% sector_sedoric_bitmap.asm -o ..\build\files\sector_sedoric_bitmap.o
+IF ERRORLEVEL 1 GOTO Error
+%osdk%\bin\xa %XAPARAMS% sector_sedoric_system.asm -o ..\build\files\sector_sedoric_system.o
+IF ERRORLEVEL 1 GOTO Error
+%osdk%\bin\xa %XAPARAMS% sector_sedoric_descriptor.asm -o ..\build\files\sector_sedoric_descriptor.o
+IF ERRORLEVEL 1 GOTO Error
+:EndSedoricSectors
 
 ECHO.
 ECHO %ESC%[96m== Assembling loader ==%ESC%[0m

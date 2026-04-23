@@ -41,6 +41,22 @@ WriteSector ..\build\files\sector_1-jasmin.o 		; Sector 1
 WriteSector ..\build\files\sector_2-microdisc.o 	; Sector 2
 WriteSector ..\build\files\sector_3.o 				; Sector 3
 
+#if DISK_SEDORIC_COPYABLE==1
+;
+; This bit is for the Sedoric minimal filesystem compatibility
+; Track 20 / sector 1: system sector (disk name, drive config, INIST)
+; Track 20 / sector 2: bitmap 1 (SEDORIC signature + geometry)
+; Track 20 / sector 3: shared empty descriptor (reusing the bitmap-2 slot)
+; Track 20 / sector 4: DIR sector 1 (4 fake module entries pointing at sector 3)
+SetPosition 20 1
+AddDefine LOADER_SEDORIC_DATA_TRACK 20
+AddDefine LOADER_SEDORIC_DATA_SKIP_SECTOR 5
+WriteSector ..\build\files\sector_sedoric_system.o 	    ; System sector (disk name)
+WriteSector ..\build\files\sector_sedoric_bitmap.o 	    ; Bitmap 1 (sector 2)
+WriteSector ..\build\files\sector_sedoric_descriptor.o  ; Shared empty descriptor (sector 3)
+WriteSector ..\build\files\sector_sedoric_directory.o   ; DIR sector 1 with 4 module entries (sector 4)
+#endif
+
 ;
 ; Now here is the loader code, that one is Microdisc only
 ;
@@ -570,10 +586,4 @@ AddFile ..\build\files\scores.bin
 AddDefine LOADER_HIGH_SCORES {FileIndex}
 AddDefine LOADER_HIGH_SCORES_SIZE {FileSize}
 AddDefine LOADER_HIGH_SCORES_DISK_OFFSET {FileDiskOffset}
-
-#if DISK_WITH_BITMAP==1
-; Overwrite the bitmap (TEST)
-SetPosition 20 2
-WriteSector ..\build\files\sector_bitmap.o 		; Sector with the bitmap data
-#endif
 
