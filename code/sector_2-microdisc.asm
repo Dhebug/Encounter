@@ -283,9 +283,9 @@ retry_counter	  .byt 4	; Number of attempts at loading data (ie: not quite clear
 
 
 OsdkNameStart
-    .byt "OSDKNAME"
+    .byt str(OSDKNAME)
     .byt " v"
-    .byt "VERSION"
+    .byt str(VERSION)
 #ifdef PRODUCT_TYPE_GAME_DEMO
     .byt "D"
 #endif // PRODUCT_TYPE_GAME_DEMO

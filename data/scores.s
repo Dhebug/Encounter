@@ -31,7 +31,7 @@
 //
 StartScores
  .byt "SAVESTRT"                      ; Start marker
- .byt "VERSION"
+ .byt str(VERSION)
  ENTRY(1,5000,"    Lt. Columbo")
  ENTRY(1,4500,"    Miss Marple")
  ENTRY(1,3000,"Sherlock Holmes")
@@ -69,10 +69,5 @@ EndScores
 
 
 ; Basic sanity checking, in case I break the macros, or forget some bytes...
-#if ((EndScores-StartScores)<>512)
-#echo Scores table should be 512 bytes long, but it is:
-#print (EndScores-StartScores) 
- nop Please fix table size
-#else
+.asserteq EndScores-StartScores,512, "Scores table should be 512 bytes" 
 #echo Scores table successfully exported
-#endif

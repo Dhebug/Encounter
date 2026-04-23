@@ -243,9 +243,9 @@ sector_OK
 sector_counter      .byt (($FFFF-FLOPPY_LOADER_ADDRESS)+1)/256
 
 OsdkNameStart
-    .byt "OSDKNAME"
+    .byt str(OSDKNAME)
     .byt " v"
-    .byt "VERSION"
+    .byt str(VERSION)
 #ifdef PRODUCT_TYPE_GAME_DEMO
     .byt "D"
 #endif // PRODUCT_TYPE_GAME_DEMO

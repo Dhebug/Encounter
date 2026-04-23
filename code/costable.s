@@ -1,5 +1,5 @@
 
-	.dsb 256-(*&255)
+	.align 256
 
 ; Non signed values, from 0 to 255
 _CosTable
