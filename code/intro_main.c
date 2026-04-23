@@ -53,6 +53,9 @@ extern unsigned char CompressedTypeWriterImage[INTRO_PICTURE_TYPEWRITER_COMPRESS
 extern char TableRotateOffset[];
 extern char TableDitherPatternOffset[];
 
+extern void InitPaperSheet();
+extern void DisplayPaperSheet();
+extern void CarriageReturn();
 
 #include "intro.h"
 
@@ -310,6 +313,7 @@ int DisplayStory()
         SetLineAddress((char*)ImageBuffer+40*8+1);
         gXPos=0;
         gYPos=0;
+        InitPaperSheet();
 
         // By using || it's possible to early exit the function when the player presses a key
         result = TypeWriterPrintCharacter(Text_TypeWriterMessage)
@@ -331,90 +335,6 @@ int DisplayStory()
 
 
 
-void DisplayPaperSheet()
-{
-#if 0
-	// Debugging code
-	gXPos = 17;
-	gYPos = 25;
-#endif		
-	{
-	int y;
-	int height                 = (gYPos+2)*8;
-    int heightBy40             = height*40;
-	char* sourcePtr            = (char*)ImageBuffer+heightBy40;
-    int globalOffset           = (136*40) - (gYPos*8+8)*40+heightBy40;
-	char* destPtr              = (char*)0xa000       + globalOffset;
-	char* sourcePtrBackground  = (char*)ImageBuffer2 + globalOffset;
-
-	int borderOffset = 0;
-	int sourceOffset = 0;
-	int destOffset   = 0;
-
-    if (gXPos<19)
-	{
-		// Border on the left side of the paper
-		borderOffset          = 0;
-        TypeWriterBorderWidth = 19-gXPos;
-		destOffset            = TypeWriterBorderWidth;
-	}
-	else
-	{
-		// Border on the right side	of the paper
-		TypeWriterBorderWidth = gXPos-18;
-		borderOffset          = 40-TypeWriterBorderWidth;
-		sourceOffset          = TypeWriterBorderWidth-1;
-	}
-	TypeWriterPaperWidth = 40-TypeWriterBorderWidth;
-#if 0	
-	sprintf((char*)0xbb80+40*25,"gXPos:%d gYPos:%d",gXPos,gYPos);
-	sprintf((char*)0xbb80+40*26,"W:%d BW:%d",width,borderWidth);
-	sprintf((char*)0xbb80+40*27,"DO:%d SO:%d BO:%d",destOffset, sourceOffset,borderOffset);
-#endif
-
-    //TypeWriterBorderWidth = borderWidth;
-
-    TypeWriterBorderRead  = sourcePtrBackground+borderOffset-1;
-    TypeWriterBorderWrite = destPtr+borderOffset-1;
-
-	// Print the paper
-	for (y=0;y<height;y++)
-	{
-		destPtr            -=40;
-		sourcePtr          -=TableRotateOffset[y];
-		TypeWriterBorderRead -=40;
-        TypeWriterBorderWrite-=40;
-		if (sourcePtr<(char*)ImageBuffer)
-		{
-			break;
-		}
-		if ( (destPtr<(char*)0xa000+(120*40)) || (destPtr>(char*)0xa000+(126*40)) )
-		{
-            TypeWriterPaperPattern=TableDitherPatternOffset[y];
-
-            TypeWriterPaperRead   = sourcePtr+sourceOffset-1;           
-            TypeWriterPaperWrite  = destPtr+destOffset-1;
-
-            CopyTypeWriterLine();
-		}
-	}		
-	}
-}
-
-
-void CarriageReturn()
-{
-	gYPos++;
-	DisplayPaperSheet();
-    PlaySound(ScrollPageData);
-	while (gXPos>2)
-	{
-		gXPos-=4;
-		DisplayPaperSheet();
-	}
-	gXPos=1;
-	DisplayPaperSheet();
-}
 
 int TypeWriterPrintCharacter(const char *message)
 {

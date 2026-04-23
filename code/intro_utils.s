@@ -195,43 +195,354 @@ done
 .)
 
 
-IrqTasks50hz
-.(
-    ; Process keyboard
-    jsr ReadKeyboard
-    jsr _PlayMusicFrame
-    jmp SoundUpdate50hz
-.)
-
 ; No-op to avoid a linker bug
 _PrintInformationMessageAsm
 _DrawArrows
     rts
 
-_CopyTypeWriterLine
+; Screen base + 144 scanlines (constant offset where the paper starts drawing from)
+PAPER_DEST_BASE = $A000 + 144*40 - 1       ; Pre-subtracted by 1 ($B67F)
+; Roller zone: the physical roller area on screen that must not be overwritten
+ROLLER_ZONE_TOP = $A000 + 120*40 - 1       ; $B2BF (pre-subtracted)
+ROLLER_ZONE_BOT = $A000 + 126*40 - 1       ; $B3AF (pre-subtracted)
+
+; ============================================
+; InitPaperSheet - call once before the typewriter sequence starts
+; ============================================
+; Computes the initial sourcePtr from gYPos and caches it.
+_InitPaperSheet
 .(
+    ; sourcePtr = ImageBuffer - 1 + (gYPos+2)*320 (pre-subtracted by 1)
+    lda #<(_ImageBuffer-1)
+    sta _gSourcePtrBase
+    lda #>(_ImageBuffer-1)
+    sta _gSourcePtrBase+1
+
+    lda _gYPos
+    clc
+    adc #2
+    tax                             ; X = gYPos+2
+
+    ; height = (gYPos+2)*8
+    asl
+    asl
+    asl
+    sta _gPaperSheetHeight
+
+    ; Add X*320 ($0140)
+    cpx #0
+    beq done
+add_320
+    clc
+    lda _gSourcePtrBase
+    adc #$40
+    sta _gSourcePtrBase
+    lda _gSourcePtrBase+1
+    adc #$01
+    sta _gSourcePtrBase+1
+    dex
+    bne add_320
+done
+    rts
+.)
+
+_gSourcePtrBase .word 0
+
+; ============================================
+; DisplayPaperSheet (full assembly version)
+; ============================================
+; Draws the typewriter paper sheet with bending effect.
+; Uses cached _gSourcePtrBase (updated by CarriageReturn).
+_DisplayPaperSheet
+.(
+    ; --- sourcePtr from cache ---
+    lda _gSourcePtrBase
+    sta _param0
+    lda _gSourcePtrBase+1
+    sta _param0+1
+
+    ; --- destPtr (constant, pre-subtracted) ---
+    lda #<PAPER_DEST_BASE
+    sta _param1
+    lda #>PAPER_DEST_BASE
+    sta _param1+1
+
+    ; --- Compute border parameters based on gXPos ---
+    lda _gXPos
+    cmp #19
+    bcs right_border
+
+    ; Left border: borderOffset=0, borderWidth=19-gXPos, destOffset=borderWidth, sourceOffset=0
+    lda #19
+    sec
+    sbc _gXPos
+    sta _TypeWriterBorderWidth
+    sta _param2+1                   ; destOffset = borderWidth
+    lda #0
+    sta _param2+0                   ; sourceOffset = 0
+
+    ; TypeWriterBorderRead = ImageBuffer2 + 5759 (borderOffset=0, -1)
+    lda #<(_ImageBuffer2+5759)
+    sta _TypeWriterBorderRead
+    lda #>(_ImageBuffer2+5759)
+    sta _TypeWriterBorderRead+1
+
+    ; TypeWriterBorderWrite = destPtr (pre-subtracted, no borderOffset for left border)
+    lda #<PAPER_DEST_BASE
+    sta _TypeWriterBorderWrite
+    lda #>PAPER_DEST_BASE
+    sta _TypeWriterBorderWrite+1
+
+    jmp setup_paper_width
+
+right_border
+    ; Right border: borderWidth=gXPos-18, borderOffset=40-width, sourceOffset=width-1, destOffset=0
+    lda _gXPos
+    sec
+    sbc #18
+    sta _TypeWriterBorderWidth
+    sec
+    sbc #1
+    sta _param2+0                   ; sourceOffset = width-1
+    lda #0
+    sta _param2+1                   ; destOffset = 0
+
+    ; borderOffset = 40 - borderWidth
+    lda #40
+    sec
+    sbc _TypeWriterBorderWidth      ; A = borderOffset
+
+    ; TypeWriterBorderRead = ImageBuffer2 + 5759 + borderOffset
+    clc
+    adc #<(_ImageBuffer2+5759)
+    sta _TypeWriterBorderRead
+    lda #>(_ImageBuffer2+5759)
+    adc #0
+    sta _TypeWriterBorderRead+1
+
+    ; TypeWriterBorderWrite = destPtr + borderOffset
+    lda #40
+    sec
+    sbc _TypeWriterBorderWidth      ; recompute borderOffset
+    clc
+    adc #<PAPER_DEST_BASE
+    sta _TypeWriterBorderWrite
+    lda #>PAPER_DEST_BASE
+    adc #0
+    sta _TypeWriterBorderWrite+1
+
+setup_paper_width
+    ; TypeWriterPaperWidth = 40 - TypeWriterBorderWidth
+    lda #40
+    sec
+    sbc _TypeWriterBorderWidth
+    sta _TypeWriterPaperWidth
+
+    ; Fall through to the inner loop
+.)
+
+; ============================================
+; DisplayPaperSheetLoop - inner scanline loop
+; ============================================
+; Input: param0=sourcePtr, param1=destPtr, param2+0=sourceOffset, param2+1=destOffset
+;        _gPaperSheetHeight=height
+;   param1 = destPtr (16-bit)
+;   param2+0 = sourceOffset, param2+1 = destOffset
+;   _gPaperSheetHeight = height (8-bit, max ~216)
+; Uses self-modifying TypeWriter* addresses from CopyTypeWriterLine
+_DisplayPaperSheetLoop
+.(
+    ldy #0                          ; Y = loop counter
+
+loop
+    ; destPtr -= 40
+    sec
+    lda _param1
+    sbc #40
+    sta _param1
+    bcs no_borrow_dest
+    dec _param1+1
+no_borrow_dest
+
+    ; sourcePtr -= TableRotateOffset[y]
+    sec
+    lda _param0
+    sbc _TableRotateOffset,y
+    sta _param0
+    bcs no_borrow_src
+    dec _param0+1
+no_borrow_src
+
+    ; TypeWriterBorderRead -= 40
+    sec
+    lda _TypeWriterBorderRead
+    sbc #40
+    sta _TypeWriterBorderRead
+    bcs no_borrow_br
+    dec _TypeWriterBorderRead+1
+no_borrow_br
+
+    ; TypeWriterBorderWrite -= 40
+    sec
+    lda _TypeWriterBorderWrite
+    sbc #40
+    sta _TypeWriterBorderWrite
+    bcs no_borrow_bw
+    dec _TypeWriterBorderWrite+1
+no_borrow_bw
+
+    ; if (sourcePtr < ImageBuffer-1) break (sourcePtr is pre-subtracted by 1)
+    lda _param0+1
+    cmp #>(_ImageBuffer-1)
+    bcc done
+    bne no_break
+    lda _param0
+    cmp #<(_ImageBuffer-1)
+    bcs no_break
+
+done
+    rts
+
+no_break
+
+    ; Skip the roller zone (the physical roller must not be overwritten)
+    lda _param1+1
+    cmp #>ROLLER_ZONE_TOP
+    bcc do_draw                     ; Above roller zone → draw
+    cmp #(ROLLER_ZONE_BOT >> 8) + 1  ; High byte past the roller zone
+    bcs do_draw                     ; Below roller zone → draw
+    ; High byte matches roller zone — check low byte more precisely
+    cmp #>ROLLER_ZONE_TOP
+    bne check_bot
+    lda _param1
+    cmp #<ROLLER_ZONE_TOP
+    bcs skip_draw                   ; >= top → skip
+    bcc do_draw                     ; < top → draw
+check_bot
+    ; High byte is >ROLLER_ZONE_BOT
+    lda _param1
+    cmp #(ROLLER_ZONE_BOT & $FF) + 1 ; Low byte past the roller zone
+    bcc skip_draw                   ; <= bot → skip
+    ; >= $B3B1 → draw (past roller zone)
+
+do_draw
+    ; Set up PaperRead = sourcePtr + sourceOffset (sourcePtr already has -1 baked in)
+    clc
+    lda _param0
+    adc _param2+0
+    sta _TypeWriterPaperRead
+    lda _param0+1
+    adc #0
+    sta _TypeWriterPaperRead+1
+
+    ; Set up PaperWrite = destPtr + destOffset (destPtr already has -1 baked in)
+    clc
+    lda _param1
+    adc _param2+1
+    sta _TypeWriterPaperWrite
+    lda _param1+1
+    adc #0
+    sta _TypeWriterPaperWrite+1
+
+    ; Check if dithering is needed
+    lda _TableDitherPatternOffset,y
+    cmp #$7F
+    bne has_mask
+
+    ; Fast path: patch AND→LDA and shorten branch to skip the mask load
+    ldx #OPCODE_LDA_ABS_X
+    lda #256-9                      ; Branch offset: skip lda #mask (-9 = $F7)
+    bne draw_paper                    ; Always branches
+
+has_mask
+    ; Normal path: AND with dither pattern
+    sta paper_mask+1                  ; Set the mask value
+    ldx #OPCODE_AND_ABS_X
+    lda #256-11                     ; Branch offset: include lda #mask (-11 = $F5)
+
+draw_paper
+    stx paper_and_opcode
+    sta paper_bne_offset
+
 +_TypeWriterPaperWidth =*+1
     ldx #0
 loop_paper
+paper_mask
+    lda #$FF                        ; Dither mask value (skipped in fast mode)
+paper_and_opcode = *
 +_TypeWriterPaperRead =*+1
-    lda $2211,x
-+_TypeWriterPaperPattern = *+1
-    and #$ff  
+    and $1234,x                     ; Patched to LDA in fast mode
 +_TypeWriterPaperWrite =*+1
-    sta $5544,x
+    sta $1234,x
     dex
+paper_bne_offset = *+1
     bne loop_paper
 
 +_TypeWriterBorderWidth =*+1
     ldx #0
 loop_border
 +_TypeWriterBorderRead =*+1
-    lda $2211,x
+    lda $1234,x
 +_TypeWriterBorderWrite =*+1
-    sta $5544,x
+    sta $1234,x
     dex
     bne loop_border
-    rts
+
+skip_draw
+    iny
++_gPaperSheetHeight = *+1
+    cpy #0
+    beq done
+    jmp loop
+.)
+
+
+
+; ============================================
+; CarriageReturn (full assembly version)
+; ============================================
+_CarriageReturn
+.(
+    inc _gYPos
+
+    ; Update cached sourcePtr += 320 ($0140)
+    clc
+    lda _gSourcePtrBase
+    adc #$40
+    sta _gSourcePtrBase
+    lda _gSourcePtrBase+1
+    adc #$01
+    sta _gSourcePtrBase+1
+
+    ; Update cached height += 8
+    lda _gPaperSheetHeight
+    clc
+    adc #8
+    sta _gPaperSheetHeight
+
+    jsr _DisplayPaperSheet
+
+    ldx #<_ScrollPageData
+    ldy #>_ScrollPageData
+    jsr _PlaySoundAsmXY
+
+carriage_loop
+    lda _gXPos
+    cmp #3
+    bcc carriage_done               ; gXPos <= 2, stop
+    sec
+    sbc #4
+    bcc carriage_done               ; Underflow (went negative), stop
+    sta _gXPos
+    jsr _DisplayPaperSheet
+    jmp carriage_loop
+
+carriage_done
+    lda #1
+    sta _gXPos
+    lda #0
+    sta _gXPos+1                    ; Clear high byte (gXPos is int)
+    jmp _DisplayPaperSheet          ; Tail call
 .)
 
 

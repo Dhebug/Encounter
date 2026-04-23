@@ -93,6 +93,8 @@
 #define OPCODE_BEQ              $F0
 #define OPCODE_CLC              $18
 #define OPCODE_SEC              $38
+#define OPCODE_AND_ABS_X        $3D
+#define OPCODE_LDA_ABS_X        $BD
 
 // Page 3 / VIA addresses
 #define via_portb               $0300 

@@ -12,8 +12,6 @@ _gStatusMessageLocation .dsb 2
     .text
 
 _gIsHires           .byt 1
-_gPrintWidth        .byt 40
-_gPrintTerminator   .byt 0          // 0 byt default, but could be TEXT_END to allow for setting black ink changes
 _gShowHighlights    .byt 0
 _gPrintRemovePrefix .byt 0
 _gPrintQuitIfSpace  .byt 0          // Used by the option menu to truncate items to the important word
@@ -112,14 +110,15 @@ loop
     beq highlighter_character
     cmp #"$"                // Mark where a word actually starts (when the strip suffix is enabled, else printed as a space)
     beq prefix_marker_character
-    cmp _gPrintTerminator   // Either 0 or TEXT_END depending of the setting
++_gPrintTerminator = *+1
+    cmp #0                  // Either 0 or TEXT_END depending of the setting
     bne normal_character
 
 quit
     jsr _PrintSpacesIfAny
-abort    
+abort
     lda #0
-    sta _gPrintTerminator   // Resets the terminator to zero (maybe?)
+    sta _gPrintTerminator   // Resets the terminator to zero
     sta _gPrintQuitIfSpace
     rts
 
@@ -160,7 +159,7 @@ normal_character
     iny
 loop_find_word_end
     lda (_param0),y
-    cmp _gPrintTerminator   // Either 0 or TEXT_END depending of the setting
+    cmp _gPrintTerminator   // Same self-modifying immediate as above
     beq found_word_end
     cmp #" "                // Space
     beq found_word_end
@@ -189,7 +188,8 @@ found_word_end
     clc
     adc _gPrintPos
     adc _spaceCounter
-    cmp _gPrintWidth
++_gPrintWidth = *+1
+    cmp #40
     bmi end_wrap_test
     beq end_wrap_test
 .(    
