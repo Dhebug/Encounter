@@ -688,6 +688,7 @@ void main()
 	// we ensure that the code is actually compiled, so that limits the chances to
 	// break the intro when working on the game
 	goto endIntro;
+warningDisableLabelTrick:    // To avoid the "intro_main.c:xxx: warning: unreachable code"
 #endif
 
     //
