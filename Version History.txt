@@ -430,4 +430,5 @@
 1.3.2
 - Restructured the code to use the new modular kernel system
 - Optimized the typewriter animated sequence 
+- The meat, pills, mortar, cardboard box, tobacco tin, net, matches, hose, ... are now visible in the scene as actual objects
 

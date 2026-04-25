@@ -1075,11 +1075,19 @@ _gDescriptionGreenHouse
     ; Spawn water if required
     GOSUB(_SpawnWaterIfNotEquipped)
 
+    ; Is the protection suit still in the greenhouse?
     IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_ProtectionSuit,e_LOC_GREENHOUSE),show_suit)
         BLIT_BLOCK(LOADER_SPRITE_ITEMS,4,13)                     ; Draw the protection suit
                 _IMAGE(14,0)
                 _BUFFER(33,104)
     ENDIF(show_suit)
+
+    ; Is the cardboard box still in the greenhouse?
+    IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_CardboardBox,e_LOC_GREENHOUSE),show_box)
+        BLIT_BLOCK(LOADER_SPRITE_ITEMS,4,16)                     ; Draw the cardboard box
+                _IMAGE(26,89)
+                _BUFFER(30,94)
+    ENDIF(show_box)
 
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
@@ -1099,6 +1107,13 @@ _gDescriptionGreenHouse
 
 // MARK: Tennis Court
 _gDescriptionTennisCourt
+    ; Is the Net still on the tennis court
+    IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_Net,e_LOC_TENNISCOURT),show_net)
+        BLIT_BLOCK(LOADER_SPRITE_ITEMS,4,17)                     ; Draw the Net
+                _IMAGE(26,71)
+                _BUFFER(3,75)
+    ENDIF(show_net)
+
     SET_ITEM_LOCATION(e_ITEM_NormalWindow,e_LOC_CURRENT)
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
@@ -1117,6 +1132,13 @@ _gDescriptionTennisCourt
 
 // MARK: Vegetable Garden
 _gDescriptionVegetableGarden
+    ; Is the Knife still in the garden
+    IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_SilverKnife,e_LOC_VEGSGARDEN),show_knife)
+        BLIT_BLOCK(LOADER_SPRITE_ITEMS,2,9)                     ; Draw the Knife
+                _IMAGE(35,51)
+                _BUFFER(2,89)
+    ENDIF(show_knife)
+
     SET_ITEM_LOCATION(e_ITEM_CellarWindow,e_LOC_VEGSGARDEN)       ; The window is in the garden
 #ifdef LANGUAGE_FR
 _gTextItemCellarWindow = *+2
@@ -1146,6 +1168,13 @@ _gTextItemCellarWindow = *+2
 // MARK: Fish Pond
 _gDescriptionFishPond
 .(
+    ; Is the Hose still near the pond
+    IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_Hose,e_LOC_FISHPND),show_hose)
+        BLIT_BLOCK(LOADER_SPRITE_ITEMS,2,21)                     ; Draw the Hose
+                _IMAGE(35,61)
+                _BUFFER(26,48)
+    ENDIF(show_hose)
+
     SET_ITEM_LOCATION(e_ITEM_NormalWindow,e_LOC_CURRENT)
 
     ; Spawn water if required
@@ -1407,6 +1436,20 @@ end_dog
 
 // MARK: Library
 _gDescriptionLibrary
+    ; Is the Chemistry book still in the library
+    IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_ChemistryBook,e_LOC_LIBRARY),show_book)
+        BLIT_BLOCK(LOADER_SPRITE_ITEMS,3,23)                     ; Draw the Book
+                _IMAGE(15,14)
+                _BUFFER(28,83)
+    ENDIF(show_book)
+
+    ; Are the Chemistry recipes still in the library
+    IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_ChemistryRecipes,e_LOC_LIBRARY),show_recipes)
+        BLIT_BLOCK(LOADER_SPRITE_ITEMS,2,7)                     ; Draw the Recipes
+                _IMAGE(35,83)
+                _BUFFER(26,88)
+    ENDIF(show_recipes)
+
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
 #ifdef LANGUAGE_FR
@@ -1473,6 +1516,22 @@ _gDescriptionNarrowPassage
 
 // MARK: Entrance Lounge
 _gDescriptionEntranceLounge
+.(
+    ; Is the Tin box book still in the lounge
+    IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_TobaccoTin,e_LOC_LOUNGE),show_tin)
+        BLIT_BLOCK(LOADER_SPRITE_ITEMS,2,13)                     ; Draw the Tin
+                _IMAGE(35,91)
+                _BUFFER(21,83)
+    ENDIF(show_tin)
+
+    ; Is the Matches box book still in the lounge
+    IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_BoxOfMatches,e_LOC_LOUNGE),show_matchbox)
+        BLIT_BLOCK(LOADER_SPRITE_ITEMS,2,3)                     ; Draw the Matches box
+                _IMAGE(16,24)
+                _BUFFER(23,95)
+    ENDIF(show_matchbox)
+
+
     SET_ITEM_LOCATION(e_ITEM_NormalWindow,e_LOC_CURRENT)
 
     WAIT(DELAY_FIRST_BUBBLE)
@@ -1488,10 +1547,18 @@ _gDescriptionEntranceLounge
     _BUBBLE_LINE(5,15,0,"had fun")
 #endif    
     END
-
+.)
 
 // MARK: Dining Room
 _gDescriptionDiningRoom
+.(
+    ; Is the Bread still in the dining room
+    IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_Bread,e_LOC_DININGROOM),show_bread)
+        BLIT_BLOCK(LOADER_SPRITE_ITEMS,3,7)                     ; Draw the Bread
+                _IMAGE(15,28)
+                _BUFFER(15,81)
+    ENDIF(show_bread)
+
     SET_ITEM_LOCATION(e_ITEM_NormalWindow,e_LOC_CURRENT)
 
     WAIT(DELAY_FIRST_BUBBLE)
@@ -1507,10 +1574,17 @@ _gDescriptionDiningRoom
     _BUBBLE_LINE(5,107,0,"...good to know")
 #endif    
     END
-
+.)
 
 // MARK: Game Room
 _gDescriptionGamesRoom
+    ; Is the Cue still in the dining room
+    IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_SnookerCue,e_LOC_GAMESROOM),show_cue)
+        BLIT_BLOCK(LOADER_SPRITE_ITEMS,10,1)                     ; Draw the Cue
+                _IMAGE(7,62)
+                _BUFFER(15,82)
+    ENDIF(show_cue)
+
     SET_ITEM_LOCATION(e_ITEM_NormalWindow,e_LOC_CURRENT)
 
     ; Is the tv cabinet open?
@@ -1567,6 +1641,41 @@ girl_is_outside
 // MARK: Kitchen
 _gDescriptionKitchen
 .(
+    ; Is the Mortar still in the kitchen
+    IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_MortarAndPestle,e_LOC_KITCHEN),show_mortar)
+        BLIT_BLOCK(LOADER_SPRITE_ITEMS,2,13)                     ; Draw the Mortar
+                _IMAGE(24,71)
+                _BUFFER(21,79)
+    ENDIF(show_mortar)
+
+    ; Is the Meat still in the kitchen
+    IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_Meat,e_LOC_KITCHEN),show_meat)
+        BLIT_BLOCK(LOADER_SPRITE_ITEMS,2,5)                     ; Draw the Meat
+                _IMAGE(24,85)
+                _BUFFER(24,79)
+    ENDIF(show_meat)
+
+    ; Are the Pills still in the kitchen
+    IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_SedativePills,e_LOC_KITCHEN),show_pills)
+        BLIT_BLOCK(LOADER_SPRITE_ITEMS,1,6)                     ; Draw the Pills
+                _IMAGE(24,5)
+                _BUFFER(26,79)
+    ENDIF(show_pills)
+
+    ; Is the Tin box book still in the lounge
+    IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_TobaccoTin,e_LOC_KITCHEN),show_tin)
+        BLIT_BLOCK(LOADER_SPRITE_ITEMS,2,13)                     ; Draw the Tin
+                _IMAGE(35,91)
+                _BUFFER(19,79)
+    ENDIF(show_tin)
+
+    ; Is the Matches box book still in the lounge
+    IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_BoxOfMatches,e_LOC_KITCHEN),show_matchbox)
+        BLIT_BLOCK(LOADER_SPRITE_ITEMS,2,3)                     ; Draw the Matches box
+                _IMAGE(16,24)
+                _BUFFER(27,88)
+    ENDIF(show_matchbox)
+
     SET_ITEM_LOCATION(e_ITEM_NormalWindow,e_LOC_CURRENT)
 
     ; Is the fridge open?
@@ -1639,6 +1748,13 @@ _gDescriptionCellar
                     _BUFFER(30,43)
         ENDIF(bomb)
     ENDIF(safe_open)
+
+    ; Is the Acid still in the cellar
+    IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_Acid,e_LOC_CELLAR),show_acid)
+        BLIT_BLOCK(LOADER_SPRITE_SAFE_ROOM,2,13)                     ; Draw the Acid
+                _IMAGE(23,32)
+                _BUFFER(27,95)
+    ENDIF(show_acid)
 
     ; Then we check if the player stroke the matches
     IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_BoxOfMatches,ITEM_FLAG_TRANSFORMED),matches)    ; Are the matches on fire?
@@ -7110,7 +7226,7 @@ _TakeNet
     JUMP_IF_FALSE(no_dove,CHECK_ITEM_LOCATION(e_ITEM_LargeDove,e_LOC_CURRENT))
     JUMP_IF_FALSE(_DropDove,CHECK_ITEM_FLAG(e_ITEM_LargeDove,ITEM_FLAG_IMMOVABLE))
 no_dove
-    END_AND_PARTIAL_REFRESH
+    END_AND_REFRESH
 .)
 
 _ThrowNet
