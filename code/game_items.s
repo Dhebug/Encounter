@@ -53,7 +53,7 @@ _gItems
     ITEM_NORMAL( _gTextItemSnookerCue            ,e_LOC_GAMESROOM       ,ITEM_FLAG_VISIBLE_IN_SCENE)                // e_ITEM_SnookerCue           
     ITEM_NORMAL( _gTextItemThug                  ,e_LOC_MASTERBEDROOM   ,ITEM_FLAG_IMMOVABLE)                       // e_ITEM_Thug                 
     ITEM_NORMAL( _gTextItemHeavySafe             ,e_LOC_CELLAR          ,ITEM_FLAG_IMMOVABLE|ITEM_FLAG_CLOSED)      // e_ITEM_HeavySafe            
-    ITEM_NORMAL( _gTextItemHandWrittenNote       ,e_LOC_BOXROOM         ,ITEM_FLAG_DEFAULT)                         // e_ITEM_HandWrittenNote          
+    ITEM_NORMAL( _gTextItemHandWrittenNote       ,e_LOC_BOXROOM         ,ITEM_FLAG_VISIBLE_IN_SCENE)                // e_ITEM_HandWrittenNote          
     ITEM_NORMAL( _gTextItemRope                  ,e_LOC_WELL            ,ITEM_FLAG_VISIBLE_IN_SCENE)                // e_ITEM_Rope                 
     ITEM_NORMAL( _gTextItemHandheldGame          ,e_LOC_CHILDBEDROOM    ,ITEM_FLAG_VISIBLE_IN_SCENE)                // e_ITEM_HandheldGame
     ITEM_NORMAL( _gTextItemRollOfToiletPaper     ,e_LOC_TINY_WC         ,ITEM_FLAG_VISIBLE_IN_SCENE)                // e_ITEM_ToiletRoll    
@@ -62,10 +62,10 @@ _gItems
     ITEM_NORMAL( _gTextItemMedicineCabinet       ,e_LOC_KITCHEN         ,ITEM_FLAG_IMMOVABLE|ITEM_FLAG_CLOSED)      // e_ITEM_Medicinecabinet
     ITEM_NORMAL( _gTextItemYoungGirl             ,e_LOC_HOSTAGE_ROOM    ,ITEM_FLAG_IMMOVABLE|ITEM_FLAG_DISABLED)    // e_ITEM_YoungGirl        
     ITEM_NORMAL( _gTextItemFuse                  ,e_LOC_NONE            ,ITEM_FLAG_DEFAULT)                         // e_ITEM_Fuse                 
-    ITEM_NORMAL( _gTextItemSmallKey              ,e_LOC_NONE            ,ITEM_FLAG_DEFAULT)                         // e_ITEM_SmallKey                 
+    ITEM_NORMAL( _gTextItemSmallKey              ,e_LOC_NONE            ,ITEM_FLAG_VISIBLE_IN_SCENE)                // e_ITEM_SmallKey                 
     ITEM_NORMAL( _gTextItemNewspaper             ,e_LOC_INVENTORY       ,ITEM_FLAG_DEFAULT)                         // e_ITEM_Newspaper            
     ITEM_NORMAL( _gTextItemBomb                  ,e_LOC_NONE            ,ITEM_FLAG_DEFAULT)                         // e_ITEM_Bomb                 
-    ITEM_NORMAL( _gTextItemPistol                ,e_LOC_NONE            ,ITEM_FLAG_DEFAULT)                         // e_ITEM_Pistol               
+    ITEM_NORMAL( _gTextItemPistol                ,e_LOC_NONE            ,ITEM_FLAG_VISIBLE_IN_SCENE)                // e_ITEM_Pistol               
     ITEM_NORMAL( _gTextItemInvoice               ,e_LOC_STUDY_ROOM      ,ITEM_FLAG_DEFAULT)                         // e_ITEM_Invoice
     ITEM_NORMAL( _gTextItemChemistryRecipes      ,e_LOC_NONE            ,ITEM_FLAG_VISIBLE_IN_SCENE)                // e_ITEM_ChemistryRecipes     
     ITEM_NORMAL( _gTextItemUnitedKingdomMap      ,e_LOC_LIBRARY         ,ITEM_FLAG_IMMOVABLE)                       // e_ITEM_UnitedKingdomMap   
@@ -77,11 +77,11 @@ _gItems
     ITEM_NORMAL( _gTextItemCarDoor               ,e_LOC_ABANDONED_CAR   ,ITEM_FLAG_IMMOVABLE|ITEM_FLAG_CLOSED)      // e_ITEM_CarDoor
     ITEM_NORMAL( _gTextItemCarPetrolTank         ,e_LOC_ABANDONED_CAR   ,ITEM_FLAG_IMMOVABLE|ITEM_FLAG_CLOSED)      // e_ITEM_CarTank
     ITEM_NORMAL( _gTextItemMortarAndPestle       ,e_LOC_KITCHEN         ,ITEM_FLAG_VISIBLE_IN_SCENE)                // e_ITEM_MortarAndPestle
-    ITEM_NORMAL( _gTextItemAdhesive              ,e_LOC_BOXROOM         ,ITEM_FLAG_DEFAULT)                         // e_ITEM_Adhesive
+    ITEM_NORMAL( _gTextItemAdhesive              ,e_LOC_BOXROOM         ,ITEM_FLAG_VISIBLE_IN_SCENE)                // e_ITEM_Adhesive
     ITEM_NORMAL( _gTextItemAcid                  ,e_LOC_NONE            ,ITEM_FLAG_VISIBLE_IN_SCENE)                // e_ITEM_Acid
     ITEM_NORMAL( _gTextItemLockedPanel           ,e_LOC_DARKCELLARROOM  ,ITEM_FLAG_IMMOVABLE|ITEM_FLAG_CLOSED|ITEM_FLAG_LOCKED)      // e_ITEM_AlarmPanel
     ITEM_NORMAL( _gTextItemSecurityDoor          ,e_LOC_PANIC_ROOM_DOOR ,ITEM_FLAG_IMMOVABLE)                       // e_ITEM_SecurityDoor
-    ITEM_NORMAL( _gTextItemDriedOutClay          ,e_LOC_CHILDBEDROOM    ,ITEM_FLAG_DEFAULT)                         // e_ITEM_Clay
+    ITEM_NORMAL( _gTextItemDriedOutClay          ,e_LOC_CHILDBEDROOM    ,ITEM_FLAG_VISIBLE_IN_SCENE)                // e_ITEM_Clay
     ITEM_NORMAL( _gTextItemProtectionSuit        ,e_LOC_GREENHOUSE      ,ITEM_FLAG_VISIBLE_IN_SCENE)                // e_ITEM_ProtectionSuit
     ITEM_NORMAL( _gTextItemHoleInDoor            ,e_LOC_NONE            ,ITEM_FLAG_IMMOVABLE)                       // e_ITEM_HoleInDoor
     ITEM_NORMAL( _gTextItemHighUpWindow          ,e_LOC_TILEDPATIO      ,ITEM_FLAG_IMMOVABLE|ITEM_FLAG_CLOSED)      // e_ITEM_PanicRoomWindow
@@ -105,7 +105,7 @@ _gItems
     ITEM_NORMAL( _gTextItemComputer              ,e_LOC_STUDY_ROOM      ,ITEM_FLAG_IMMOVABLE)                       // e_ITEM_Computer
     ITEM_NORMAL( _gTextItemOricComputer          ,e_LOC_NONE            ,ITEM_FLAG_IMMOVABLE)                       // e_ITEM_Oric
     ITEM_NORMAL( _gTextItemClosedTVCabinet       ,e_LOC_GAMESROOM       ,ITEM_FLAG_IMMOVABLE|ITEM_FLAG_CLOSED)      // e_ITEM_TVCabinet
-    ITEM_NORMAL( _gTextItemBatteries             ,e_LOC_NONE            ,ITEM_FLAG_DEFAULT)                         // e_ITEM_Batteries
+    ITEM_NORMAL( _gTextItemBatteries             ,e_LOC_NONE            ,ITEM_FLAG_VISIBLE_IN_SCENE)                // e_ITEM_Batteries
     ITEM_NORMAL( _gTextItemClosedDrawer          ,e_LOC_GUESTBEDROOM    ,ITEM_FLAG_IMMOVABLE|ITEM_FLAG_CLOSED)      // e_ITEM_Drawer
     ITEM_NORMAL( _gTextItemDuneBook              ,e_LOC_GUESTBEDROOM    ,ITEM_FLAG_VISIBLE_IN_SCENE)                // e_ITEM_DuneBook
 #ifdef PRODUCT_TYPE_GAME_DEMO

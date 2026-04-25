@@ -1436,6 +1436,7 @@ end_dog
 
 // MARK: Library
 _gDescriptionLibrary
+.(
     ; Is the Chemistry book still in the library
     IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_ChemistryBook,e_LOC_LIBRARY),show_book)
         BLIT_BLOCK(LOADER_SPRITE_ITEMS,3,23)                     ; Draw the Book
@@ -1463,6 +1464,7 @@ _gDescriptionLibrary
     _BUBBLE_LINE(5,97,0,"a comfortable chair")
 #endif    
     END
+.)
 
 
 // MARK: Study Room
@@ -2132,9 +2134,24 @@ _gDescriptionMasterBedRoom
 #else
 // MARK: Child Bedroom
 _gDescriptionChildBedroom
+.(
 #ifdef TESTING_MONKEY_KING
     CALL_NATIVE(_PlayMonkeyKing)
 #endif    
+    ; Is the Monkey King game still in the kid's room
+    IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_HandheldGame,e_LOC_CHILDBEDROOM),show_game)
+        BLIT_BLOCK(LOADER_SPRITE_SAFE_ROOM,2,4)                     ; Draw the game
+                _IMAGE(23,54)
+                _BUFFER(18,69)
+    ENDIF(show_game)
+
+    ; Is the Clay still in the kid's room
+    IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_Clay,e_LOC_CHILDBEDROOM),show_clay)
+        BLIT_BLOCK(LOADER_SPRITE_SAFE_ROOM,2,7)                     ; Draw the clay
+                _IMAGE(23,46)
+                _BUFFER(31,117)
+    ENDIF(show_clay)
+
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
 #ifdef LANGUAGE_FR
@@ -2148,15 +2165,29 @@ _gDescriptionChildBedroom
     _BUBBLE_LINE(5,107,0,"Teenager room?")
 #endif    
     END
-
+.)
 
 // MARK: Guest Bedroom
 _gDescriptionGuestBedroom
-
+.(
     ; Is the drawer cabinet open?
     JUMP_IF_TRUE(drawer_closed,CHECK_ITEM_FLAG(e_ITEM_Drawer,ITEM_FLAG_CLOSED))
     DRAW_BITMAP(LOADER_SPRITE_SAFE_ROOM,BLOCK_SIZE(4,9),40,_SecondImageBuffer+40*117+0,_ImageBuffer+40*69+7)       ; Drawer open
 drawer_closed
+
+    ; Is the Dune book still in the guest bedroom
+    IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_DuneBook,e_LOC_GUESTBEDROOM),show_book)
+        BLIT_BLOCK(LOADER_SPRITE_SAFE_ROOM,3,8)                     ; Draw the Dune book
+                _IMAGE(25,32)
+                _BUFFER(22,105)
+    ENDIF(show_book)
+
+    ; Are the batteries still in the guest bedroom
+    IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_Batteries,e_LOC_GUESTBEDROOM),show_batteries)
+        BLIT_BLOCK(LOADER_SPRITE_SAFE_ROOM,1,5)                     ; Draw the Batteries
+                _IMAGE(4,88)
+                _BUFFER(12,72)
+    ENDIF(show_batteries)
 
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
@@ -2171,7 +2202,7 @@ drawer_closed
     _BUBBLE_LINE(5,17,0,"for a change")
 #endif    
     END
-
+.)
 
 // MARK: Shower Room
 _gDescriptionShowerRoom
@@ -2248,6 +2279,21 @@ curtain_open
 
 // MARK: Box Room
 _gDescriptionBoxRoom
+.(
+    ; Is the Adhesive still in the box room
+    IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_Adhesive,e_LOC_BOXROOM),show_adhesive)
+        BLIT_BLOCK(LOADER_SPRITE_SAFE_ROOM,2,8)                     ; Draw the Adhesive
+                _IMAGE(23,59)
+                _BUFFER(16,66)
+    ENDIF(show_adhesive)
+
+    ; Is the Note still in the box room
+    IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_HandWrittenNote,e_LOC_BOXROOM),show_note)
+        BLIT_BLOCK(LOADER_SPRITE_SAFE_ROOM,2,10)                     ; Draw the Note
+                _IMAGE(25,41)
+                _BUFFER(35,53)
+    ENDIF(show_note)
+
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
 #ifdef LANGUAGE_FR
@@ -2261,6 +2307,7 @@ _gDescriptionBoxRoom
     _BUBBLE_LINE(5,16,0,"little room")
 #endif    
     END
+.)
 
 
 // MARK: Classy Bathroom
@@ -2321,14 +2368,29 @@ _gDescriptionMasterBedRoom
 
     ; Is the thug alive?
     JUMP_IF_FALSE(thug_alive,CHECK_ITEM_FLAG(e_ITEM_Thug,ITEM_FLAG_DISABLED))
-      ; Draw the dead thug 
-      DRAW_BITMAP(LOADER_SPRITE_THUG,BLOCK_SIZE(23,24),40,_SecondImageBuffer+0,_ImageBuffer+40*66+12)          ; Dead thug
-      DRAW_BITMAP(LOADER_SPRITE_THUG,BLOCK_SIZE(2,27),40,_SecondImageBuffer+40*24+17,_ImageBuffer+40*90+29)    ; Arm
-      DRAW_BITMAP(LOADER_SPRITE_THUG,BLOCK_SIZE(6,17),40,_SecondImageBuffer+40*0+24,_ImageBuffer+40*109+33)    ; Pillow on the floor
-      ; Text describing the dead thug
-      WAIT(DELAY_FIRST_BUBBLE)
-      GOSUB(_SubCollateralDamage)
-      END
+        ; Draw the dead thug 
+        DRAW_BITMAP(LOADER_SPRITE_THUG,BLOCK_SIZE(23,24),40,_SecondImageBuffer+0,_ImageBuffer+40*66+12)          ; Dead thug
+        DRAW_BITMAP(LOADER_SPRITE_THUG,BLOCK_SIZE(2,27),40,_SecondImageBuffer+40*24+17,_ImageBuffer+40*90+29)    ; Arm
+        DRAW_BITMAP(LOADER_SPRITE_THUG,BLOCK_SIZE(6,17),40,_SecondImageBuffer+40*0+24,_ImageBuffer+40*109+33)    ; Pillow on the floor
+
+        ; Is the Pistol still in the master bedroom
+        IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_Pistol,e_LOC_MASTERBEDROOM),show_pistol)
+            BLIT_BLOCK(LOADER_SPRITE_SAFE_ROOM,4,8)                     ; Draw the Pistol
+                    _IMAGE(4,120)
+                    _BUFFER(34,112)
+        ENDIF(show_pistol)
+
+        ; Is the small key still in the master bedroom
+        IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_SmallKey,e_LOC_MASTERBEDROOM),show_key)
+            BLIT_BLOCK(LOADER_SPRITE_SAFE_ROOM,3,4)                     ; Draw the Key
+                    _IMAGE(25,52)
+                    _BUFFER(30,120)
+        ENDIF(show_key)
+
+        ; Text describing the dead thug
+        WAIT(DELAY_FIRST_BUBBLE)
+        GOSUB(_SubCollateralDamage)
+        END
 
 thug_alive
     ; Draw the thug Sleeping
