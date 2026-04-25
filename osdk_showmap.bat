@@ -40,6 +40,14 @@ IF "%OSDKFILE_GAME%"=="" GOTO EndGame
 explorer build\map_game.htm
 :EndGame
 
+::
+:: Monkey King
+::
+IF "%OSDKFILE_KING%"=="" GOTO EndMonkeyKing
+%osdk%\bin\MemMap.exe -s30 build\symbols_MonkeyKing build\map_monkeyking.htm MonkeyKing %OSDK%\documentation\documentation.css
+explorer build\map_monkeyking.htm
+:EndMonkeyKing
+
 GOTO End
 
 

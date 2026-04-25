@@ -142,7 +142,7 @@ SET OSDKXAPARAMS=%OSDKXAPARAMSCOPY% -DMODULE_GAME -DKERNEL_RESIDENT
 CALL %OSDK%\bin\make.bat %OSDKFILE%
 IF ERRORLEVEL 1 GOTO Error
 copy build\final.out ..\build\files\GameProgram.o >NUL
-::copy build\symbols+..\build\symbols_Loader+..\build\symbols_Kernel+..\build\symbols_kong ..\build\symbols_GameProgram >NUL
+::copy build\symbols+..\build\symbols_Loader+..\build\symbols_Kernel+..\build\symbols_MonkeyKing ..\build\symbols_GameProgram >NUL
 copy build\symbols+..\build\symbols_Loader+..\build\symbols_Kernel ..\build\symbols_GameProgram >NUL
 IF %TEST_MODULE%==GAME COPY ..\build\symbols_GameProgram %OSDK%\Oricutron\symbols >NUL
 IF %TEST_MODULE%==GAME SET BREAKPOINTS=%BREAKPOINTS_GAME%
@@ -152,20 +152,20 @@ IF %TEST_MODULE%==GAME SET BREAKPOINTS=%BREAKPOINTS_GAME%
 ::
 :: Monkey King
 ::
+IF "%OSDKFILE_KING%"=="" GOTO EndMonkeyKing
 ECHO.
 ECHO %ESC%[96m== Compiling Monkey King ==%ESC%[0m
 
 SET OSDKLINK=-b -S ..\build\symbols_GameProgram -t _Minigame
-SET OSDKADDR=
 SET OSDKNAME=monkey_king
-SET OSDKFILE=monkey_king_main
+SET OSDKFILE=%OSDKFILE_KING%
 SET OSDKCPPFLAGS=%OSDKCPPFLAGSCOPY% -DMODULE_MONKEY_KING
 SET OSDKXAPARAMS=%OSDKXAPARAMSCOPY% -DMODULE_MONKEY_KING
 CALL %OSDK%\bin\make.bat %OSDKFILE%
 IF ERRORLEVEL 1 GOTO Error
 copy build\final.out ..\build\files\monkey_king.o >NUL
-copy build\symbols ..\build\symbols_kong >NUL
-
+copy build\symbols ..\build\symbols_MonkeyKing >NUL
+:EndMonkeyKing
 
 ::
 :: Generate the breakpoint file is necessary:

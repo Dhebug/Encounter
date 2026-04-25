@@ -42,8 +42,6 @@
 
 	.zero
 
-	*= _KernelZeroPageEnd
-
 _zp_start_
 
 ptr_src         .dsb 2

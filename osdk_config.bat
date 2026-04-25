@@ -127,7 +127,7 @@ SET OSDKFILE_SPLASH=kernel_zp_reserve splash_main splash_utils distorter costabl
 SET OSDKFILE_INTRO=kernel_zp_reserve intro_main score intro_utils intro_text time last_module
 SET OSDKFILE_GAME=kernel_zp_reserve game_main input_utils bytestream game_data game_items game_locations game_text game_utils time display last_module
 SET OSDKFILE_OUTRO=kernel_zp_reserve outro_main score outro_text input_utils outro_utils display last_module
-
+SET OSDKFILE_KING=kernel_zp_reserve monkey_king_main
 
 ::SET OSDKVERBOSITY=2
 ::SET OSDKMACRO=-O
