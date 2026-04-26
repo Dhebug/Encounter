@@ -17,7 +17,8 @@ _EndText
 #ifdef MODULE_MONKEY_KING
 #print Remaining space before loader = (FLOPPY_LOADER_RESIDENT_ADDRESS - *)
 #elif MODULE_GAME
-#print Remaining space = ($9900 - *)
+//#print Remaining space = ($9900 - *)
+#print Remaining space = ($9b00 - * - 256)    // Experimental
 #else
 #print Remaining space = ($9800 - *)
 #endif
@@ -72,18 +73,19 @@ _free
 * = $9800             ; STD charset for HIRES mode: 1024 bytes
 _STD_Charset
 #else
-* = $9800+256         ; STD charset for HIRES mode: 1024 bytes
+* = $9800+256+256+256         ; STD charset for HIRES mode: 1024 bytes
 
 ; Contains all the combinations of 6 pixels patterns shifted by 0 to 5 pixels to the right.
 ; Each entry requires two bytes, and each need to be merged to the target buffer to rebuild
 ; the complete shifted graphics
 _gShiftBuffer         .dsb 64*2*6           ; 768 bytes
+.assert osdk_endstack<=_gShiftBuffer, "Stack is overlapping BSS content"
 #endif
 
-* = $9C00             ; ALT charset for HIRES mode: 1024 bytes
+* = $9C00+256+256             ; ALT charset for HIRES mode: 1024 bytes
+;_free_to_use_9c00
 _gTableModulo6        .dsb 256           ; Given a X value, returns the value modulo 6 (used to access the proper pixel in a graphical block)
 _gTableDivBy6         .dsb 256           ; Given a X value, returns the value divide by 6 (used to locate the proper byte in a scanline)
-_free_to_use_9e00
 
 * = $A000             ; Top of the HIRES screen: 8000 bytes
 _HIRES_MEMORY_START
