@@ -14,9 +14,6 @@ extern unsigned char gGameOverCondition;        // Moved to the last 32 bytes so
 
 extern char ScenePreLoadScript[];              // Script that runs before the scene even loads - used to move the girl around
 
-extern char gColoredSeparator[];
-
-
 extern void HandleKeywordHighlight();
 extern void PrintSceneInformation();
 extern char FindActionMapping();
@@ -176,51 +173,6 @@ WORDS ProcessAnswer()
     return e_WORD_CONTINUE;
 }
 
-
-
-// MARK: SHOW HELP
-void ShowHelp()
-{
-    char counter=0;
-    keyword* keywordPtr = gWordsArray;
-
-    ClearMessageAndInventoryWindow(16+4);
-
-    gPrintWidth=38;
-    gPrintPos = 0;
-    SetLineAddress((char*)0xbb80+40*18+1);
-
-    while (keywordPtr->word)   // The list is terminated by a null pointer entry
-    {
-        if  ( (keywordPtr->id>e_ITEM_COUNT_) && (keywordPtr->id<e_WORD_COUNT_) )
-        {
-            if (gPrintPos==0)
-            {
-                // New line
-                counter=0;
-            }
-            else
-            {
-                counter++;
-            }
-            PrintString(keywordPtr->word);
-            if (gPrintLineTruncated)
-            {
-                counter=0;
-            }
-
-            if (gPrintPos<gPrintWidth)  // We only put the color separator if there is still some room on the right
-            {
-                gColoredSeparator[0] = (counter&1)?7:3;  // Alternate the ink colors based on the counter
-                PrintString(gColoredSeparator);
-            }
-        }
-        ++keywordPtr;
-    }
-    PrintString(gTextUseShiftToHighlight);    
-    WaitKey();
-    // Note: This code is now called from a script, so no need to reload the scene by code
-}
 
 
 void DrawArrowsBottom()

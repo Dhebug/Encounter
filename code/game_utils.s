@@ -2779,4 +2779,80 @@ quit_done
     rts
 .)
 
+
+// MARK: ShowHelp
+; void ShowHelp() — list all action keywords with alternating colored separators.
+; Called from script via CALL_NATIVE(_ShowHelp). No parameters, no return value.
+; Uses absolute,Y addressing into gWordsArray, which requires the array stays <256 bytes
+_ShowHelp
+.(
+counter     = tmp2    
+saveY       = tmp3
+
+    lda #16+4    ; Blue paper
+    sta _param0
+    jsr _ClearMessageAndInventoryWindow
+
+    lda #38
+    sta _gPrintWidth
+
+    lda #<($bb80+40*18+1)
+    sta _gPrintAddress
+    lda #>($bb80+40*18+1)
+    sta _gPrintAddress+1
+
+    ldy #0
+    sty _gPrintPos
+    sty counter
+
+loop_keyword
+    ldx _gWordsArray+1,y        ; Keyword pointer MSB
+    beq end_loop
+
+    inc counter                 ; Increment counter after each keyword, resets on start of new line
+    lda _gPrintPos
+    bne end_counter_reset
+    sta counter
+end_counter_reset
+
+    sty saveY
+    lda _gWordsArray,y          ; Keyword pointer LSB
+    jsr _PrintStringInternalAX  ; A=0 on return
+
+    ldx _gPrintLineTruncated    ; Truncation counts as new line
+    beq end_truncate
+    sta counter
+end_truncate
+
+    lda _gPrintPos
+    cmp _gPrintWidth
+    bcs next_keyword            ; line full → no separator
+
+    ; gColoredSeparator[0] = (counter & 1) ? 7 : 3   →   ((counter & 1) << 2) | 3
+    lda counter
+    and #1
+    asl
+    asl
+    ora #3
+    sta _gColoredSeparator
+
+    lda #<_gColoredSeparator
+    ldx #>_gColoredSeparator
+    jsr _PrintStringInternalAX
+
+next_keyword
+    ldy saveY
+    iny
+    iny
+    iny
+    bne loop_keyword
+
+end_loop
+    lda #<_gTextUseShiftToHighlight
+    ldx #>_gTextUseShiftToHighlight
+    jsr _PrintStringInternalAX
+
+    jmp _WaitKey
+.)
+
 _EndGameUtils_

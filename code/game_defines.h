@@ -70,8 +70,6 @@ extern location* gCurrentLocationPtr;
 extern unsigned char gSceneImage;
 extern item gItems[e_ITEM_COUNT_];
 
-extern keyword gWordsArray[];
-
 extern action_mapping gActionMappingsArray[];
 
 extern stream_mapping gTakeItemMappingsArray[];

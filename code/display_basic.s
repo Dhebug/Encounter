@@ -77,6 +77,7 @@ no_prefix
 
 
 ; A/X = pointer to the string -> copied to _param0 +0/+1
+; Returns with A=0 and Z=1
 _PrintStringInternalAX
     sta _param0+0
     stx _param0+1

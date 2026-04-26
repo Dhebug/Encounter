@@ -2,6 +2,7 @@
 #include "game_defines.h"
 
 
+// Important: This array must be kept under 256 bytes, else ShowHelp will fail
 keyword gWordsArray[] =
 {
     // Misc instructions
