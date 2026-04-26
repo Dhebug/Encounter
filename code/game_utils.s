@@ -2298,16 +2298,15 @@ _Reset
 /*
 -- 0xbb80-0x9900 --
 
-$9900 - Shift buffers
-$9900	768	768	_gShiftBuffer
-$9c00	256	256	_gTableModulo6
-$9d00	256	256	_gTableDivBy6
-$9e00	512	512	_free_to_use_9e00
+$9b00	768	768	_gShiftBuffer
+$9e00	256	256	_gTableModulo6
+$9f00	256	256	_gTableDivBy6
 $a000	5120	5120	_HIRES_MEMORY_START
 --> $9900-$a000 = 1792 bytes
 
 $b400	1	1	_Attribute_TEXT  = $a000+5120
-$b401	383	383	_free_to_use_b401
+$b401	255	255	_free_to_use_b401
+$b500	128	128	_TextCharsetSpace
 $b580	136	136	_TextCharsetNumbers
 $b608	256	256	_TextCharsetUpperCaseLetters
 $b708	248	248	_TextCharsetLowerCaseLetters
@@ -2339,6 +2338,11 @@ $e940	2660	2660	_gFont12x14
 */
 _PlayMonkeyKing
 .(
+    ; The Monkey King minigame fully repaints the HIRES window with its own image,
+    ; so any bubbles previously on screen are gone — drop them from the recovery state
+    ; before LoadScene runs after the minigame returns.
+    jsr _ClearBubbleCount
+
     ; Stop the clock so it does not damage the HIRES content
     jsr _StopClock
 

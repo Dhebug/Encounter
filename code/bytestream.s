@@ -1522,13 +1522,11 @@ loop_bottom_fluff
 ; param1 +0 = width
 ; param1 +1 = height
 ; param2 +0 = fillValue
+; _gDrawAddress = base address of the target buffer
 _DrawRectangleOutlineAsm
 .(
-    ; Pointer to first hires window
-    lda #<$a000
-    sta _gDrawAddress+0
-    lda #>$a000
-    sta _gDrawAddress+1
+    ; Caller must initialize _gDrawAddress (typically $A000 for HIRES screen or _ImageBuffer for off-screen drawing). 
+    ; HandleByteStream sets it to $A000 on entry; the BLACK_BUBBLE/WHITE_BUBBLE handler overrides it to _ImageBuffer.
 
     lda _param2+0
     sta _gDrawPattern  ; fillValue
@@ -1613,6 +1611,8 @@ _ByteStreamCommand_DISPLAY_IMAGE_NOBLIT
     sta _param0+0
     jsr _ClearMessageWindowAsm
 +_ByteStreamCommand_DISPLAY_IMAGE_NO_CLEAR_TEXT
+    ; The HIRES window is about to be repainted with a non-scene image, so any bubbles previously on screen are gone — drop them from the recovery state.
+    jsr _ClearBubbleCount
 	; unsigned char loaderId = *gCurrentStream++;
     ; LoadFileAt(loaderId,ImageBuffer);
     jsr _ByteStreamGetNextByte
@@ -1719,19 +1719,18 @@ _InitializeGraphicMode
 	sta $BB80+40*27
 
 	; Initialize the ALT charset numbers
-    MEMCPY($b800+"0"*8,_gSevenDigitDisplay,8*11)
+    MEMCPY(_g7DigitDisplayChars,_gSevenDigitDisplay,8*11)
     rts
 .)
 
 
 
-_BubblesWidth .dsb MAX_BUBBLE       ; TODO: Should adjust and check based on the max number of bubbles
-
-
- _ByteStreamCommand_WHITE_BUBBLE
+; Bubble state arrays (per-call _Bubbles* and persistent _BubbleList*) live in BSS in overlay RAM — see last_module.s. MAX_BUBBLE comes from scripting.h.
+.(
++_ByteStreamCommand_WHITE_BUBBLE
     ldx #64                        ; White on Black Color pattern
     bne draw_bubble
- _ByteStreamCommand_BLACK_BUBBLE
++_ByteStreamCommand_BLACK_BUBBLE
     ldx #127                       ; White on Black Color pattern
 draw_bubble
 .(
@@ -1741,8 +1740,17 @@ tmpCount       = reg6
 
     stx _gDrawPattern
 
-    jsr _ByteStreamGetNextByte     ; Number of bubbles 
-    stx _count                     ; Should not exceed the size of _BubblesWidth
+    ; Bubbles are drawn into _ImageBuffer (off-screen), then partial-blitted to $A000 at the end. 
+    ; This avoids visible flicker and means scene refreshes that re-blit the buffer to screen will preserve the bubbles.
+    lda #<_ImageBuffer
+    sta _gDrawAddress+0
+    lda #>_ImageBuffer
+    sta _gDrawAddress+1
+
+    jsr _ByteStreamGetNextByte     ; Number of bubbles
+    stx _count                     ; This call's count (max MAX_BUBBLE)
+    lda _gCurrentLocation          ; Tag the bubbles with the scene they belong to
+    sta _BubbleScene
 
     lda _gCurrentStream+0          ; Memorize the pointer for the later passes
     sta _coordinates+0
@@ -1752,17 +1760,25 @@ tmpCount       = reg6
     ;
     ; Draw the black outline of the speech bubble
     ;
-    .( 
+    .(
     ldx _count
     stx tmpCount
 loop_bubble
-    jsr _ByteStreamGetNextByte  ; X Pos
+    jsr _ByteStreamGetNextByte  ; X Pos (pixel)
     dex
     stx _param0+0
+    ; Convert pixel X-1 to byte column for the final blit (6 pixels per byte on HIRES)
+    lda _gTableDivBy6,x
+    ldy tmpCount
+    sta _BubblesX-1,y
 
     jsr _ByteStreamGetNextByte  ; Y Pos
     dex
     stx _param0+1
+    ; Save Y-1 (top-left of outline) for the final blit
+    ldy tmpCount                ; Reload Y — _ByteStreamGetNextByte clobbered it
+    txa
+    sta _BubblesY-1,y
 
     jsr _ByteStreamGetNextByte   ; Skip offset Y
 
@@ -1806,10 +1822,26 @@ offset               ; Signed offset to handle things like AV or To properly
     sta _param1+0    
     bne loop_compute_size
 end_compute_size
-    ; Store the value
+    ; Store the pixel outline width (used by the fill pass below)
     lda _param1+0
     ldx tmpCount
     sta _BubblesWidth-1,x
+
+    ; Compute the byte width spanned by the outline rectangle for the final blit:
+    ;   right_byte = _gTableDivBy6[(X-1) + outline_width - 1]
+    ;   byte_width = right_byte - left_byte + 1
+    clc
+    lda _param0+0               ; pixel X-1
+    adc _param1+0               ; + pixel outline width
+    tax
+    dex                         ; right pixel = X-1 + W - 1
+    sec
+    lda _gTableDivBy6,x         ; right byte column
+    ldy tmpCount
+    sbc _BubblesX-1,y           ; - left byte column (already converted)
+    clc
+    adc #1                      ; +1 for inclusive count
+    sta _BubblesByteWidth-1,y
 
     jsr _DrawRectangleOutlineAsm
 
@@ -1912,6 +1944,143 @@ loop_bubble
     bne loop_bubble
     .)
 
+    ;
+    ; Append this call's bubbles to the persistent list, then blit ALL bubbles in the list from _ImageBuffer to $A000. 
+    ; Re-blitting older bubbles is harmless (same pixels in the buffer) and lets us share _BlitBubbles with the reverse path in _RestoreBubblesFromHires.
+    ;
+    .(
+    ldx _count                  ; this call's count
+    ldy _BubbleCount            ; current accumulated index (start offset for this call)
+copy_loop
+    lda _BubblesX-1,x
+    sta _BubbleListX,y
+    lda _BubblesY-1,x
+    sta _BubbleListY,y
+    lda _BubblesByteWidth-1,x
+    sta _BubbleListWidth,y
+    iny
+    dex
+    bne copy_loop
+    sty _BubbleCount
+    .)
+
+; These are used here, but also in _RestoreBubblesFromHires and _BlitBubbles
+&sourcePtr   = tmp2  ; base address of the source buffer
+&targetPtr   = tmp3  ; base address of the target buffer
+&bubbleCount = tmp4  ; number of bubbles to blit (1..MAX_BUBBLE_TOTAL)
+
+    ; Forward blit: src=_ImageBuffer, dst=$A000
+    lda #<_ImageBuffer
+    sta sourcePtr+0
+    lda #>_ImageBuffer
+    sta sourcePtr+1
+    lda #<$A000
+    sta targetPtr+0
+    lda #>$A000
+    sta targetPtr+1
+    lda _BubbleCount
+    sta bubbleCount
+    jmp _BlitBubbles
+.)
+
+
+
+;
+; Recovers the on-screen bubble rectangles back into _ImageBuffer.
+; Called from LoadScene right after the new scene image is loaded into the buffer but before the script re-runs / the buffer is re-blitted to HIRES. 
+; The HIRES window still holds the OLD scene with the bubbles painted on top, so we copy each bubble's bounding box from $A000 back into _ImageBuffer at the same offset. 
+; After this, the regular BlitBufferToHiresWindow at the end of LoadScene will restore the bubbles with no visible flicker.
+;
+; If _BubbleCount is zero (no bubbles currently on HIRES — e.g. after DISPLAY_IMAGE or _PlayMonkeyKing repainted the window), the routine is a no-op.
+;
++_RestoreBubblesFromHires
+.(
+    ; If the location changed since the bubbles were drawn, the pixels still on HIRES
+    ; belong to the *previous* scene — drop the recovery state and return. Otherwise
+    ; the bubbles would smear into the new scene's image.
+    lda _gCurrentLocation
+    cmp _BubbleScene
+    beq scene_match
+    ; Clears the persistent bubble list. 
+    ; Called from any code path that repaints the HIRES window with non-scene content (DISPLAY_IMAGE, _PlayMonkeyKing) and from the recovery routine after it has finished copying bubbles back from HIRES.
++_ClearBubbleCount
+    lda #0
+    sta _BubbleCount
+end
     rts
+
+scene_match
+    lda _BubbleCount
+    beq end                     ; no bubbles to recover
+
+    sta bubbleCount             ; count input for _BlitBubbles
+
+    ; Reset _BubbleCount to 0 — once we're done copying from HIRES, the script will re-run and the bubble handler will re-accumulate the list from scratch.
+    jsr _ClearBubbleCount
+
+    ; Reverse blit: src=$A000 (HIRES), dst=_ImageBuffer
+    lda #<$A000
+    sta sourcePtr+0
+    lda #>$A000
+    sta sourcePtr+1
+    lda #<_ImageBuffer
+    sta targetPtr+0
+    lda #>_ImageBuffer
+    sta targetPtr+1
+.)  ; Fall through into _BlitBubbles
+;
+; Iterates the _BubbleList* arrays and copies each bubble's bounding box from (src_base + offset) to (dst_base + offset). 
+; Used by both the forward blit (buffer→HIRES) at the end of WHITE_BUBBLE/BLACK_BUBBLE handlers — after the
+; just-drawn bubbles have been appended to the list — and the reverse blit (HIRES→buffer) inside _RestoreBubblesFromHires.
+;
+_BlitBubbles
+.(
+offset      = tmp0
+
+    lda #17
+    sta _gDrawHeight                ; outline + fill = 15 + 2
+
+    lda #40
+    sta _gSourceStride
+
+loop
+    ; Compute byte offset = BubbleListY[i] * 40 + BubbleListX[i]
+    ldx bubbleCount
+    ldy _BubbleListY-1,x
+    clc
+    lda _gTableMulBy40Low,y
+    adc _BubbleListX-1,x
+    sta offset+0
+    lda _gTableMulBy40High,y
+    adc #0
+    sta offset+1
+
+    ; gDrawSourceAddress = src + offset
+    clc
+    lda offset+0
+    adc sourcePtr+0
+    sta _gDrawSourceAddress+0
+    lda offset+1
+    adc sourcePtr+1
+    sta _gDrawSourceAddress+1
+
+    ; gDrawAddress = dst + offset
+    clc
+    lda offset+0
+    adc targetPtr+0
+    sta _gDrawAddress+0
+    lda offset+1
+    adc targetPtr+1
+    sta _gDrawAddress+1
+
+    lda _BubbleListWidth-1,x
+    sta _gDrawWidth
+
+    jsr _BlitRectangle
+
+    dec bubbleCount
+    bne loop
+    rts
+.)
 .)
 

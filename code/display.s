@@ -33,12 +33,12 @@ _gSourceStride  .byt 0
 
 
 
+_BlitSprite
 .(
 sourcePtr   = tmp0
 targetPtr   = tmp1
 saveY       = tmp2
 
-+_BlitSprite
 
   lda _gDrawSourceAddress+0
   sta sourcePtr+0
@@ -99,6 +99,63 @@ skip
   .)
 
   ldx saveY
+  dex
+  bne loop_y
+
+  rts
+.)
+
+
+; Straight rectangle copy from gDrawSourceAddress to gDrawAddress.
+; No alpha masking — every byte is copied verbatim.
+; Uses gDrawWidth, gDrawHeight, gSourceStride. Target stride is 40.
+_BlitRectangle
+.(
+sourcePtr   = tmp0
+targetPtr   = tmp1
+
+  lda _gDrawSourceAddress+0
+  sta sourcePtr+0
+  lda _gDrawSourceAddress+1
+  sta sourcePtr+1
+
+  lda _gDrawAddress+0
+  sta targetPtr+0
+  lda _gDrawAddress+1
+  sta targetPtr+1
+
+  ldx _gDrawHeight
+loop_y
+  ldy _gDrawWidth
+  dey
+loop_x
+  lda (sourcePtr),y
+  sta (targetPtr),y
+  dey
+  bpl loop_x
+
+  ; Next scanline on the source
+  .(
+  clc
+  lda sourcePtr+0
+  adc _gSourceStride
+  sta sourcePtr+0
+  bcc skip
+  inc sourcePtr+1
+skip
+  .)
+
+  ; Next scanline on the target
+  .(
+  clc
+  lda targetPtr+0
+  adc #40
+  sta targetPtr+0
+  bcc skip
+  inc targetPtr+1
+skip
+  .)
+
   dex
   bne loop_y
 
@@ -996,7 +1053,7 @@ loop
 .)
 
 
-
+#ifdef MODULE_GAME
 _gSevenDigitDisplay
  ; 0
  .byt %011100
@@ -1107,21 +1164,21 @@ PatchArrowCharacters
   ldy #0
 loop  
   lda _ImageBuffer+40*(128+0)+17,x
-  sta $B800+8*59+0,y
+  sta _gArrowCharacters+0,y
   lda _ImageBuffer+40*(128+1)+17,x
-  sta $B800+8*59+1,y
+  sta _gArrowCharacters+1,y
   lda _ImageBuffer+40*(128+2)+17,x
-  sta $B800+8*59+2,y
+  sta _gArrowCharacters+2,y
   lda _ImageBuffer+40*(128+3)+17,x
-  sta $B800+8*59+3,y
+  sta _gArrowCharacters+3,y
   lda _ImageBuffer+40*(128+4)+17,x
-  sta $B800+8*59+4,y
+  sta _gArrowCharacters+4,y
   lda _ImageBuffer+40*(128+5)+17,x
-  sta $B800+8*59+5,y
+  sta _gArrowCharacters+5,y
   lda _ImageBuffer+40*(128+6)+17,x
-  sta $B800+8*59+6,y
+  sta _gArrowCharacters+6,y
   lda _ImageBuffer+40*(128+7)+17,x
-  sta $B800+8*59+7,y
+  sta _gArrowCharacters+7,y
 
   tya
   clc
@@ -1133,6 +1190,7 @@ loop
   bne loop
   rts
 .)
+#endif
 
 #ifdef MODULE_GAME
 ; Merges together the 14 scanlines of one character's column

@@ -16,6 +16,7 @@ extern char ScenePreLoadScript[];              // Script that runs before the sc
 
 extern void HandleKeywordHighlight();
 extern void PrintSceneInformation();
+extern void RestoreBubblesFromHires();
 extern char FindActionMapping();
 extern void RunAction();
 
@@ -48,7 +49,13 @@ void LoadScene()
     
 	ClearMessageWindow(16+4);
 
-	LoadFileAt(gSceneImage,ImageBuffer);	
+	LoadFileAt(gSceneImage,ImageBuffer);
+
+	// LoadFileAt just clobbered the buffer's previous content, but the HIRES window
+	// still holds the old scene with any speech bubbles painted on top. Recover them
+	// straight off the screen before the script re-runs and the buffer gets re-blitted,
+	// so the bubbles persist visually across the refresh with no flicker gap.
+	RestoreBubblesFromHires();
 
 	// And run the first set of commands for this scene
 	HandleByteStream();

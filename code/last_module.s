@@ -53,6 +53,9 @@ _ThirdImageBuffer    .dsb 6000   ; A third buffer that can store a full image
 
 
 #ifdef MODULE_GAME
+* = $B400+8*32
+_TextCharsetSpace
+
 * = $B400+8*48
 _TextCharsetNumbers
 
@@ -98,7 +101,20 @@ _free_to_use_b401     .dsb 255
 ; Contains all the combination of X*40 to access specific scanlines
 _gTableMulBy40Low     .dsb 128
 _gTableMulBy40High    .dsb 128
+#ifdef MODULE_GAME
+* = $B800+8*" "       ; STD charset for " "
+_gAltCharSpace        .dsb 8
 _maybe_free_to_use    ; Need to check
+
+* = $B800+8*"0"        ; STD charset for "0123456789:"
+_g7DigitDisplayChars  .dsb 8*11
+
+* = $B800+8*59        ; STD charset for ";<=>?@"
+_gArrowCharacters     .dsb 8*6
+_maybe_free_to_use_2  ; Need to check
+#else
+_maybe_free_to_use    ; Need to check
+#endif
 
 * = $BB80             ; Top of the TEXT screen: 1120 bytes
 _TEXT_MEMORY_START
@@ -141,6 +157,22 @@ _gFont12x14           .dsb 2660     ; 95 characters (from space to tilde), each 
 _gFont12x14Width      .dsb 95       ; Width (in pixels) of each of the 95 characters in the 12x14 font
 _gInputBuffer         .dsb 40
 _gPrintMessageBackground .dsb 40    ; Temporary storage for the input field to restore whatever was displayed on screen
+
+; Per-call bubble state — overwritten by each WHITE_BUBBLE/BLACK_BUBBLE handler invocation
+; (each call processes up to MAX_BUBBLE bubbles in one go: outline → fill → text → blit).
+_BubblesWidth     .dsb MAX_BUBBLE   ; Outline width of each bubble (pixels) — used by the fill pass
+_BubblesByteWidth .dsb MAX_BUBBLE   ; Outline width of each bubble (bytes)  — used by the blit pass
+_BubblesX         .dsb MAX_BUBBLE   ; X position of each bubble (byte column on the HIRES window)
+_BubblesY         .dsb MAX_BUBBLE   ; Y position of each bubble (scanline)
+
+; Persistent bubble list — accumulated across all bubble-draw calls in a scene so the LoadScene refresh 
+; path can recover them from HIRES even when the scene has multiple WHITE_BUBBLE/BLACK_BUBBLE commands separated by WAITs.
+MAX_BUBBLE_TOTAL = 8
+_BubbleListX     .dsb MAX_BUBBLE_TOTAL ; Left position
+_BubbleListY     .dsb MAX_BUBBLE_TOTAL ; Top position
+_BubbleListWidth .dsb MAX_BUBBLE_TOTAL ; Width in bytes (the height is a fixed 17 scanlines tall)
+_BubbleCount     .dsb 1                ; Total number of bubbles that need to be repainted 
+_BubbleScene     .dsb 1                ; Copy of gCurrentLocation at the time the bubbles were drawn
 
 ; Minigame overlay information
 _SavedData1 = _ImageBuffer
