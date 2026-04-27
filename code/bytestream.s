@@ -323,7 +323,9 @@ end_of_table
     jsr _ByteStreamComputeItemPtr        ; _gStreamItemPtr -> item[_param2]
     ldy #5
     lda (_gStreamItemPtr),y              ; usable_containers of _param2
-    ldy tmp2                             ; Restore Y
+    pha                                  ; Save A — the LDY below would clobber Z and we still need to test for zero
+    ldy tmp2                             ; Restore Y for _PlayMatchedStream
+    pla                                  ; A back; PLA sets Z based on popped value
     beq _PlayMatchedStream               ; _param2 doesn't need a container -> play default error stream
 
     ; Match: _param0 = container, _param2 = item needing container
