@@ -91,5 +91,19 @@ call %OSDK%\bin\ComputeTime.bat
 echo %ESC%[1mBuild completed: %date% %time%%ESC%[0m
 ECHO Total build time: %OSDK_BUILD_TIME%
 
+:: Warn if any module's file list is missing (commented out in osdk_config.bat for fast iteration).
+:: A real release must rebuild every module from source — anything else uses cached .o files.
+if "%OSDKFILE_KERNEL%"=="" goto :partial_build
+if "%OSDKFILE_SPLASH%"=="" goto :partial_build
+if "%OSDKFILE_INTRO%"==""  goto :partial_build
+if "%OSDKFILE_GAME%"==""   goto :partial_build
+if "%OSDKFILE_OUTRO%"==""  goto :partial_build
+if "%OSDKFILE_KING%"==""   goto :partial_build
+goto :build_done
+:partial_build
+ECHO.
+ECHO %ESC%[48;5;130;37m Test build: one or more OSDKFILE_* modules are commented out in osdk_config.bat %ESC%[0m
+:build_done
+
 echo.
 echo.
