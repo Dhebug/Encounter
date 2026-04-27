@@ -74,6 +74,7 @@ _ByteStreamCallbacks
     .word _ByteStreamCommand_COMMAND_CALL_NATIVE
     .word _ByteStreamCommand_COMBINE_ITEMS
     .word _ByteStreamCommand_KEYPRESS_MESSAGE
+    .word _ClearBubbleCount                              ; COMMAND_CLEAR_BUBBLES — alias to the existing helper (no args, returns via rts)
 
 
 ; Checks if there's a stream delay active.

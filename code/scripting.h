@@ -54,7 +54,8 @@
 #define COMMAND_CALL_NATIVE     45
 #define COMMAND_COMBINE_ITEMS   46
 #define COMMAND_KEYPRESS_MESSAGE 47
-#define _COMMAND_COUNT          48
+#define COMMAND_CLEAR_BUBBLES   48
+#define _COMMAND_COUNT          49
 
 // Operator opcodes
 #define OPERATOR_CHECK_ITEM_LOCATION   0
@@ -101,6 +102,7 @@
 #define KEYPRESS_MESSAGE(message)            .byt COMMAND_KEYPRESS_MESSAGE,message,0
 
 #define WAIT_KEYPRESS                        .byt COMMAND_WAIT_KEYPRESS
+#define CLEAR_BUBBLES                        .byt COMMAND_CLEAR_BUBBLES
 
 #define MAX_BUBBLE 4                         // Should find a way to assert that at compile time
 #define WHITE_BUBBLE(bubble_count)           .byt COMMAND_WHITE_BUBBLE,bubble_count

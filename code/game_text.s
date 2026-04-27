@@ -5332,6 +5332,10 @@ _OpenCurtain
     INFO_MESSAGE("An armoured door!")
 #endif
     STOP_MUSIC()
+    ; The new West Gallery bubble layout differs from the closed-curtain one — drop
+    ; the persisted list so LoadScene's recovery doesn't paint the old bubble's pixels
+    ; into the buffer where the new bubble won't fully cover them.
+    CLEAR_BUBBLES
     END_AND_REFRESH
 .)
 
@@ -5736,6 +5740,8 @@ _CloseCurtain
 #else
     SET_ITEM_DESCRIPTION(e_ITEM_Curtain,"a closed _curtain")
 #endif
+    ; See _OpenCurtain — same reason, opposite direction.
+    CLEAR_BUBBLES
     END_AND_REFRESH
 .)
 
@@ -7490,6 +7496,9 @@ _CommonDogDisabled
     LOAD_MUSIC(LOADER_MUSIC_SUCCESS)
     WAIT(50*2)
     STOP_MUSIC()
+    ; Entrance hall flips from the "Is that Cerberus?" bubble to the collateral-damage one
+    ; when the dog is killed — drop the persisted list so the recovery doesn't leak it.
+    CLEAR_BUBBLES
     END_AND_REFRESH
 .)
 
@@ -7509,6 +7518,9 @@ _CommonThugDisabled
     LOAD_MUSIC(LOADER_MUSIC_SUCCESS)
     WAIT(50*2)
     STOP_MUSIC()
+    ; Master bedroom flips from "thug asleep" bubble to "collateral damage" bubble — drop
+    ; the persisted list so the recovery doesn't paint the old bubble through the new one.
+    CLEAR_BUBBLES
     END_AND_REFRESH
 .)
 
