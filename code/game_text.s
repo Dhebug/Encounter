@@ -7,7 +7,7 @@
 
 _StartGameTextData
 
-#pragma osdk replace_characters_if LANGUAGE_FR : é:{ è:} ê:| à:@ î:i ô:^ ç:c Ç:C â:[ ù:u û:] Ê:E
+#pragma osdk replace_characters_if LANGUAGE_FR : é:{ è:} ê:| à:@ î:i ô:^ ç:c Ç:C â:[ ù:u û:] Ê:E É:E
 #pragma osdk replace_characters_if LANGUAGE_NO : æ:{ ø:} å:| Æ:A Ø:O Å:A
 
 
@@ -193,6 +193,8 @@ _gTextItemGameConsole             .byt "une _console de jeu",0
 _gTextItemLockedPanel             .byt "un _voyant lumineux",0
 _gTextItemBatteries               .byt "un paquet de$_piles SR44",0
 _gTextItemDuneBook                .byt "un$_roman",0
+_gTextItemTowel                   .byt "une$_serviette",0
+_gTextItemFabricStrip             .byt "une$_bande de tissu",0
 #ifdef PRODUCT_TYPE_GAME_DEMO
 _gTextItemDemoReadMe              .byt "un _message sur le mur",0
 #endif // PRODUCT_TYPE_GAME_DEMO
@@ -271,6 +273,8 @@ _gTextItemGameConsole             .byt "en spill _konsoll",0
 _gTextItemLockedPanel             .byt "et alarm _lys",0
 _gTextItemBatteries               .byt "en pakke$SR44 _batterier",0
 _gTextItemDuneBook                .byt "en$_roman",0
+_gTextItemTowel                   .byt "et$_håndkle",0
+_gTextItemFabricStrip             .byt "en$lang _stoffremse",0
 #ifdef PRODUCT_TYPE_GAME_DEMO
 _gTextItemDemoReadMe              .byt "en _melding på veggen",0
 #endif // PRODUCT_TYPE_GAME_DEMO
@@ -349,6 +353,8 @@ _gTextItemGameConsole             .byt "a game _console",0
 _gTextItemLockedPanel             .byt "a flashing _light",0
 _gTextItemBatteries               .byt "a pack of$SR44 _batteries",0
 _gTextItemDuneBook                .byt "a$_novel",0
+_gTextItemTowel                   .byt "a$_towel",0
+_gTextItemFabricStrip             .byt "a$long _strip of fabric",0
 #ifdef PRODUCT_TYPE_GAME_DEMO
 _gTextItemDemoReadMe              .byt "a _message on the wall",0
 #endif // PRODUCT_TYPE_GAME_DEMO
@@ -2330,6 +2336,13 @@ _gDescriptionBoxRoom
 // MARK: Classy Bathroom
 _gDescriptionClassyBathRoom
 .(
+    ; Is the Towel book still in the bathroom
+    IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_Towel,e_LOC_CLASSY_BATHROOM),show_towel)
+        BLIT_BLOCK(LOADER_SPRITE_SAFE_ROOM,4,28)                     ; Draw the Towel
+                _IMAGE(29,64)
+                _BUFFER(3,10)
+    ENDIF(show_towel)
+
     ; Spawn water if required
     GOSUB(_SpawnWaterIfNotEquipped)
 
@@ -2718,6 +2731,14 @@ _gCombineItemMappingsArray
     COMBINE_MAPPING(e_ITEM_SilverKnife,e_ITEM_BlackTape     ,_CombineKnifeTape)
     COMBINE_MAPPING(e_ITEM_Adhesive,e_ITEM_GunPowder        ,_CombineNeedsFuse)
     COMBINE_MAPPING(e_ITEM_Adhesive,e_ITEM_TobaccoTin       ,_CombineNeedsFuse)
+    COMBINE_MAPPING(e_ITEM_TobaccoTin,e_ITEM_ToiletRoll     ,_CombineNeedsFuel)
+    COMBINE_MAPPING(e_ITEM_TobaccoTin,e_ITEM_FabricStrip    ,_CombineNeedsFuel)
+    COMBINE_MAPPING(e_ITEM_SilverKnife,e_ITEM_Curtain       ,_CombineKnifeCurtain)
+    COMBINE_MAPPING(e_ITEM_SilverKnife,e_ITEM_Towel         ,_CombineKnifeTowel)
+    COMBINE_MAPPING(e_ITEM_Petrol,e_ITEM_FabricStrip        ,_CombinePetrolWithFabric)
+    COMBINE_MAPPING(e_ITEM_Petrol,e_ITEM_Rope               ,_CombinePetrolWithRope)
+    COMBINE_MAPPING(e_ITEM_Petrol,e_ITEM_GunPowder          ,_CombinePetrolWithGunPowder)
+    COMBINE_MAPPING(e_ITEM_Towel,e_ITEM_Water               ,_CombineTowelWithWater)
     VALUE_MAPPING2(255,255    ,_ErrorCannotDo)
 
 
@@ -2780,8 +2801,51 @@ _CombineMeatWithPills
 .)
 
 
-_CombinePetrolWithTP
+
+; "Already got a strip" branch — used when the player tries to cut a second source
+_AlreadyGotStrip
+#ifdef LANGUAGE_FR
+    ERROR_MESSAGE("J'ai déjà une bande.")
+#elif defined(LANGUAGE_NO)
+    ERROR_MESSAGE("Har allerede en remse.")
+#else
+    ERROR_MESSAGE("Already got a strip.")
+#endif
+    END_AND_PARTIAL_REFRESH
+
+
+; Cut a strip of fabric — works on either the curtain or the towel.
+_CombineKnifeCurtain
+_CombineKnifeTowel
 .(
+    JUMP_IF_FALSE(_AlreadyGotStrip,CHECK_ITEM_LOCATION(e_ITEM_FabricStrip,e_LOC_NONE))
+    ; Drop on the ground first, then promote to inventory if there's room
+    SET_ITEM_LOCATION(e_ITEM_FabricStrip,e_LOC_CURRENT)
+    JUMP_IF_TRUE(end_inventory,CHECK_ADDRESS_VALUE(_gCurrentItemCount,8))
+    SET_ITEM_LOCATION(e_ITEM_FabricStrip,e_LOC_INVENTORY)
+end_inventory
+    PLAY_SOUND(_Swoosh)
+#ifdef LANGUAGE_FR
+    INFO_MESSAGE("Et voilà une belle bande de tissu.")
+#elif defined(LANGUAGE_NO)
+    INFO_MESSAGE("Det ble en fin stoffremse.")
+#else
+    INFO_MESSAGE("That'll make a decent strip.")
+#endif
+    END_AND_REFRESH
+.)
+
+
+
+_CombinePetrolWithTP
+    COMBINE_ITEMS_2(e_ITEM_Fuse,e_ITEM_Petrol,e_ITEM_ToiletRoll)         ; We now have a fuse for our bomb, the Petrol and TP are gone
+    JUMP(_FuseBuilt)
+
+; Combine fabric strip with petrol to make a fuse — 
+_CombinePetrolWithFabric
+    COMBINE_ITEMS_2(e_ITEM_Fuse,e_ITEM_Petrol,e_ITEM_FabricStrip)
+; fall-through 
+_FuseBuilt
     LOAD_MUSIC(LOADER_MUSIC_SUCCESS)
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Et voilà une mèche.")
@@ -2790,12 +2854,54 @@ _CombinePetrolWithTP
 #else
     INFO_MESSAGE("That makes a decent fuse.")
 #endif
-    COMBINE_ITEMS_2(e_ITEM_Fuse,e_ITEM_Petrol,e_ITEM_ToiletRoll)         ; We now have a fuse for our bomb, the Petrol and TP are gone
-    UNLOCK_ACHIEVEMENT(ACHIEVEMENT_BUILT_A_FUSE)                         ; Achievement!    
+    UNLOCK_ACHIEVEMENT(ACHIEVEMENT_BUILT_A_FUSE)
     INCREASE_SCORE(POINTS_BUILT_FUSE)
     STOP_MUSIC()
     END_AND_REFRESH
+
+
+; Hint: rope is not absorbent enough
+_CombinePetrolWithRope
+.(
+#ifdef LANGUAGE_FR
+    ERROR_MESSAGE("La corde n'absorberait pas l'essence.")
+    ERROR_MESSAGE("Il faudrait quelque chose de plus absorbant.")
+#elif defined(LANGUAGE_NO)
+    ERROR_MESSAGE("Tauet absorberer ikke bensinen.")
+    ERROR_MESSAGE("Jeg trenger noe mer absorberende.")
+#else
+    ERROR_MESSAGE("The rope wouldn't absorb the petrol.")
+    ERROR_MESSAGE("I need something more absorbent.")
+#endif
+    END_AND_PARTIAL_REFRESH
 .)
+
+
+; Hint: gunpowder and petrol don't combine
+_CombinePetrolWithGunPowder
+.(
+#ifdef LANGUAGE_FR
+    ERROR_MESSAGE("Ce n'est pas une bonne idée.")
+#elif defined(LANGUAGE_NO)
+    ERROR_MESSAGE("Det er ingen god idé.")
+#else
+    ERROR_MESSAGE("That's not a good idea.")
+#endif
+    END_AND_PARTIAL_REFRESH
+.)
+
+
+; Combine towel with water - gets wet, then fall through to the inspect message
+_CombineTowelWithWater
+#ifdef LANGUAGE_FR
+    SET_ITEM_DESCRIPTION(e_ITEM_Towel,"une$_serviette mouillée")
+#elif defined(LANGUAGE_NO)
+    SET_ITEM_DESCRIPTION(e_ITEM_Towel,"et$vått _håndkle")
+#else
+    SET_ITEM_DESCRIPTION(e_ITEM_Towel,"a$wet _towel")
+#endif
+    SET_ITEM_FLAGS(e_ITEM_Towel,ITEM_FLAG_TRANSFORMED)
+    JUMP(_InspectTowel)
 
 
 _CombineSulfurWithSalpetre
@@ -2895,11 +3001,26 @@ _CombineGunPowderWithFuse
 
 _CombineNeedsFuse
 #ifdef LANGUAGE_FR
-    ERROR_MESSAGE("La bombe n'est pas encore prête.")
+    ERROR_MESSAGE("Trop dangereux sans mèche.")
 #elif defined(LANGUAGE_NO)
-    ERROR_MESSAGE("Bomben er ikke ferdig ennå.")
+    ERROR_MESSAGE("For farlig uten en lunte.")
 #else
-    ERROR_MESSAGE("The bomb is not complete yet.")
+    ERROR_MESSAGE("Too dangerous without a fuse.")
+#endif
+    END_AND_PARTIAL_REFRESH
+
+
+; Hint: TP/fabric strip alone won't burn well as a fuse — needs petrol
+_CombineNeedsFuel
+#ifdef LANGUAGE_FR
+    ERROR_MESSAGE("Ça brûlera pas bien comme ça.")
+    ERROR_MESSAGE("Faut quelque chose d'inflammable.")
+#elif defined(LANGUAGE_NO)
+    ERROR_MESSAGE("Det ville ikke brenne lett slik.")
+    ERROR_MESSAGE("Trenger noe brennbart først.")
+#else
+    ERROR_MESSAGE("Wouldn't burn easily as is.")
+    ERROR_MESSAGE("Needs something flammable first.")
 #endif
     END_AND_PARTIAL_REFRESH
 
@@ -3494,6 +3615,7 @@ _gInspectItemMappingsArray
     VALUE_MAPPING(e_ITEM_FrontDoor          , _InspectFrontDoor)
     VALUE_MAPPING(e_ITEM_Fuse               , _InspectFuse)
     VALUE_MAPPING(e_ITEM_ToiletRoll         , _InspectToiletRoll)
+    VALUE_MAPPING(e_ITEM_FabricStrip        , _InspectFabricStrip)
     VALUE_MAPPING(e_ITEM_Bucket             , _InspectBucket)
     VALUE_MAPPING(e_ITEM_Rope               , _InspectRope)
     VALUE_MAPPING(e_ITEM_Ladder             , _InspectLadder)
@@ -3522,6 +3644,7 @@ _gInspectItemMappingsArray
     VALUE_MAPPING(e_ITEM_Drawer             , _InspectDrawer)
     VALUE_MAPPING(e_ITEM_DuneBook           , _InspectDuneBook)
     VALUE_MAPPING(e_ITEM_MortarAndPestle    , _InspectMortar)
+    VALUE_MAPPING(e_ITEM_Towel              , _InspectTowel)
 #ifdef PRODUCT_TYPE_GAME_DEMO
     VALUE_MAPPING(e_ITEM_DemoMessage        , _InspectDemoMessage)
 #endif // PRODUCT_TYPE_GAME_DEMO
@@ -3636,13 +3759,14 @@ _InspectBomb
     END_AND_PARTIAL_REFRESH
 
 
- _InspectToiletRoll
+_InspectFabricStrip
+_InspectToiletRoll
 #ifdef LANGUAGE_FR
-    KEYPRESS_MESSAGE("Long, résistant, et super absorbant")
+    KEYPRESS_MESSAGE("Long et moelleux.")
 #elif defined(LANGUAGE_NO)
-    KEYPRESS_MESSAGE("Lang, solid og ekstra absorberende")
+    KEYPRESS_MESSAGE("Lang og myk.")
 #else
-    KEYPRESS_MESSAGE("Long, sturdy, and extra absorbent")
+    KEYPRESS_MESSAGE("Long and fluffy.")
 #endif
     END_AND_PARTIAL_REFRESH
 
@@ -4749,6 +4873,30 @@ _InspectMortar
 #else
     INFO_MESSAGE("For grinding spices, usually...")
     KEYPRESS_MESSAGE("...could work on other things.")
+#endif
+    END_AND_PARTIAL_REFRESH
+.)
+
+
+; Hint about the towel's absorbency (or whether it's already wet)
+_InspectTowel
+.(
+    JUMP_IF_FALSE(dry_towel,CHECK_ITEM_FLAG(e_ITEM_Towel,ITEM_FLAG_TRANSFORMED))
+#ifdef LANGUAGE_FR
+    KEYPRESS_MESSAGE("Bien trempée.")
+#elif defined(LANGUAGE_NO)
+    KEYPRESS_MESSAGE("Skikkelig gjennomvått.")
+#else
+    KEYPRESS_MESSAGE("Soaked through.")
+#endif
+    END_AND_PARTIAL_REFRESH
+dry_towel
+#ifdef LANGUAGE_FR
+    KEYPRESS_MESSAGE("Épaisse. Bien absorbante.")
+#elif defined(LANGUAGE_NO)
+    KEYPRESS_MESSAGE("Tykt. Veldig absorberende.")
+#else
+    KEYPRESS_MESSAGE("Thick. Properly absorbent.")
 #endif
     END_AND_PARTIAL_REFRESH
 .)
@@ -6721,7 +6869,7 @@ _UseProtectionSuit
         INFO_MESSAGE("...den passer perfekt!")
 #else
         INFO_MESSAGE("...it fits perfectly!")
-#endif        
+#endif
         SET_ITEM_FLAGS(e_ITEM_ProtectionSuit,ITEM_FLAG_ATTACHED)
     ELSE(panic_room,not_panic_room)
         ; The player is anywhere else
@@ -6788,7 +6936,7 @@ _UseClay
 #else
     INFO_MESSAGE("Ok, that should be good enough...")
     INFO_MESSAGE("...now just need to fill it!")
-#endif        
+#endif
     END_AND_REFRESH
 .)
 
@@ -6855,7 +7003,7 @@ _UseAcid
     SET_ITEM_LOCATION(e_ITEM_Clay,e_LOC_GONE_FOREVER)                     ; The clay has vanished
     SET_ITEM_LOCATION(e_ITEM_Acid,e_LOC_GONE_FOREVER)                     ; The acid is gone as well
     SET_ITEM_LOCATION(e_ITEM_ProtectionSuit,e_LOC_GONE_FOREVER)           ; We don't need the protection suit
-    UNSET_ITEM_FLAGS(e_ITEM_ProtectionSuit,ITEM_FLAG_ATTACHED)            ; 
+    UNSET_ITEM_FLAGS(e_ITEM_ProtectionSuit,ITEM_FLAG_ATTACHED)            ;
 
     END_AND_REFRESH
 .)
@@ -7290,6 +7438,13 @@ tape_knife
     JUMP_IF_TRUE(_SliceApples,CHECK_ITEM_LOCATION(e_ITEM_Apple,e_LOC_INVENTORY))
     JUMP_IF_TRUE(_SliceApples,CHECK_ITEM_LOCATION(e_ITEM_Apple,e_LOC_CURRENT))
 apple_knife
+
+    // - We have the towel and want to cut it (handler itself rejects with "already got one" if we already have a strip)
+    JUMP_IF_TRUE(_CombineKnifeTowel,CHECK_ITEM_LOCATION(e_ITEM_Towel,e_LOC_INVENTORY))
+    JUMP_IF_TRUE(_CombineKnifeTowel,CHECK_ITEM_LOCATION(e_ITEM_Towel,e_LOC_CURRENT))
+
+    // - We see the curtain in the gallery and it can be cut
+    JUMP_IF_TRUE(_CombineKnifeCurtain,CHECK_ITEM_LOCATION(e_ITEM_Curtain,e_LOC_CURRENT))
 
     RETURN
 .)

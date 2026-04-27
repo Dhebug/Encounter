@@ -108,6 +108,8 @@ _gItems
     ITEM_NORMAL( _gTextItemBatteries             ,e_LOC_NONE            ,ITEM_FLAG_VISIBLE_IN_SCENE)                // e_ITEM_Batteries
     ITEM_NORMAL( _gTextItemClosedDrawer          ,e_LOC_GUESTBEDROOM    ,ITEM_FLAG_IMMOVABLE|ITEM_FLAG_CLOSED)      // e_ITEM_Drawer
     ITEM_NORMAL( _gTextItemDuneBook              ,e_LOC_GUESTBEDROOM    ,ITEM_FLAG_VISIBLE_IN_SCENE)                // e_ITEM_DuneBook
+    ITEM_NORMAL( _gTextItemTowel                 ,e_LOC_CLASSY_BATHROOM ,ITEM_FLAG_VISIBLE_IN_SCENE)                // e_ITEM_Towel
+    ITEM_NORMAL( _gTextItemFabricStrip           ,e_LOC_NONE            ,ITEM_FLAG_DEFAULT)                         // e_ITEM_FabricStrip
 #ifdef PRODUCT_TYPE_GAME_DEMO
     ITEM_NORMAL( _gTextItemDemoReadMe            ,e_LOC_LARGE_STAIRCASE ,ITEM_FLAG_IMMOVABLE)                       // e_ITEM_DemoReadMe
 #endif // PRODUCT_TYPE_GAME_DEMO
