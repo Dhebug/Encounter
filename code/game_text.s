@@ -1132,6 +1132,7 @@ _gDescriptionTennisCourt
 
 // MARK: Vegetable Garden
 _gDescriptionVegetableGarden
+.(
     ; Is the Knife still in the garden
     IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_SilverKnife,e_LOC_VEGSGARDEN),show_knife)
         BLIT_BLOCK(LOADER_SPRITE_ITEMS,2,9)                     ; Draw the Knife
@@ -1141,13 +1142,13 @@ _gDescriptionVegetableGarden
 
     SET_ITEM_LOCATION(e_ITEM_CellarWindow,e_LOC_VEGSGARDEN)       ; The window is in the garden
 #ifdef LANGUAGE_FR
-_gTextItemCellarWindow = *+2
++_gTextItemCellarWindow = *+2
     SET_ITEM_DESCRIPTION(e_ITEM_CellarWindow,"une _fenêtre basse")
 #elif defined(LANGUAGE_NO)
-_gTextItemCellarWindow = *+2
++_gTextItemCellarWindow = *+2
     SET_ITEM_DESCRIPTION(e_ITEM_CellarWindow,"et kjeller _vindu")
 #else
-_gTextItemCellarWindow = *+2
++_gTextItemCellarWindow = *+2
     SET_ITEM_DESCRIPTION(e_ITEM_CellarWindow,"a cellar _window")
 #endif
     WAIT(DELAY_FIRST_BUBBLE)
@@ -1163,6 +1164,7 @@ _gTextItemCellarWindow = *+2
     _BUBBLE_LINE(136,15,1,"to grow tomatoes")
 #endif
     END
+.)
 
 
 // MARK: Fish Pond
@@ -1399,6 +1401,20 @@ _gDescriptionStaircase
     SET_ITEM_LOCATION(e_ITEM_Dog,e_LOC_LARGE_STAIRCASE)
 end_dog_check
 
+    ; Is the knife in the scene?
+    IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_SilverKnife,e_LOC_CURRENT),show_knife)
+        BLIT_BLOCK(LOADER_SPRITE_DOG,3,4)                        ; Draw the knife
+                _IMAGE(0,0)
+                _BUFFER(27,114)
+    ENDIF(show_knife)    
+
+    ; Is the queue in the scene?
+    IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_SnookerCue,e_LOC_CURRENT),show_queue)
+        BLIT_BLOCK(LOADER_SPRITE_DOG,5,18)                        ; Draw the queue
+                _IMAGE(3,0)
+                _BUFFER(8,107)
+    ENDIF(show_queue)    
+
     ; Is there a dog in the entrance
     JUMP_IF_FALSE(end_dog,CHECK_ITEM_LOCATION(e_ITEM_Dog,e_LOC_LARGE_STAIRCASE))
 
@@ -1580,6 +1596,7 @@ _gDescriptionDiningRoom
 
 // MARK: Game Room
 _gDescriptionGamesRoom
+.(
     ; Is the Cue still in the dining room
     IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_SnookerCue,e_LOC_GAMESROOM),show_cue)
         BLIT_BLOCK(LOADER_SPRITE_ITEMS,10,1)                     ; Draw the Cue
@@ -1617,7 +1634,7 @@ cabinet_closed
     _BUBBLE_LINE(175,40,0,"Impressive")
 #endif    
     END
-
+.)
 
 // MARK: Sun Lounge
 _gDescriptionSunLounge
@@ -2366,6 +2383,20 @@ _gDescriptionMasterBedRoom
     ; Draw the shoes at the bottom of the bed
     DRAW_BITMAP(LOADER_SPRITE_THUG,BLOCK_SIZE(7,15),40,_SecondImageBuffer+40*73+14,_ImageBuffer+40*112+3)       ; Shoes
 
+    ; Is the Knife in the master bedroom
+    IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_SilverKnife,e_LOC_MASTERBEDROOM),show_knife)
+        BLIT_BLOCK(LOADER_SPRITE_SAFE_ROOM,3,4)                     ; Draw the Knife
+                _IMAGE(25,57)
+                _BUFFER(26,120)
+    ENDIF(show_knife)
+
+    ; Is the Queue in the master bedroom
+    IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_SnookerCue,e_LOC_MASTERBEDROOM),show_queue)
+        BLIT_BLOCK(LOADER_SPRITE_SAFE_ROOM,8,1)                     ; Draw the Queue
+                _IMAGE(13,65)
+                _BUFFER(10,122)
+    ENDIF(show_queue)
+
     ; Is the thug alive?
     JUMP_IF_FALSE(thug_alive,CHECK_ITEM_FLAG(e_ITEM_Thug,ITEM_FLAG_DISABLED))
         ; Draw the dead thug 
@@ -2513,7 +2544,35 @@ _gDescriptionPanicRoomDoor
         _BUBBLE_LINE(148,85,0,"claustrophobic")
 #endif    
         END
-    ENDIF(suit)
+    ELSE(suit,no_suit)
+        ; Is the Cue in front of the panic room door
+        IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_SnookerCue,e_LOC_PANIC_ROOM_DOOR),show_cue)
+            BLIT_BLOCK(LOADER_SPRITE_SAFE_ROOM,1,62)                     ; Draw the Cue
+                    _IMAGE(33,64)
+                    _BUFFER(9,58)
+        ENDIF(show_cue)
+    
+        ; Is the Knife in front of the panic room door
+        IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_SilverKnife,e_LOC_PANIC_ROOM_DOOR),show_knife)
+            BLIT_BLOCK(LOADER_SPRITE_SAFE_ROOM,3,4)                     ; Draw the Knife
+                    _IMAGE(25,57)
+                    _BUFFER(24,120)
+        ENDIF(show_knife)
+
+        ; Is the Rope in front of the panic room door
+        IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_Rope,e_LOC_PANIC_ROOM_DOOR),show_rope)
+            BLIT_BLOCK(LOADER_SPRITE_SAFE_ROOM,4,5)                     ; Draw the Rope
+                    _IMAGE(4,114)
+                    _BUFFER(9,120)
+        ENDIF(show_rope)
+
+        ; Is the Protection suit in front of the panic room door
+        IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_ProtectionSuit,e_LOC_PANIC_ROOM_DOOR),show_suit)
+            BLIT_BLOCK(LOADER_SPRITE_SAFE_ROOM,3,22)                     ; Draw the Protection suit
+                    _IMAGE(5,92)
+                    _BUFFER(14,98)
+        ENDIF(show_suit)
+    ENDIF(no_suit)
 
 
     IF_TRUE(CHECK_ITEM_FLAG(e_ITEM_Clay,ITEM_FLAG_ATTACHED),attached)       ; Is the clay attached?
