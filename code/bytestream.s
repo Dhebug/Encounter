@@ -213,32 +213,43 @@ check_partial_refresh
 
 ; _param0=id of the element we are searching for in the table
 ; _param1=pointer to a table with id:stream pointer
+;
+; Each entry is 3 bytes (id, stream_lo, stream_hi) so the table with 85+ entries is now longer than 255 bytes
 _DispatchStream
 .(
     ; Store the item id into "CurrentItem"
     lda _param0
     sta _gCurrentItem
 
-    ldy #0
 search_loop
+    ldy #0
     lda (_param1),y     ; Check the ID in the table
-    iny
     cmp _param0         ; Does that match the ID we are looking for?
-    beq _PlayMatchedStream
+    beq matched
     cmp #MAPPING_REDIRECT  ; Redirect: retry with a different table?
     beq redirect
     cmp #MAPPING_DEFAULT   ; End of table (default handler)?
-    beq _PlayMatchedStream
+    beq matched
 
-    iny                 ; Skip the callback/stream pointer
-    iny
-    jmp search_loop
+    ; Advance _param1 to the next entry
+    clc
+    lda _param1
+    adc #3
+    sta _param1
+    bcc search_loop
+    inc _param1+1
+    bne search_loop     ; Always (table never starts in zero page)
+
+matched
+    iny                 ; Y=1, _PlayMatchedStream expects Y at the stream-pointer lo byte
+    jmp _PlayMatchedStream
 
 redirect
     ; Replace the table pointer with the redirect target and restart the search
+    iny                 ; Y=1
     lda (_param1),y
     pha
-    iny
+    iny                 ; Y=2
     lda (_param1),y
     sta _param1+1
     pla
