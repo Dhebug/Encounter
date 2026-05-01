@@ -35,15 +35,17 @@ osdk_stack                  .dsb 256      ; We move the stack in overlay memory
 osdk_endstack
 
 #ifdef MODULE_SPLASH
-
-; Severn Software logo: 215x51    -> 40*51=2040  *6=12240
-; Defence Force logo: 216x74      -> 40*74=2960  *6=17760
-_LabelPicture0	.dsb 2960
-_LabelPicture1	.dsb 2960
-_LabelPicture2	.dsb 2960
+;_LabelPicture0               ; Not actually used, the source images are directly used instead of allocating a buffer for the non shifted image
+_LabelPicture1	.dsb 2960     ; Severn Software logo: 215x51    -> 40*51=2040
+_LabelPicture2	.dsb 2960     ; Defence Force logo: 216x74      -> 40*74=2960
 _LabelPicture3	.dsb 2960
 _LabelPicture4	.dsb 2960
 _LabelPicture5	.dsb 2960
+
+_HiresLineLow   .dsb 200    ; Contains all the combination of X*40 to access specific scanlines
+_HiresLineHigh  .dsb 200    ; Similar to _gTableMulBy40Low/High, but that one was limited to 128 scanlines
+
+_CosTableTimes40 .dsb 256   ; Vertical scanline offset cos table for reflection distorton
 #endif
 
 

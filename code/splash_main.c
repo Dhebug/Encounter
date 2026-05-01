@@ -25,47 +25,30 @@ void HandleSettingsMenu() {}
 //
 // Normal splash screen
 //
-extern unsigned char LabelPicture0[2960];
 extern unsigned char LabelPicture1[2960];
 extern unsigned char LabelPicture2[2960];
 extern unsigned char LabelPicture3[2960];
 extern unsigned char LabelPicture4[2960];
 extern unsigned char LabelPicture5[2960];
 
-extern unsigned char *DistorterTable[6];
+extern unsigned char DistorterTableLo[6];
+extern unsigned char DistorterTableHi[6];
+#define GenerateLogoPreshifts(p)  { param0.ptr=(p); DistorterTableLo[0]=param0.uchars[0]; DistorterTableHi[0]=param0.uchars[1];asm("jsr _GenerateLogoPreshiftsAsm"); }
 
-extern unsigned char CosTable[];         // Originally contains non signed values, from 0 to 255
+extern unsigned char ShowLogoAnimation();
+extern void GenerateTables();
+extern void Clear38Columns();
 
-extern DrawPreshiftLogos();
+extern unsigned char setupColorsPaper[2];   // [0]=top half, [1]=bottom half
+extern unsigned char setupColorsInk[2];     // [0]=top half, [1]=bottom half
 
+#define SetupColors(pT,iT,pB,iB)          (setupColorsPaper[0]=(pT),setupColorsInk[0]=(iT),setupColorsPaper[1]=(pB),setupColorsInk[1]=(iB),SetupColorsAsm())
+#define SetupColorsAnimated(pT,iT,pB,iB)  (setupColorsPaper[0]=(pT),setupColorsInk[0]=(iT),setupColorsPaper[1]=(pB),setupColorsInk[1]=(iB),SetupColorsAnimatedAsm())
 
-extern unsigned char  angle;
-extern unsigned char  angle2;
-extern unsigned char  angle3;
-extern unsigned char  angle4;
-extern unsigned char  y;
-extern unsigned char  position;
-extern unsigned char stopMoving;
-
+extern unsigned char angle;
 extern unsigned char height;
-extern unsigned char startPosition;
-extern unsigned int frameCount;
-
-extern unsigned char* ptrSrc;
-extern unsigned char* ptrDst;
-extern unsigned char* ptrDstBottom;
-
-extern int offset;
-extern int sourceOffset;
-extern int verticalSourceOffset;
-extern int maxVerticalSourceOffset;
-
-extern unsigned char* Copy38Source;
-extern unsigned char* Copy38Target;
-extern unsigned char* Erase38Target;
-
-extern void Copy38Bytes();
-extern void Erase38Bytes();
+extern unsigned char position;
+extern unsigned char frameCount;
 
 extern void CheckOptionMenuInput();
 
@@ -233,201 +216,36 @@ void HandleSettingsMenu()
 }
 
 
-// Some quite ugly function which waits a certain number of frames
-// while detecting key presses and returns 1 if either space or enter are pressed
-int Wait(int frameCount)
-{	
-	int k;
-
-	while (frameCount--)
-	{
-		WaitIRQ();
-
-		k=ReadKeyNoBounce();
-		if ((k==KEY_RETURN) || (k==' ') || ShouldQuit)
-		{
-			WaitFrames(4);
-			return 1;
-		}
-        gMenuKeyOption=k;
-        HandleSettingsMenu();
-	}
-	return 0;
-}
-
-
-void PatchCosTable()
-{
-	int x;
-
-	for (x=0;x<256;x++)
-	{
-		CosTable[x]=(((int)CosTable[x])*3)/255;
-	}
-}
-
-
-
-int ShowLogoAnimation()
-{
-	int k;
-
-    stopMoving = 0;
-    position = startPosition;
-
-    maxVerticalSourceOffset = height*40;
-
-    while (frameCount--)
-    {
-        ptrSrc=(unsigned char*)LabelPicture0+2;
-        ptrDst=(unsigned char*)0xa000+(125-position)*40+2;
-        ptrDstBottom=(unsigned char*)0xa000+(125+position/2)*40;
-
-        angle2=angle;
-        angle3=angle;
-        angle4=angle;
-        angle+=5;
-
-        sourceOffset=0;
-
-        for (y=0;y<position;y++)
-        {
-            if (!stopMoving)
-            {
-                if (y<height)
-                {
-                    Copy38Source = ptrSrc;
-                    Copy38Target = ptrDst;
-                    Copy38Bytes();
-                }
-                else
-                {
-                    Erase38Target = ptrDst;
-                    Erase38Bytes();
-                }
-            }
-            if (y&1)
-            {
-                offset=CosTable[angle2&255]+CosTable[angle3&255];
-                verticalSourceOffset=CosTable[angle4&255]*40;
-
-                if ((y<height) && ((sourceOffset+verticalSourceOffset)<maxVerticalSourceOffset) ) 
-                {
-                    Copy38Source = DistorterTable[offset]+sourceOffset+2+verticalSourceOffset;
-                    Copy38Target = ptrDstBottom+2;
-                    Copy38Bytes();
-                }
-                else
-                {
-                    Erase38Target = ptrDstBottom+2;
-                    Erase38Bytes();
-                }
-                sourceOffset+=80;
-                ptrDstBottom-=40;
-
-                angle2+=5;
-                angle3+=7;
-                angle4+=11;
-
-            }
-            ptrDst+=40;
-            ptrSrc+=40;
-            CheckOptionMenuInput();
-        }
-        /*
-        if (Wait(1))
-        {
-            return 1;
-        }
-        */
-		k=ReadKeyNoBounce();
-		if ((k==KEY_RETURN) || (k==' ') || ShouldQuit)
-		{
-			return 1;
-		}
-        gMenuKeyOption=k;
-        HandleSettingsMenu();
-
-        if (position<height+5)
-        {
-            position++;
-        }
-        else
-        {
-            stopMoving=1;
-        }
-    }
-    return 0;
-}
-
-
-void SetupLineColors(unsigned char y,unsigned char paperTop,unsigned char inkTop,unsigned char paperBottom,unsigned char inkBottom)
-{
-    unsigned char* ptr=(unsigned char*)0xa000+y*40;
-    if (y<125)
-    {
-        // Top half of the screen
-        ptr[0]=paperTop;
-        ptr[1]=inkTop;
-    }
-    else
-    {
-        // Bottom half of the screen (the river where things reflect)
-        ptr[0]=paperBottom;
-        ptr[1]=inkBottom;
-    }
-    memset(ptr+2,64,38);
-}
-
-
-int SetupColors(unsigned char paperTop,unsigned char inkTop,unsigned char paperBottom,unsigned char inkBottom)
-{
-    int y,spacing;
-    for (spacing=16;spacing>=1;spacing>>=1)
-    {
-        for (y=0;y<200;y+=spacing)
-        {
-            SetupLineColors(y,paperTop,inkTop,paperBottom,inkBottom);
-            CheckOptionMenuInput();
-        }
-        if (Wait(spacing/2))
-        {
-            return 1;
-        }
-    }
-    return 0;
-}
-
-
-
 int DisplayLogosWithPreshift()
 {
 	Hires(16+0,4);
 
     memset((char*)0xa000,64,8000);
 
-    PatchCosTable();
+    GenerateTables();    // patches CosTable in place, then derives _CosTableTimes40 from it
 
+    HandleSettingsMenu();  // Make sure the menu is present from the start
     do
     {
         // Scroll the Servern Software up the river: Logo is 51 lines tall, from line 97 to 147
-        if (SetupColors(16+0,7,16+4,6))       return 1;
-        memcpy(LabelPicture0,ImageBuffer+97*40,51*40);
-        DrawPreshiftLogos();
-        height        = 51;
-        startPosition = 0;
-        frameCount    = 90;
-        if (ShowLogoAnimation())      return 1;
-
+        if (SetupColors(16+0,7,16+4,6))             return 1;
+        GenerateLogoPreshifts(ImageBuffer+97*40);
+        height        = 53;
+        position      = 0;
+        frameCount    = 200;
+        if (ShowLogoAnimation())                    return 1;
+        if (SetupColorsAnimated(16+7,7,16+4,4))     return 1;
+        Clear38Columns();
 
         // Scroll the Defence Force logo up the river: Logo is 74 lines tall, from line 5 to 78
-        if (SetupColors(16+7,0,16+4,0))       return 1;
-        memcpy(LabelPicture0,ImageBuffer+5*40,74*40);
-        DrawPreshiftLogos();
-        height        = 74;
-        startPosition = 74+5;
-        frameCount    = 60;
-        if (ShowLogoAnimation())   return 1;
+        GenerateLogoPreshifts(ImageBuffer+5*40);
+        height        = 73;
+        position      = 74+5;
+        frameCount    = 100;
+        if (SetupColors(16+7,0,16+4,0))             return 1;        
+        if (ShowLogoAnimation())                    return 1;
+        if (SetupColorsAnimated(16+7,7,16+4,4))     return 1;
+        Clear38Columns();
     }
     while (UsedMenu);  // If the user did not use the menu, we quit after one loop, else we stay there
 
