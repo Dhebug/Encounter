@@ -27,9 +27,9 @@ _gItems
     ITEM_CONTAINER( _gTextItemPlasticBag  ,e_LOC_MARKETPLACE      ,ITEM_FLAG_VISIBLE_IN_SCENE)  // e_ITEM_PlasticBag           
 
     // Items requiring containers
-    ITEM( _gTextItemGunPowder             ,e_LOC_NONE            ,ITEM_FLAG_DEFAULT         ,CONTAINER_MASK4(e_ITEM_Bucket,e_ITEM_PlasticBag,e_ITEM_TobaccoTin,e_ITEM_CardboardBox))   // e_ITEM_GunPowder            
-    ITEM( _gTextItemSaltpetre             ,e_LOC_DARKTUNNEL      ,ITEM_FLAG_DEFAULT         ,CONTAINER_MASK4(e_ITEM_Bucket,e_ITEM_PlasticBag,e_ITEM_TobaccoTin,e_ITEM_CardboardBox))   // e_ITEM_Saltpetre
-    ITEM( _gTextItemSulphur               ,e_LOC_INSIDE_PIT      ,ITEM_FLAG_DEFAULT         ,CONTAINER_MASK4(e_ITEM_Bucket,e_ITEM_PlasticBag,e_ITEM_TobaccoTin,e_ITEM_CardboardBox))   // e_ITEM_Sulphur         
+    ITEM( _gTextItemGunPowder             ,e_LOC_NONE            ,ITEM_FLAG_VISIBLE_IN_SCENE ,CONTAINER_MASK4(e_ITEM_Bucket,e_ITEM_PlasticBag,e_ITEM_TobaccoTin,e_ITEM_CardboardBox))   // e_ITEM_GunPowder            
+    ITEM( _gTextItemSaltpetre             ,e_LOC_DARKTUNNEL      ,ITEM_FLAG_VISIBLE_IN_SCENE ,CONTAINER_MASK4(e_ITEM_Bucket,e_ITEM_PlasticBag,e_ITEM_TobaccoTin,e_ITEM_CardboardBox))   // e_ITEM_Saltpetre
+    ITEM( _gTextItemSulphur               ,e_LOC_INSIDE_PIT      ,ITEM_FLAG_VISIBLE_IN_SCENE ,CONTAINER_MASK4(e_ITEM_Bucket,e_ITEM_PlasticBag,e_ITEM_TobaccoTin,e_ITEM_CardboardBox))   // e_ITEM_Sulphur         
     ITEM( _gTextItemPetrol                ,e_LOC_NONE            ,ITEM_FLAG_DEFAULT         ,CONTAINER_MASK3(e_ITEM_Bucket,e_ITEM_PlasticBag,e_ITEM_TobaccoTin))                       // e_ITEM_Petrol               
     ITEM( _gTextItemWater                 ,e_LOC_WELL            ,ITEM_FLAG_DEFAULT         ,CONTAINER_MASK3(e_ITEM_Bucket,e_ITEM_PlasticBag,e_ITEM_TobaccoTin))                       // e_ITEM_Water                
     ITEM( _gTextItemLargeDoveOutOfReach   ,e_LOC_WOODEDAVENUE    ,ITEM_FLAG_IMMOVABLE       ,CONTAINER_MASK2(e_ITEM_CardboardBox,e_ITEM_Net))                                          // e_ITEM_LargeDove            
@@ -64,7 +64,7 @@ _gItems
     ITEM_NORMAL( _gTextItemFuse                  ,e_LOC_NONE            ,ITEM_FLAG_DEFAULT)                         // e_ITEM_Fuse                 
     ITEM_NORMAL( _gTextItemSmallKey              ,e_LOC_NONE            ,ITEM_FLAG_VISIBLE_IN_SCENE)                // e_ITEM_SmallKey                 
     ITEM_NORMAL( _gTextItemNewspaper             ,e_LOC_INVENTORY       ,ITEM_FLAG_DEFAULT)                         // e_ITEM_Newspaper            
-    ITEM_NORMAL( _gTextItemBomb                  ,e_LOC_NONE            ,ITEM_FLAG_DEFAULT)                         // e_ITEM_Bomb                 
+    ITEM_NORMAL( _gTextItemBomb                  ,e_LOC_NONE            ,ITEM_FLAG_VISIBLE_IN_SCENE)                // e_ITEM_Bomb                 
     ITEM_NORMAL( _gTextItemPistol                ,e_LOC_NONE            ,ITEM_FLAG_VISIBLE_IN_SCENE)                // e_ITEM_Pistol               
     ITEM_NORMAL( _gTextItemInvoice               ,e_LOC_STUDY_ROOM      ,ITEM_FLAG_DEFAULT)                         // e_ITEM_Invoice
     ITEM_NORMAL( _gTextItemChemistryRecipes      ,e_LOC_NONE            ,ITEM_FLAG_VISIBLE_IN_SCENE)                // e_ITEM_ChemistryRecipes     

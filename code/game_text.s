@@ -354,7 +354,7 @@ _gTextItemLockedPanel             .byt "a flashing _light",0
 _gTextItemBatteries               .byt "a pack of$SR44 _batteries",0
 _gTextItemDuneBook                .byt "a$_novel",0
 _gTextItemTowel                   .byt "a$_towel",0
-_gTextItemFabricStrip             .byt "a$long _strip of fabric",0
+_gTextItemFabricStrip             .byt "a long$_strip of fabric",0
 #ifdef PRODUCT_TYPE_GAME_DEMO
 _gTextItemDemoReadMe              .byt "a _message on the wall",0
 #endif // PRODUCT_TYPE_GAME_DEMO
@@ -1666,12 +1666,35 @@ girl_is_outside
 // MARK: Kitchen
 _gDescriptionKitchen
 .(
+    ; Is the Salptetre still in the kitchen
+    IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_Saltpetre,e_LOC_KITCHEN),show_saltpetre)
+        BLIT_BLOCK(LOADER_SPRITE_ITEMS,1,5)                     ; Draw the Salptetre
+                _IMAGE(24,100)
+                _BUFFER(25,87)
+    ENDIF(show_saltpetre)
+
+    ; Is the Sulphur still in the kitchen
+    IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_Sulphur,e_LOC_KITCHEN),show_sulphur)
+        BLIT_BLOCK(LOADER_SPRITE_ITEMS,1,5)                     ; Draw the Sulphur
+                _IMAGE(25,100)
+                _BUFFER(26,87)
+    ENDIF(show_sulphur)
+
     ; Is the Mortar still in the kitchen
     IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_MortarAndPestle,e_LOC_KITCHEN),show_mortar)
         BLIT_BLOCK(LOADER_SPRITE_ITEMS,2,13)                     ; Draw the Mortar
                 _IMAGE(24,71)
                 _BUFFER(21,79)
     ENDIF(show_mortar)
+
+    ; Is the Gunpowder (or rough mix) still in the kitchen
+    JUMP_IF_TRUE(draw_powder,CHECK_ITEM_LOCATION(e_ITEM_PowderMix,e_LOC_KITCHEN))
+    IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_GunPowder,e_LOC_KITCHEN),show_gunpowder)
+draw_powder    
+        BLIT_BLOCK(LOADER_SPRITE_ITEMS,2,8)                     ; Draw the Gunpowder
+                _IMAGE(24,91)
+                _BUFFER(23,84)
+    ENDIF(show_gunpowder)
 
     ; Is the Meat still in the kitchen
     IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_Meat,e_LOC_KITCHEN),show_meat)
@@ -1687,8 +1710,10 @@ _gDescriptionKitchen
                 _BUFFER(26,79)
     ENDIF(show_pills)
 
-    ; Is the Tin box book still in the lounge
+    ; Is the Tin box (or bomb) book still in the lounge
+    JUMP_IF_TRUE(draw_tin,CHECK_ITEM_LOCATION(e_ITEM_Bomb,e_LOC_KITCHEN))
     IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_TobaccoTin,e_LOC_KITCHEN),show_tin)
+draw_tin    
         BLIT_BLOCK(LOADER_SPRITE_ITEMS,2,13)                     ; Draw the Tin
                 _IMAGE(35,91)
                 _BUFFER(19,79)
