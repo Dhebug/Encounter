@@ -28,7 +28,7 @@ _gDrawPosY      .byt 0
 _gDrawWidth     .byt 0
 _gDrawHeight    .byt 0
 _gDrawPattern   .byt 0
-_gSourceStride  .byt 0
+_gSourceStride  .byt 40   ; default for BITMAP; SET_STRIDE overrides for one shot
 
 
 

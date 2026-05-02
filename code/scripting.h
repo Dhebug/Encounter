@@ -55,7 +55,9 @@
 #define COMMAND_COMBINE_ITEMS   46
 #define COMMAND_KEYPRESS_MESSAGE 47
 #define COMMAND_CLEAR_BUBBLES   48
-#define _COMMAND_COUNT          49
+#define COMMAND_SET_STRIDE      49
+#define COMMAND_DISPLAY_IMAGE_NO_CLEAR_TEXT 50
+#define _COMMAND_COUNT          51
 
 // Operator opcodes
 #define OPERATOR_CHECK_ITEM_LOCATION   0
@@ -137,14 +139,19 @@
 // Graphics
 #define BLOCK_SIZE(w,h) w,h
 
-#define DRAW_BITMAP(imageId,size,stride,src,dst)     .byt COMMAND_BITMAP,imageId,size,stride,<src,>src,<dst,>dst
-#define DISPLAY_IMAGE(imagedId)                      .byt COMMAND_DISPLAY_IMAGE,imagedId
-#define DISPLAY_IMAGE_NOBLIT(imagedId)               .byt COMMAND_DISPLAY_IMAGE_NOBLIT,imagedId
-#define DISPLAY_IMAGE_ONLY(imagedId)                 .byt COMMAND_DISPLAY_IMAGE_ONLY,imagedId
+// Stride defaults to 40; SET_STRIDE overrides it for the next BITMAP only (auto-resets to 40 after the blit).
+#define SET_STRIDE(stride)                           .byt COMMAND_SET_STRIDE,stride
+
+#define DRAW_BITMAP(imageId,size,src,dst)            .byt COMMAND_BITMAP,imageId,size,<src,>src,<dst,>dst
+#define DRAW_BITMAP_STRIDE(imageId,size,stride,src,dst)  .byt COMMAND_SET_STRIDE,stride,COMMAND_BITMAP,imageId,size,<src,>src,<dst,>dst
+#define DISPLAY_IMAGE(imageId)                       .byt COMMAND_DISPLAY_IMAGE,imageId
+#define DISPLAY_IMAGE_NOBLIT(imageId)                .byt COMMAND_DISPLAY_IMAGE_NOBLIT,imageId
+#define DISPLAY_IMAGE_ONLY(imageId)                  .byt COMMAND_DISPLAY_IMAGE_ONLY,imageId
+#define DISPLAY_IMAGE_NO_CLEAR_TEXT(imageId)         .byt COMMAND_DISPLAY_IMAGE_NO_CLEAR_TEXT,imageId
 #define FADE_BUFFER                                  .byt COMMAND_FADE_BUFFER
 
-#define BLIT_BLOCK(imageId,w,h)                      .byt COMMAND_BITMAP,imageId,w,h,40
-#define BLIT_BLOCK_STRIDE(imageId,w,h,stride)        .byt COMMAND_BITMAP,imageId,w,h,stride
+#define BLIT_BLOCK(imageId,w,h)                      .byt COMMAND_BITMAP,imageId,w,h
+#define BLIT_BLOCK_STRIDE(imageId,w,h,stride)        .byt COMMAND_SET_STRIDE,stride,COMMAND_BITMAP,imageId,w,h
 #define _BUFFER(x,y)                                 .byt <_ImageBuffer+x+(40*y),>_ImageBuffer+x+(40*y)
 #define _IMAGE(x,y)                                  .byt <_SecondImageBuffer+x+(40*y),>_SecondImageBuffer+x+(40*y)
 #define _IMAGE_STRIDE(x,y,stride)                    .byt <_SecondImageBuffer+x+(stride*y),>_SecondImageBuffer+x+(stride*y)

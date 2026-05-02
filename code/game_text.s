@@ -769,7 +769,7 @@ has_ladder
 
 rope_attached_to_tree
     SET_LOCATION_DIRECTION(e_LOC_INSIDE_PIT,e_DIRECTION_UP,e_LOC_OUTSIDE_PIT)                           ; Enable the UP direction
-    DRAW_BITMAP(LOADER_SPRITE_ITEMS,BLOCK_SIZE(3,52),40,_SecondImageBuffer+(40*51)+37,_ImageBuffer+(40*39)+19)    ; Draw the rope 
+    DRAW_BITMAP(LOADER_SPRITE_ITEMS,BLOCK_SIZE(3,52),_SecondImageBuffer+(40*51)+37,_ImageBuffer+(40*39)+19)    ; Draw the rope 
     END
 .)
 
@@ -800,11 +800,11 @@ no_rope
     JUMP(digging_for_gold)            ; Generic message if the ladder or rope are not present
 
 ladder_in_hole
-    DRAW_BITMAP(LOADER_SPRITE_ITEMS,BLOCK_SIZE(4,34),40,_SecondImageBuffer+25,_ImageBuffer+(40*53)+20)    ; Draw the ladder 
+    DRAW_BITMAP(LOADER_SPRITE_ITEMS,BLOCK_SIZE(4,34),_SecondImageBuffer+25,_ImageBuffer+(40*53)+20)    ; Draw the ladder 
     END
 
 rope_attached_to_tree
-    DRAW_BITMAP(LOADER_SPRITE_ITEMS,BLOCK_SIZE(5,49),40,_SecondImageBuffer+30,_ImageBuffer+(40*38)+21)    ; Draw the rope 
+    DRAW_BITMAP(LOADER_SPRITE_ITEMS,BLOCK_SIZE(5,49),_SecondImageBuffer+30,_ImageBuffer+(40*38)+21)    ; Draw the rope 
     END
 
 digging_for_gold
@@ -1317,7 +1317,7 @@ end_dog_check
     ; Is the dog dead?
     JUMP_IF_FALSE(dog_alive,CHECK_ITEM_FLAG(e_ITEM_Dog,ITEM_FLAG_DISABLED))
       ; Draw the dead dog
-      DRAW_BITMAP(LOADER_SPRITE_DOG,BLOCK_SIZE(6,12),40,_SecondImageBuffer+40*24+7,_ImageBuffer+(40*44)+18)    
+      DRAW_BITMAP(LOADER_SPRITE_DOG,BLOCK_SIZE(6,12),_SecondImageBuffer+40*24+7,_ImageBuffer+(40*44)+18)    
       ; Text describing the dead dog
       WAIT(DELAY_FIRST_BUBBLE)
       GOSUB(_SubCollateralDamage)
@@ -1325,7 +1325,7 @@ end_dog_check
       
 dog_alive
     ; Draw the Growling dog
-    DRAW_BITMAP(LOADER_SPRITE_DOG,BLOCK_SIZE(7,30),40,_SecondImageBuffer+(40*31)+0,_ImageBuffer+(40*25)+18)    
+    DRAW_BITMAP(LOADER_SPRITE_DOG,BLOCK_SIZE(7,30),_SecondImageBuffer+(40*31)+0,_ImageBuffer+(40*25)+18)    
 
     ; Text describing the growling dog
     WAIT(DELAY_FIRST_BUBBLE)
@@ -1338,22 +1338,22 @@ dog_alive
     _BUBBLE_LINE(5,105,0,"Is that Cerberus?")
 #endif    
 dog_growls
-    DRAW_BITMAP(LOADER_SPRITE_DOG,BLOCK_SIZE(10,15),40,_SecondImageBuffer+(40*62)+0,$a000+(40*10)+16)        // Erase the area under the grwwww
-    DRAW_BITMAP(LOADER_SPRITE_DOG,BLOCK_SIZE(7,7),40,_SecondImageBuffer+(40*24)+0,$a000+(40*20)+18)    
+    DRAW_BITMAP(LOADER_SPRITE_DOG,BLOCK_SIZE(10,15),_SecondImageBuffer+(40*62)+0,$a000+(40*10)+16)        // Erase the area under the grwwww
+    DRAW_BITMAP(LOADER_SPRITE_DOG,BLOCK_SIZE(7,7),_SecondImageBuffer+(40*24)+0,$a000+(40*20)+18)    
     WAIT(15)
-    DRAW_BITMAP(LOADER_SPRITE_DOG,BLOCK_SIZE(10,15),40,_SecondImageBuffer+(40*62)+0,$a000+(40*10)+16)        // Erase the area under the grwwww
-    DRAW_BITMAP(LOADER_SPRITE_DOG,BLOCK_SIZE(7,7),40,_SecondImageBuffer+(40*24)+0,$a000+(40*19)+19)    
+    DRAW_BITMAP(LOADER_SPRITE_DOG,BLOCK_SIZE(10,15),_SecondImageBuffer+(40*62)+0,$a000+(40*10)+16)        // Erase the area under the grwwww
+    DRAW_BITMAP(LOADER_SPRITE_DOG,BLOCK_SIZE(7,7),_SecondImageBuffer+(40*24)+0,$a000+(40*19)+19)    
     WAIT(10)
-    DRAW_BITMAP(LOADER_SPRITE_DOG,BLOCK_SIZE(10,15),40,_SecondImageBuffer+(40*62)+0,$a000+(40*10)+16)        // Erase the area under the grwwww
-    DRAW_BITMAP(LOADER_SPRITE_DOG,BLOCK_SIZE(7,7),40,_SecondImageBuffer+(40*24)+0,$a000+(40*18)+18)    
+    DRAW_BITMAP(LOADER_SPRITE_DOG,BLOCK_SIZE(10,15),_SecondImageBuffer+(40*62)+0,$a000+(40*10)+16)        // Erase the area under the grwwww
+    DRAW_BITMAP(LOADER_SPRITE_DOG,BLOCK_SIZE(7,7),_SecondImageBuffer+(40*24)+0,$a000+(40*18)+18)    
     WAIT(12)
-    DRAW_BITMAP(LOADER_SPRITE_DOG,BLOCK_SIZE(10,15),40,_SecondImageBuffer+(40*62)+0,$a000+(40*10)+16)        // Erase the area under the grwwww
-    DRAW_BITMAP(LOADER_SPRITE_DOG,BLOCK_SIZE(7,7),40,_SecondImageBuffer+(40*24)+0,$a000+(40*17)+17)    
+    DRAW_BITMAP(LOADER_SPRITE_DOG,BLOCK_SIZE(10,15),_SecondImageBuffer+(40*62)+0,$a000+(40*10)+16)        // Erase the area under the grwwww
+    DRAW_BITMAP(LOADER_SPRITE_DOG,BLOCK_SIZE(7,7),_SecondImageBuffer+(40*24)+0,$a000+(40*17)+17)    
     WAIT(8)
-    DRAW_BITMAP(LOADER_SPRITE_DOG,BLOCK_SIZE(10,15),40,_SecondImageBuffer+(40*62)+0,$a000+(40*10)+16)        // Erase the area under the grwwww
-    DRAW_BITMAP(LOADER_SPRITE_DOG,BLOCK_SIZE(7,7),40,_SecondImageBuffer+(40*24)+0,$a000+(40*16)+18)    
+    DRAW_BITMAP(LOADER_SPRITE_DOG,BLOCK_SIZE(10,15),_SecondImageBuffer+(40*62)+0,$a000+(40*10)+16)        // Erase the area under the grwwww
+    DRAW_BITMAP(LOADER_SPRITE_DOG,BLOCK_SIZE(7,7),_SecondImageBuffer+(40*24)+0,$a000+(40*16)+18)    
     WAIT(10)
-    DRAW_BITMAP(LOADER_SPRITE_DOG,BLOCK_SIZE(10,15),40,_SecondImageBuffer+(40*62)+0,$a000+(40*10)+16)        // Erase the area under the grwwww
+    DRAW_BITMAP(LOADER_SPRITE_DOG,BLOCK_SIZE(10,15),_SecondImageBuffer+(40*62)+0,$a000+(40*10)+16)        // Erase the area under the grwwww
     WAIT(50)
     JUMP(dog_growls)
     END
@@ -1427,7 +1427,7 @@ end_dog_check
     ; Is the dog dead?
     JUMP_IF_FALSE(dog_alive,CHECK_ITEM_FLAG(e_ITEM_Dog,ITEM_FLAG_DISABLED))
       ; Draw the dead dog
-      DRAW_BITMAP(LOADER_SPRITE_DOG,BLOCK_SIZE(17,34),40,_SecondImageBuffer+40*95,_ImageBuffer+(40*93)+12)    
+      DRAW_BITMAP(LOADER_SPRITE_DOG,BLOCK_SIZE(17,34),_SecondImageBuffer+40*95,_ImageBuffer+(40*93)+12)    
       ; Text describing the dead dog
       WAIT(DELAY_FIRST_BUBBLE)
       GOSUB(_SubCollateralDamage)
@@ -1440,7 +1440,7 @@ dog_alive
     QUICK_MESSAGE("Oops...")
     FADE_BUFFER
     UNLOCK_ACHIEVEMENT(ACHIEVEMENT_MAIMED_BY_DOG)
-    DRAW_BITMAP(LOADER_SPRITE_DOG,BLOCK_SIZE(21,128),40,_SecondImageBuffer+19,_ImageBuffer+(40*0)+10)    ; Draw the attacking dog     
+    DRAW_BITMAP(LOADER_SPRITE_DOG,BLOCK_SIZE(21,128),_SecondImageBuffer+19,_ImageBuffer+(40*0)+10)    ; Draw the attacking dog     
     FADE_BUFFER
     LOAD_MUSIC(LOADER_MUSIC_GAME_OVER)
     WAIT(DELAY_FIRST_BUBBLE)
@@ -1496,7 +1496,7 @@ _gDescriptionStudyRoom
 
     ; Is the gun cabinet open?
     JUMP_IF_TRUE(cabinet_closed,CHECK_ITEM_FLAG(e_ITEM_GunCabinet,ITEM_FLAG_CLOSED))
-    DRAW_BITMAP(LOADER_SPRITE_SAFE_ROOM,BLOCK_SIZE(6,50),40,_SecondImageBuffer+40*0+8,_ImageBuffer+40*13+24)       ; Cabinet open
+    DRAW_BITMAP(LOADER_SPRITE_SAFE_ROOM,BLOCK_SIZE(6,50),_SecondImageBuffer+40*0+8,_ImageBuffer+40*13+24)       ; Cabinet open
 cabinet_closed
 
     WAIT(DELAY_FIRST_BUBBLE)
@@ -1614,7 +1614,7 @@ _gDescriptionGamesRoom
 
     ; Is the tv cabinet open?
     JUMP_IF_TRUE(cabinet_closed,CHECK_ITEM_FLAG(e_ITEM_TVCabinet,ITEM_FLAG_CLOSED))
-    DRAW_BITMAP(LOADER_SPRITE_SAFE_ROOM,BLOCK_SIZE(6,12),40,_SecondImageBuffer+40*100+34,_ImageBuffer+40*58+24)       ; Cabinet open
+    DRAW_BITMAP(LOADER_SPRITE_SAFE_ROOM,BLOCK_SIZE(6,12),_SecondImageBuffer+40*100+34,_ImageBuffer+40*58+24)       ; Cabinet open
 cabinet_closed
 
     WAIT(DELAY_FIRST_BUBBLE)
@@ -1705,12 +1705,12 @@ _gDescriptionKitchen
 
     ; Is the fridge open?
     JUMP_IF_TRUE(fridge_closed,CHECK_ITEM_FLAG(e_ITEM_Fridge,ITEM_FLAG_CLOSED))
-    DRAW_BITMAP(LOADER_SPRITE_SAFE_ROOM,BLOCK_SIZE(4,52),40,_SecondImageBuffer+40*64+0,_ImageBuffer+40*22+26)       ; Fridge open
+    DRAW_BITMAP(LOADER_SPRITE_SAFE_ROOM,BLOCK_SIZE(4,52),_SecondImageBuffer+40*64+0,_ImageBuffer+40*22+26)       ; Fridge open
 fridge_closed
 
     ; Is the medicine cabinet open?
     JUMP_IF_TRUE(medicine_cabinet_closed,CHECK_ITEM_FLAG(e_ITEM_Medicinecabinet,ITEM_FLAG_CLOSED))
-    DRAW_BITMAP(LOADER_SPRITE_SAFE_ROOM,BLOCK_SIZE(4,23),40,_SecondImageBuffer+40*64+4,_ImageBuffer+40*30+33)       ; Medicine cabinet open
+    DRAW_BITMAP(LOADER_SPRITE_SAFE_ROOM,BLOCK_SIZE(4,23),_SecondImageBuffer+40*64+4,_ImageBuffer+40*30+33)       ; Medicine cabinet open
 medicine_cabinet_closed
 
     ; Spawn water if required
@@ -1939,7 +1939,7 @@ _gDescriptionDarkerCellar
             BLIT_BLOCK(LOADER_SPRITE_SAFE_ROOM,5,16)                     ; Draw the open panel
                     _IMAGE(8,51)
                     _BUFFER(25,24)
-        //DRAW_BITMAP(LOADER_SPRITE_SAFE_ROOM,BLOCK_SIZE(4,23),40,_SecondImageBuffer+40*64+4,_ImageBuffer+40*30+33)       ; Medicine cabinet open
+        //DRAW_BITMAP(LOADER_SPRITE_SAFE_ROOM,BLOCK_SIZE(4,23),_SecondImageBuffer+40*64+4,_ImageBuffer+40*30+33)       ; Medicine cabinet open
 alarm_panel_closed
 
         // TODO: SET_LOCATION_DIRECTION(e_LOC_DARKCELLARROOM,e_DIRECTION_WEST,e_LOC_STORAGE_ROOM)      ; Enable the west direction
@@ -2195,7 +2195,7 @@ _gDescriptionGuestBedroom
 .(
     ; Is the drawer cabinet open?
     JUMP_IF_TRUE(drawer_closed,CHECK_ITEM_FLAG(e_ITEM_Drawer,ITEM_FLAG_CLOSED))
-    DRAW_BITMAP(LOADER_SPRITE_SAFE_ROOM,BLOCK_SIZE(4,9),40,_SecondImageBuffer+40*117+0,_ImageBuffer+40*69+7)       ; Drawer open
+    DRAW_BITMAP(LOADER_SPRITE_SAFE_ROOM,BLOCK_SIZE(4,9),_SecondImageBuffer+40*117+0,_ImageBuffer+40*69+7)       ; Drawer open
 drawer_closed
 
     ; Is the Dune book still in the guest bedroom
@@ -2271,7 +2271,7 @@ _gDescriptionWestGallery
     ; Is the curtain closed?
     JUMP_IF_FALSE(curtain_open,CHECK_ITEM_FLAG(e_ITEM_Curtain,ITEM_FLAG_CLOSED))
 curtain_closed
-    DRAW_BITMAP(LOADER_SPRITE_SAFE_ROOM,BLOCK_SIZE(8,62),40,_SecondImageBuffer+0,_ImageBuffer+40*5+20)       ; Closed curtain
+    DRAW_BITMAP(LOADER_SPRITE_SAFE_ROOM,BLOCK_SIZE(8,62),_SecondImageBuffer+0,_ImageBuffer+40*5+20)       ; Closed curtain
     WAIT(DELAY_FIRST_BUBBLE)
     BLACK_BUBBLE(1)
 #ifdef LANGUAGE_FR
@@ -2387,14 +2387,12 @@ _gDescriptionTinyToilet
     END
 .)
 
-// MARK: Master Bedroom
-_gDescriptionMasterBedRoom
+// Visual scene state for the master bedroom — shared between _gDescriptionMasterBedRoom (which then waits and shows the bubble/message)
+// and _SearchThug (which calls it after reloading the picture, before painting the attacking-thug overlay).
+_DrawMasterBedroomItems
 .(
-    ; Is there a thug in the master bedroom
-    //JUMP_IF_FALSE(end_thug,CHECK_ITEM_LOCATION(e_ITEM_Thug,e_LOC_MASTERBEDROOM))
-
     ; Draw the shoes at the bottom of the bed
-    DRAW_BITMAP(LOADER_SPRITE_THUG,BLOCK_SIZE(7,15),40,_SecondImageBuffer+40*73+14,_ImageBuffer+40*112+3)       ; Shoes
+    DRAW_BITMAP(LOADER_SPRITE_THUG,BLOCK_SIZE(7,15),_SecondImageBuffer+40*73+14,_ImageBuffer+40*112+3)       ; Shoes
 
     ; Is the Knife in the master bedroom
     IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_SilverKnife,e_LOC_MASTERBEDROOM),show_knife)
@@ -2413,9 +2411,9 @@ _gDescriptionMasterBedRoom
     ; Is the thug alive?
     JUMP_IF_FALSE(thug_alive,CHECK_ITEM_FLAG(e_ITEM_Thug,ITEM_FLAG_DISABLED))
         ; Draw the dead thug 
-        DRAW_BITMAP(LOADER_SPRITE_THUG,BLOCK_SIZE(23,24),40,_SecondImageBuffer+0,_ImageBuffer+40*66+12)          ; Dead thug
-        DRAW_BITMAP(LOADER_SPRITE_THUG,BLOCK_SIZE(2,27),40,_SecondImageBuffer+40*24+17,_ImageBuffer+40*90+29)    ; Arm
-        DRAW_BITMAP(LOADER_SPRITE_THUG,BLOCK_SIZE(6,17),40,_SecondImageBuffer+40*0+24,_ImageBuffer+40*109+33)    ; Pillow on the floor
+        DRAW_BITMAP(LOADER_SPRITE_THUG,BLOCK_SIZE(23,24),_SecondImageBuffer+0,_ImageBuffer+40*66+12)          ; Dead thug
+        DRAW_BITMAP(LOADER_SPRITE_THUG,BLOCK_SIZE(2,27),_SecondImageBuffer+40*24+17,_ImageBuffer+40*90+29)    ; Arm
+        DRAW_BITMAP(LOADER_SPRITE_THUG,BLOCK_SIZE(6,17),_SecondImageBuffer+40*0+24,_ImageBuffer+40*109+33)    ; Pillow on the floor
 
         ; Is the Pistol still in the master bedroom
         IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_Pistol,e_LOC_MASTERBEDROOM),show_pistol)
@@ -2438,8 +2436,18 @@ _gDescriptionMasterBedRoom
 
 thug_alive
     ; Draw the thug Sleeping
-    DRAW_BITMAP(LOADER_SPRITE_THUG,BLOCK_SIZE(18,37),40,_SecondImageBuffer+40*91,_ImageBuffer+40*52+17)   ; Thug sleeping
-    DRAW_BITMAP(LOADER_SPRITE_THUG,BLOCK_SIZE(8,23),40,_SecondImageBuffer+32,_ImageBuffer+40*33+30)       ; Zzzz over the head
+    DRAW_BITMAP(LOADER_SPRITE_THUG,BLOCK_SIZE(18,37),_SecondImageBuffer+40*91,_ImageBuffer+40*52+17)   ; Thug sleeping
+    DRAW_BITMAP(LOADER_SPRITE_THUG,BLOCK_SIZE(8,23),_SecondImageBuffer+32,_ImageBuffer+40*33+30)       ; Zzzz over the head
+    RETURN
+.)
+
+
+// MARK: Master Bedroom
+_gDescriptionMasterBedRoom
+.(
+    GOSUB(_DrawMasterBedroomItems)
+
+    ; If we get here, the thug is alive — the dead branch terminated the stream inside the subroutine.
     ; Draw the message
     WAIT(DELAY_FIRST_BUBBLE)
     WHITE_BUBBLE(2)
@@ -2632,7 +2640,7 @@ _gDescriptionGameOverLost
     DECREASE_SCORE(MALUS_POINTS_GAME_OVER)    
     STOP_CLOCK
 _gDescriptionGameOverWon
-    DRAW_BITMAP(LOADER_SPRITE_THE_END,BLOCK_SIZE(20,95),20,_SecondImageBuffer,_ImageBuffer+(40*16)+10)     ; Draw the 'The End' logo
+    DRAW_BITMAP_STRIDE(LOADER_SPRITE_THE_END,BLOCK_SIZE(20,95),20,_SecondImageBuffer,_ImageBuffer+(40*16)+10)     ; Draw the 'The End' logo
     WAIT(50*2)                                                                                             ; Wait a couple seconds
     FADE_BUFFER
     STOP_MUSIC()
@@ -5304,6 +5312,7 @@ rope_not_attached
 
     WAIT(50*3)
 
+    CLEAR_BUBBLES   ; bubble belongs to the hole-inspection scene; drop it before scene refresh redraws into the safe room
     RETURN
 .)
 
@@ -5473,6 +5482,8 @@ girl_at_the_window
         INFO_MESSAGE("No way up from this side.")
 #endif        
     ENDIF(window_closed)
+
+    CLEAR_BUBBLES   ; bubble belongs to the window-inspection scene; drop it before scene refresh redraws into the safe room
     RETURN
 .)
 
@@ -7083,8 +7094,8 @@ _SearchThug
     JUMP_IF_TRUE(thug_disabled,CHECK_ITEM_FLAG(e_ITEM_Thug,ITEM_FLAG_DISABLED))
         ; If the thug was not disabled, attempting to search him will lead to the player immediate death
         SET_CUT_SCENE(1)
-        DRAW_BITMAP(LOADER_SPRITE_THUG,BLOCK_SIZE(3,28),40,_SecondImageBuffer+40*100+19,_ImageBuffer+40*37+30)   ; Thug opening his eye
-        DRAW_BITMAP(LOADER_SPRITE_THUG,BLOCK_SIZE(5,13),40,_SecondImageBuffer+40*59+14,_ImageBuffer+40*33+33)   ; Erase the Zzzz
+        DRAW_BITMAP(LOADER_SPRITE_THUG,BLOCK_SIZE(3,28),_SecondImageBuffer+40*100+19,_ImageBuffer+40*37+30)   ; Thug opening his eye
+        DRAW_BITMAP(LOADER_SPRITE_THUG,BLOCK_SIZE(5,13),_SecondImageBuffer+40*59+14,_ImageBuffer+40*33+33)   ; Erase the Zzzz
         FADE_BUFFER
         CLEAR_TEXT_AREA(1)
 #ifdef LANGUAGE_FR
@@ -7094,9 +7105,13 @@ _SearchThug
 #else
         INFO_MESSAGE("Should have dealt with him first.")
 #endif    
-        DRAW_BITMAP(LOADER_SPRITE_THUG,BLOCK_SIZE(4,33),40,_SecondImageBuffer+40*24+13,_ImageBuffer+(40*52)+31)      ; Erase the head of the sleeping thug
-        DRAW_BITMAP(LOADER_SPRITE_THUG,BLOCK_SIZE(18,105),40,_SecondImageBuffer+40*23+22,_ImageBuffer+(40*21)+13)    ; Draw the attacking thug
-        DRAW_BITMAP(LOADER_SPRITE_THUG,BLOCK_SIZE(13,56),40,_SecondImageBuffer+40*34+0,_ImageBuffer+(40*1)+23)       ; Now You Die!
+        ; Reload the bedroom picture and rebuild every static overlay so the "notably easier" speech bubble pixels are wiped from the buffer.
+        DISPLAY_IMAGE_NO_CLEAR_TEXT(LOADER_PICTURE_LOCATIONS_START+e_LOC_MASTERBEDROOM)
+        CLEAR_BUBBLES
+        GOSUB(_DrawMasterBedroomItems)
+        DRAW_BITMAP(LOADER_SPRITE_THUG,BLOCK_SIZE(4,33),_SecondImageBuffer+40*24+13,_ImageBuffer+(40*52)+31)      ; Erase the head of the sleeping thug
+        DRAW_BITMAP(LOADER_SPRITE_THUG,BLOCK_SIZE(18,105),_SecondImageBuffer+40*23+22,_ImageBuffer+(40*21)+13)    ; Draw the attacking thug
+        DRAW_BITMAP(LOADER_SPRITE_THUG,BLOCK_SIZE(13,56),_SecondImageBuffer+40*34+0,_ImageBuffer+(40*1)+23)       ; Now You Die!
         FADE_BUFFER
         PLAY_SOUND(_ShootData)
         ; Draw the message
@@ -8422,7 +8437,7 @@ _OneHourAlarmWarning
             _BUFFER(17,63)
     FADE_BUFFER
     PLAY_SOUND(_WatchBeepData)                                          ; Play the beep beep beep sound
-    DRAW_BITMAP(LOADER_SPRITE_BEEP,BLOCK_SIZE(12,38),12,_SecondImageBuffer,$a000+(40*10)+27)        // Beep!
+    DRAW_BITMAP_STRIDE(LOADER_SPRITE_BEEP,BLOCK_SIZE(12,38),12,_SecondImageBuffer,$a000+(40*10)+27)        // Beep!
 
     CLEAR_TEXT_AREA(5)                                                  ; MAGENTA background
 #ifdef LANGUAGE_FR
@@ -8448,7 +8463,7 @@ _OneHourAlarmWarning
 #endif
 
     PLAY_SOUND(_WatchBeepData)                                          ; Play the beep beep beep sound
-    DRAW_BITMAP(LOADER_SPRITE_BEEP,BLOCK_SIZE(12,38),12,_SecondImageBuffer,$a000+(40*81)+3)        // Beep!
+    DRAW_BITMAP_STRIDE(LOADER_SPRITE_BEEP,BLOCK_SIZE(12,38),12,_SecondImageBuffer,$a000+(40*81)+3)        // Beep!
     BLIT_BLOCK(LOADER_SPRITE_ITEMS,2,9)                                 ; Overlay the :58 patch
             _IMAGE(28,34)
             _SCREEN(21,63)
@@ -8467,7 +8482,7 @@ _TimeOutGameOver
     DISPLAY_IMAGE(LOADER_PICTURE_WATCH_ALARM)
 
     PLAY_SOUND(_WatchBeepData)                                          ; Play the beep beep beep sound
-    DRAW_BITMAP(LOADER_SPRITE_BEEP,BLOCK_SIZE(12,38),12,_SecondImageBuffer,$a000+(40*10)+27)        // Beep!
+    DRAW_BITMAP_STRIDE(LOADER_SPRITE_BEEP,BLOCK_SIZE(12,38),12,_SecondImageBuffer,$a000+(40*10)+27)        // Beep!
     CLEAR_TEXT_AREA(1)                                                  ; RED background
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("Trop lent. Mince.")
@@ -8478,7 +8493,7 @@ _TimeOutGameOver
 #endif    
 
     PLAY_SOUND(_WatchBeepData)                                          ; Play the beep beep beep sound
-    DRAW_BITMAP(LOADER_SPRITE_BEEP,BLOCK_SIZE(12,38),12,_SecondImageBuffer,$a000+(40*81)+3)        // Beep!
+    DRAW_BITMAP_STRIDE(LOADER_SPRITE_BEEP,BLOCK_SIZE(12,38),12,_SecondImageBuffer,$a000+(40*81)+3)        // Beep!
     CLEAR_TEXT_AREA(1)                                                  ; RED background
 #ifdef LANGUAGE_FR
     INFO_MESSAGE("...plus de temps.")

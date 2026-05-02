@@ -75,6 +75,8 @@ _ByteStreamCallbacks
     .word _ByteStreamCommand_COMBINE_ITEMS
     .word _ByteStreamCommand_KEYPRESS_MESSAGE
     .word _ClearBubbleCount                              ; COMMAND_CLEAR_BUBBLES — alias to the existing helper (no args, returns via rts)
+    .word _ByteStreamCommand_SET_STRIDE                  ; COMMAND_SET_STRIDE — sets _gSourceStride for the next BITMAP, auto-reverts to 40
+    .word _ByteStreamCommand_DISPLAY_IMAGE_NO_CLEAR_TEXT
 
 
 ; Checks if there's a stream delay active.
@@ -1602,7 +1604,7 @@ _DrawRectangleOutlineAsm
 ; - Loads an image
 ; - Display a title string
 ; - Fades the image in
-; .byt COMMAND_FULLSCREEN_ITEM,imagedId,description,0
+; .byt COMMAND_FULLSCREEN_ITEM,imageId,description,0
 _ByteStreamCommand_DISPLAY_IMAGE
 .(
     jsr _ByteStreamCommand_DISPLAY_IMAGE_NOBLIT
@@ -1616,7 +1618,7 @@ _ByteStreamCommand_DISPLAY_IMAGE_ONLY
     jmp _BlitBufferToHiresWindow
 .)    
 
-; .byt COMMAND_FULLSCREEN_ITEM_NOBLIT,imagedId,description,0
+; .byt COMMAND_FULLSCREEN_ITEM_NOBLIT,imageId,description,0
 _ByteStreamCommand_DISPLAY_IMAGE_NOBLIT
 .(  
     ; _param0=paper color
@@ -1661,7 +1663,15 @@ _ByteStreamCommand_CLEAR_FULL_TEXT_AREA
 .)
 
 
-; .byt COMMAND_BITMAP,imageId,w,h,stride
+; .byt COMMAND_SET_STRIDE,stride
+_ByteStreamCommand_SET_STRIDE
+    jsr _ByteStreamGetNextByte
+    stx _gSourceStride
+    rts
+
+
+; .byt COMMAND_BITMAP,imageId,w,h
+; Stride is read from _gSourceStride (defaults to 40, set by SET_STRIDE for one-shot overrides).
 _ByteStreamCommand_BITMAP
 .( 
 	; unsigned char loaderId = *gCurrentStream++;
@@ -1685,8 +1695,6 @@ image_already_loaded
     stx _gDrawWidth
     jsr _ByteStreamGetNextByte
     stx _gDrawHeight
-    jsr _ByteStreamGetNextByte
-    stx _gSourceStride
 
     jsr _ByteStreamGetNextByte
     stx _gDrawSourceAddress+0
@@ -1698,7 +1706,10 @@ image_already_loaded
     jsr _ByteStreamGetNextByte
     stx _gDrawAddress+1
 
-    jmp _BlitSprite
+    jsr _BlitSprite
+    lda #40
+    sta _gSourceStride                   ; auto-revert SET_STRIDE one-shot
+    rts
 .)
 
 
