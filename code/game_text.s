@@ -1261,6 +1261,7 @@ _gDescriptionTiledPatio
         BLIT_BLOCK(LOADER_SPRITE_PANIC_ROOM_WINDOW,2,10)                     ; Draw the speech bubble triangle
                 _IMAGE(6,31)
                 _SCREEN(3,40)
+        CLEAR_BUBBLES
 girl_is_outside        
 
     WAIT(DELAY_FIRST_BUBBLE)
