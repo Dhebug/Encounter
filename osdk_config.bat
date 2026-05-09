@@ -48,9 +48,10 @@
 :: 1.2.6 - Reordered list of words, improved net handling, improved containers selection, fixes to the inventory size limits
 :: 1.3.0 - So many changes!
 :: 1.3.1 - Quite a few changes resulting of the game tests and review by YagmanX and MattBrush
-:: 1.3.2 - 
-SET VERSION=1.3.1
-SET VERSION=1.3.0
+:: 1.4.0 - Optimizations, visible in-game objects, new interactions
+:: 1.4.1 -
+::
+SET VERSION=1.4.1
 SET BASENAME=EncounterHD
 
 :: Disk geometry parameters: These are passed to the floppy builder and will impact the floppy disk format.
