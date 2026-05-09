@@ -2180,6 +2180,7 @@ _gDescriptionBoxRoom
 _gDescriptionClassyBathRoom
 _gDescriptionTinyToilet
 _gDescriptionMasterBedRoom
+_DrawMasterBedroomItems
 #else
 // MARK: Child Bedroom
 _gDescriptionChildBedroom
