@@ -12,7 +12,12 @@
             // - Click on the drop-down menu next to Terminal › Integrated › Default Profile: Windows and select Command Prompt.
             "label": "osdk_build_and_run",
             "type": "shell",
-            "command": "osdk_execute.bat",
+            "command": "osdk_execute.bat"
+        },
+        {
+            "label": "osdk_build",
+            "type": "shell",
+            "command": "osdk_build.bat",
             "group": {
                 "kind": "build",
                 "isDefault": true

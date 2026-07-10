@@ -32,7 +32,7 @@ IF ERRORLEVEL 1 GOTO Error
 
 ECHO.
 ECHO %ESC%[96m== Assembling loader ==%ESC%[0m
-%osdk%\bin\xa -DASSEMBLER=XA -DFREQUENCY_%FREQUENCY% -DDISPLAYINFO=%DISPLAYINFO% loader.asm -o ..\build\files\loader.o -l ..\build\symbols_Loader
+%osdk%\bin\xa -DASSEMBLER=XA -DFREQUENCY_%FREQUENCY% -DDISPLAYINFO=%DISPLAYINFO% loader.asm -o ..\build\files\loader.o -l ..\build\symbols_Loader -S ..\build\symbols_ext_Loader
 IF ERRORLEVEL 1 GOTO Error
 
 ::IF NOT EXIST BUILD\symbols GOTO NoSymbol
@@ -58,6 +58,7 @@ CALL %OSDK%\bin\make.bat %OSDKFILE%
 IF ERRORLEVEL 1 GOTO Error
 copy build\final.out ..\build\files\KernelProgram.o >NUL
 copy build\symbols ..\build\symbols_Kernel >NUL
+copy build\symbols_ext ..\build\symbols_ext_Kernel >NUL 2>NUL
 
 :EndKernel
 
@@ -80,8 +81,10 @@ CALL %OSDK%\bin\make.bat %OSDKFILE%
 IF ERRORLEVEL 1 GOTO Error
 copy build\final.out ..\build\files\SplashProgram.o >NUL
 copy build\symbols+..\build\symbols_Loader+..\build\symbols_Kernel ..\build\symbols_SplashProgram >NUL
-IF %TEST_MODULE%==SPLASH COPY build\symbols+..\build\symbols_Loader+..\build\symbols_Kernel %OSDK%\Oricutron\symbols >NUL
-IF %TEST_MODULE%==SPLASH SET BREAKPOINTS=%BREAKPOINTS_SPLASH%
+copy build\symbols_ext ..\build\symbols_ext_SplashProgram >NUL 2>NUL
+IF "%TEST_MODULE%"=="SPLASH" COPY build\symbols+..\build\symbols_Loader+..\build\symbols_Kernel %OSDK%\Oricutron\symbols >NUL
+IF "%TEST_MODULE%"=="SPLASH" COPY ..\build\symbols_ext_Loader+..\build\symbols_ext_Kernel+..\build\symbols_ext_SplashProgram ..\build\symbols_debug >NUL
+IF "%TEST_MODULE%"=="SPLASH" SET BREAKPOINTS=%BREAKPOINTS_SPLASH%
 :EndSplash
 
 
@@ -101,8 +104,10 @@ CALL %OSDK%\bin\make.bat %OSDKFILE%
 IF ERRORLEVEL 1 GOTO Error
 copy build\final.out ..\build\files\IntroProgram.o >NUL
 copy build\symbols+..\build\symbols_Loader+..\build\symbols_Kernel ..\build\symbols_IntroProgram >NUL
-IF %TEST_MODULE%==INTRO COPY build\symbols+..\build\symbols_Loader+..\build\symbols_Kernel %OSDK%\Oricutron\symbols >NUL
-IF %TEST_MODULE%==INTRO SET BREAKPOINTS=%BREAKPOINTS_INTRO%
+copy build\symbols_ext ..\build\symbols_ext_IntroProgram >NUL 2>NUL
+IF "%TEST_MODULE%"=="INTRO" COPY build\symbols+..\build\symbols_Loader+..\build\symbols_Kernel %OSDK%\Oricutron\symbols >NUL
+IF "%TEST_MODULE%"=="INTRO" COPY ..\build\symbols_ext_Loader+..\build\symbols_ext_Kernel+..\build\symbols_ext_IntroProgram ..\build\symbols_debug >NUL
+IF "%TEST_MODULE%"=="INTRO" SET BREAKPOINTS=%BREAKPOINTS_INTRO%
 :EndIntro
 
 
@@ -122,8 +127,10 @@ CALL %OSDK%\bin\make.bat %OSDKFILE%
 IF ERRORLEVEL 1 GOTO Error
 copy build\final.out ..\build\files\OutroProgram.o >NUL
 copy build\symbols+..\build\symbols_Loader+..\build\symbols_Kernel ..\build\symbols_OutroProgram >NUL
-IF %TEST_MODULE%==OUTRO COPY build\symbols+..\build\symbols_Loader+..\build\symbols_Kernel %OSDK%\Oricutron\symbols >NUL
-IF %TEST_MODULE%==OUTRO SET BREAKPOINTS=%BREAKPOINTS_OUTRO%
+copy build\symbols_ext ..\build\symbols_ext_OutroProgram >NUL 2>NUL
+IF "%TEST_MODULE%"=="OUTRO" COPY build\symbols+..\build\symbols_Loader+..\build\symbols_Kernel %OSDK%\Oricutron\symbols >NUL
+IF "%TEST_MODULE%"=="OUTRO" COPY ..\build\symbols_ext_Loader+..\build\symbols_ext_Kernel+..\build\symbols_ext_OutroProgram ..\build\symbols_debug >NUL
+IF "%TEST_MODULE%"=="OUTRO" SET BREAKPOINTS=%BREAKPOINTS_OUTRO%
 :EndOutro
 
 
@@ -144,8 +151,10 @@ IF ERRORLEVEL 1 GOTO Error
 copy build\final.out ..\build\files\GameProgram.o >NUL
 ::copy build\symbols+..\build\symbols_Loader+..\build\symbols_Kernel+..\build\symbols_MonkeyKing ..\build\symbols_GameProgram >NUL
 copy build\symbols+..\build\symbols_Loader+..\build\symbols_Kernel ..\build\symbols_GameProgram >NUL
-IF %TEST_MODULE%==GAME COPY ..\build\symbols_GameProgram %OSDK%\Oricutron\symbols >NUL
-IF %TEST_MODULE%==GAME SET BREAKPOINTS=%BREAKPOINTS_GAME%
+copy build\symbols_ext ..\build\symbols_ext_GameProgram >NUL 2>NUL
+IF "%TEST_MODULE%"=="GAME" COPY ..\build\symbols_GameProgram %OSDK%\Oricutron\symbols >NUL
+IF "%TEST_MODULE%"=="GAME" COPY ..\build\symbols_ext_Loader+..\build\symbols_ext_Kernel+..\build\symbols_ext_GameProgram ..\build\symbols_debug >NUL
+IF "%TEST_MODULE%"=="GAME" SET BREAKPOINTS=%BREAKPOINTS_GAME%
 :EndGame
 
 
@@ -165,6 +174,7 @@ CALL %OSDK%\bin\make.bat %OSDKFILE%
 IF ERRORLEVEL 1 GOTO Error
 copy build\final.out ..\build\files\monkey_king.o >NUL
 copy build\symbols ..\build\symbols_MonkeyKing >NUL
+copy build\symbols_ext ..\build\symbols_ext_MonkeyKing >NUL 2>NUL
 :EndMonkeyKing
 
 ::

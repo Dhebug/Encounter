@@ -1,0 +1,51 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "oric-debug",
+            "request": "launch",
+            "name": "Build & Debug",
+            "emulatorPath": "${env:OSDK}/Oricutron/Oricutron.exe",
+            "diskImage": "${workspaceFolder}/build/debug.dsk",
+            "emulatorArgs": ["-m", "atmos", "-R", "soft", "--scanlines", "off"],
+            "port": 6510,
+            "symbolFile": "${workspaceFolder}/build/symbols_debug",
+            "stopOnAttach": true,
+            "logLevel": 2,
+            "build": {
+                "command": "osdk_build.bat",
+                "cwd": "${workspaceFolder}",
+                "output": "${workspaceFolder}/build/debug.dsk",
+                "sources": ["${workspaceFolder}/code"]
+            }
+        },
+        {
+            "type": "oric-debug",
+            "request": "launch",
+            "name": "Build & Run",
+            "emulatorPath": "${env:OSDK}/Oricutron/Oricutron.exe",
+            "diskImage": "${workspaceFolder}/build/debug.dsk",
+            "emulatorArgs": ["-m", "atmos", "-R", "soft", "--scanlines", "off"],
+            "port": 6510,
+            "symbolFile": "${workspaceFolder}/build/symbols_debug",
+            "stopOnAttach": false,
+            "logLevel": 2,
+            "build": {
+                "command": "osdk_build.bat",
+                "cwd": "${workspaceFolder}",
+                "output": "${workspaceFolder}/build/debug.dsk",
+                "sources": ["${workspaceFolder}/code"]
+            }
+        },
+        {
+            "type": "oric-debug",
+            "request": "attach",
+            "name": "Attach to Oricutron",
+            "host": "localhost",
+            "port": 6510,
+            "symbolFile": "${workspaceFolder}/build/symbols_debug",
+            "stopOnAttach": true,
+            "logLevel": 2
+        }
+    ]
+}

@@ -73,7 +73,7 @@ call ..\bin\_build_pass.bat > NUL
 
 ECHO ---------------- 2nd pass ----------------
 set DISPLAYINFO=1
-SET OSDKXAPARAMS=-DOSDK_ZP_START=0 -DLANGUAGE_%LANGUAGE% -DFREQUENCY_%FREQUENCY% -DPRODUCT_TYPE_%PRODUCT_TYPE% -DDISPLAYINFO=1
+SET OSDKXAPARAMS=-DOSDK_ZP_START=0 -DLANGUAGE_%LANGUAGE% -DFREQUENCY_%FREQUENCY% -DPRODUCT_TYPE_%PRODUCT_TYPE% -DDISPLAYINFO=1 -S build\symbols_ext
 call ..\bin\_build_pass.bat
 IF ERRORLEVEL 1 GOTO Error
 
@@ -83,6 +83,8 @@ ECHO %ESC%[95m== Building final floppy ==%ESC%[0m
 %osdk%\bin\FloppyBuilder build floppybuilderscript.txt >..\build\floppy_builder_error.txt
 IF ERRORLEVEL 1 GOTO FloppyBuilderError
 type ..\build\floppy_builder_error.txt
+:: Copy disk to stable name for VS Code debug launcher
+copy ..\build\%OSDKDISK% ..\build\debug.dsk >NUL
 
 IF "%FINAL_TARGET_DISK%"=="" GOTO EndCopy
 ECHO Copying ..\build\%OSDKDISK% to %FINAL_TARGET_DISK%\%OSDKDISK%
