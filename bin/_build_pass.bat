@@ -76,7 +76,7 @@ SET OSDKLINK=-S ..\build\symbols_Kernel -g ..\build\kernel_exports.h -t _KernelE
 SET OSDKNAME=SplashProgram
 SET OSDKFILE=%OSDKFILE_SPLASH%
 SET OSDKCPPFLAGS=%OSDKCPPFLAGSCOPY% -DMODULE_SPLASH -DKERNEL_RESIDENT
-SET OSDKXAPARAMS=%OSDKXAPARAMSCOPY% -DMODULE_SPLASH -DKERNEL_RESIDENT
+SET OSDKXAPARAMS=%OSDKXAPARAMSCOPY% -DMODULE_SPLASH -DKERNEL_RESIDENT -DOSDK_MODULE_ID=0
 CALL %OSDK%\bin\make.bat %OSDKFILE%
 IF ERRORLEVEL 1 GOTO Error
 copy build\final.out ..\build\files\SplashProgram.o >NUL
@@ -99,7 +99,7 @@ SET OSDKLINK=-S ..\build\symbols_Kernel -g ..\build\kernel_exports.h -t _KernelE
 SET OSDKNAME=IntroProgram
 SET OSDKFILE=%OSDKFILE_INTRO%
 SET OSDKCPPFLAGS=%OSDKCPPFLAGSCOPY% -DMODULE_INTRO -DKERNEL_RESIDENT
-SET OSDKXAPARAMS=%OSDKXAPARAMSCOPY% -DMODULE_INTRO -DKERNEL_RESIDENT
+SET OSDKXAPARAMS=%OSDKXAPARAMSCOPY% -DMODULE_INTRO -DKERNEL_RESIDENT -DOSDK_MODULE_ID=1
 CALL %OSDK%\bin\make.bat %OSDKFILE%
 IF ERRORLEVEL 1 GOTO Error
 copy build\final.out ..\build\files\IntroProgram.o >NUL
@@ -122,7 +122,7 @@ SET OSDKLINK=-S ..\build\symbols_Kernel -g ..\build\kernel_exports.h -t _KernelE
 SET OSDKNAME=OutroProgram
 SET OSDKFILE=%OSDKFILE_OUTRO%
 SET OSDKCPPFLAGS=%OSDKCPPFLAGSCOPY% -DMODULE_OUTRO -DKERNEL_RESIDENT
-SET OSDKXAPARAMS=%OSDKXAPARAMSCOPY% -DMODULE_OUTRO -DKERNEL_RESIDENT
+SET OSDKXAPARAMS=%OSDKXAPARAMSCOPY% -DMODULE_OUTRO -DKERNEL_RESIDENT -DOSDK_MODULE_ID=3
 CALL %OSDK%\bin\make.bat %OSDKFILE%
 IF ERRORLEVEL 1 GOTO Error
 copy build\final.out ..\build\files\OutroProgram.o >NUL
@@ -145,7 +145,7 @@ SET OSDKLINK=-S ..\build\symbols_Kernel -g ..\build\kernel_exports.h -t _KernelE
 SET OSDKNAME=GameProgram
 SET OSDKFILE=%OSDKFILE_GAME%
 SET OSDKCPPFLAGS=%OSDKCPPFLAGSCOPY% -DMODULE_GAME -DKERNEL_RESIDENT
-SET OSDKXAPARAMS=%OSDKXAPARAMSCOPY% -DMODULE_GAME -DKERNEL_RESIDENT
+SET OSDKXAPARAMS=%OSDKXAPARAMSCOPY% -DMODULE_GAME -DKERNEL_RESIDENT -DOSDK_MODULE_ID=2
 CALL %OSDK%\bin\make.bat %OSDKFILE%
 IF ERRORLEVEL 1 GOTO Error
 copy build\final.out ..\build\files\GameProgram.o >NUL
@@ -169,13 +169,35 @@ SET OSDKLINK=-b -S ..\build\symbols_GameProgram -t _Minigame
 SET OSDKNAME=monkey_king
 SET OSDKFILE=%OSDKFILE_KING%
 SET OSDKCPPFLAGS=%OSDKCPPFLAGSCOPY% -DMODULE_MONKEY_KING
-SET OSDKXAPARAMS=%OSDKXAPARAMSCOPY% -DMODULE_MONKEY_KING
+SET OSDKXAPARAMS=%OSDKXAPARAMSCOPY% -DMODULE_MONKEY_KING -DOSDK_MODULE_ID=4
 CALL %OSDK%\bin\make.bat %OSDKFILE%
 IF ERRORLEVEL 1 GOTO Error
 copy build\final.out ..\build\files\monkey_king.o >NUL
 copy build\symbols ..\build\symbols_MonkeyKing >NUL
 copy build\symbols_ext ..\build\symbols_ext_MonkeyKing >NUL 2>NUL
 :EndMonkeyKing
+
+::
+:: Combined multi-module symbol file for the VS Code debugger (osdk-debug extension):
+:: resident (Loader+Kernel) followed by every built module under a #MODULE section.
+:: This is what makes the extension show the module selector and resolve per-module
+:: symbols. Manual module selection works today; AUTO-switching would additionally
+:: need the loader to stamp a resident _osdk_dbg_module byte with the matching id
+:: (not yet wired for Encounter — ids below are provisional). Missing per-module files
+:: (partial "test" builds) are skipped so the combined file still builds.
+::
+type ..\build\symbols_ext_Loader > ..\build\symbols_ext_combined
+type ..\build\symbols_ext_Kernel >> ..\build\symbols_ext_combined
+if exist ..\build\symbols_ext_SplashProgram echo #MODULE 0 Splash>> ..\build\symbols_ext_combined
+if exist ..\build\symbols_ext_SplashProgram type ..\build\symbols_ext_SplashProgram >> ..\build\symbols_ext_combined
+if exist ..\build\symbols_ext_IntroProgram echo #MODULE 1 Intro>> ..\build\symbols_ext_combined
+if exist ..\build\symbols_ext_IntroProgram type ..\build\symbols_ext_IntroProgram >> ..\build\symbols_ext_combined
+if exist ..\build\symbols_ext_GameProgram echo #MODULE 2 Game>> ..\build\symbols_ext_combined
+if exist ..\build\symbols_ext_GameProgram type ..\build\symbols_ext_GameProgram >> ..\build\symbols_ext_combined
+if exist ..\build\symbols_ext_OutroProgram echo #MODULE 3 Outro>> ..\build\symbols_ext_combined
+if exist ..\build\symbols_ext_OutroProgram type ..\build\symbols_ext_OutroProgram >> ..\build\symbols_ext_combined
+if exist ..\build\symbols_ext_MonkeyKing echo #MODULE 4 King>> ..\build\symbols_ext_combined
+if exist ..\build\symbols_ext_MonkeyKing type ..\build\symbols_ext_MonkeyKing >> ..\build\symbols_ext_combined
 
 ::
 :: Generate the breakpoint file is necessary:

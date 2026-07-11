@@ -894,6 +894,19 @@ _LoaderApiLoadingAnimation            = _RefreshAccessIndicator
 _LoaderApiSaveData                    = _WriteData
 _LoaderApiLoadFile                    = _LoadData
 
+; --- Debugger: active overlay module id. Resident loader byte in writable overlay
+; RAM, emitted as $ff (= no overlay loaded yet — during loader/kernel boot no
+; module is in memory). NOT in the kernel's cleared BSS, so the debugger's
+; write-watch on it doesn't fire during startup clearing. Each module stamps its
+; id on entry — the OSDK CRT (lib/header.s) does the stamp when OSDK_MODULE_ID is
+; defined for the build; the VS Code debugger reads _osdk_dbg_module (by
+; name) to auto-select that module's symbols, treating any non-module value as
+; "resident only".
+; The loader's export filter is -P _Loader, so only _Loader* names reach
+; loader_exports.h. Publish a _Loader-prefixed alias for the kernel to import,
+; while the real byte keeps the name the extension needs. ---
+_osdk_dbg_module    .byt $ff
+_LoaderDbgModule = _osdk_dbg_module
 
 _EndLoaderCode
 
