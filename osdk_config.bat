@@ -116,13 +116,13 @@ SET OSDKGDBPORT=6510
 
 :: Emulator settings
 SET OSDKEMUL=ORICUTRON
-SET OSDKEMULPARAMS=%SET OSDKEMULPARAMS% -m atmos
-SET OSDKEMULPARAMS=%SET OSDKEMULPARAMS%-R soft --scanlines off
+SET OSDKEMULPARAMS=-m atmos
+SET OSDKEMULPARAMS=%OSDKEMULPARAMS% -R soft --scanlines off
 IF NOT "%OSDKGDBPORT%"=="" SET OSDKEMULPARAMS=%OSDKEMULPARAMS% --gdb_port %OSDKGDBPORT%
-::SET OSDKEMULPARAMS=%SET OSDKEMULPARAMS%-R soft --scanlines on
-::SET OSDKEMULPARAMS=%SET OSDKEMULPARAMS%-R opengl --scanlines on
-::SET OSDKEMULPARAMS=%SET OSDKEMULPARAMS% -k microdisc
-::SET OSDKEMULPARAMS=%SET OSDKEMULPARAMS% -k jasmin
+::SET OSDKEMULPARAMS=%OSDKEMULPARAMS% -R soft --scanlines on
+::SET OSDKEMULPARAMS=%OSDKEMULPARAMS% -R opengl --scanlines on
+::SET OSDKEMULPARAMS=%OSDKEMULPARAMS% -k microdisc
+::SET OSDKEMULPARAMS=%OSDKEMULPARAMS% -k jasmin
 
 :: These are the definition of the various files used by each module.
 :: After a module has been built once, and as long as the files are not deleted, you can
