@@ -2390,8 +2390,19 @@ loop_1
     sta _LoaderApiAddressHigh
     jsr _LoaderApiLoadFileFromDirectory
 
+    ; Debugger: MonkeyKing is bare-linked (no CRT), so it carries no module-id
+    ; stamp of its own. Mark module 4 (King) active for its symbols at $D6A0+ over
+    ; the whole minigame, then restore this module's id (Game) when it returns —
+    ; King has several exit paths, but they all rts back here, so wrapping the call
+    ; covers them all. Id 4 must match King's "#MODULE 4" section / build id.
+    lda #4
+    sta _osdk_dbg_module
+
     ; Launch the game
     jsr _Minigame
+
+    lda #OSDK_MODULE_ID
+    sta _osdk_dbg_module
 
     ; Restore whatever graphics mode we had
     MEMCPY($a000+5120,_SavedData1,3040)               ; Restore the bottom half of screen memory

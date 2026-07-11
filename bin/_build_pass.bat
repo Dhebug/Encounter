@@ -180,11 +180,12 @@ copy build\symbols_ext ..\build\symbols_ext_MonkeyKing >NUL 2>NUL
 ::
 :: Combined multi-module symbol file for the VS Code debugger (osdk-debug extension):
 :: resident (Loader+Kernel) followed by every built module under a #MODULE section.
-:: This is what makes the extension show the module selector and resolve per-module
-:: symbols. Manual module selection works today; AUTO-switching would additionally
-:: need the loader to stamp a resident _osdk_dbg_module byte with the matching id
-:: (not yet wired for Encounter — ids below are provisional). Missing per-module files
-:: (partial "test" builds) are skipped so the combined file still builds.
+:: This makes the extension show the module selector, resolve per-module symbols, and
+:: AUTO-switch to the running overlay via the resident _osdk_dbg_module byte: modules
+:: 0-3 stamp it from the CRT (the -DOSDK_MODULE_ID passed to each build above);
+:: MonkeyKing (4) is bare-linked (no CRT) so game_utils.s stamps id 4 around the
+:: _Minigame call. The #MODULE ids below MUST match those stamps. Missing per-module
+:: files (partial "test" builds) are skipped so the combined file still builds.
 ::
 type ..\build\symbols_ext_Loader > ..\build\symbols_ext_combined
 type ..\build\symbols_ext_Kernel >> ..\build\symbols_ext_combined
