@@ -130,13 +130,13 @@ _TEXT_BOTTOM_VIEW__START
 * = $BFE0                           ; The 32 bytes of RAM between the end of the screen and the start of the ROM
 _32_Bytes_BufferStart
 _gScore                 .dsb 2         ; Current highscore for the player
-_gAchievements          .dsb 7         ; Enough for 7*8=56 achievements
-_gAchievementsChanged   .dsb 1         ; Set to 1 to indicate the game that the achievements have changed and need to be resaved
+_gAchievements          .dsb 7         ; Enough for 7*8=56 achievements  @bitset achievement
+_gAchievementsChanged   .dsb 1         ; Set to 1 to indicate the game that the achievements have changed and need to be resaved  @bool
 _gGameOverCondition     .dsb 1         ; Used to store the way the player exited the game
-_gKeyboardLayout        .dsb 1         ; QWERTY / AZERTY / QWERTZ
-_gMusicEnabled          .dsb 1         ; 0 or 255
-_gSoundEnabled          .dsb 1         ; 0 or 255
-_gJoystickType          .dsb 1         ; See enum in lib.h (0=JOYSTICK_INTERFACE_NOTHING, ijk/pase/telestrat/opel/dktronics)
+_gKeyboardLayout        .dsb 1         ; QWERTY / AZERTY / QWERTZ  @enum KeyboardLayout
+_gMusicEnabled          .dsb 1         ; 0 or 255  @bool
+_gSoundEnabled          .dsb 1         ; 0 or 255  @bool
+_gJoystickType          .dsb 1         ; See enum in lib.h (0=JOYSTICK_INTERFACE_NOTHING, ijk/pase/telestrat/opel/dktronics)  @enum JoystickInterface
 
 ; Note: These need to stay in this order, the "menu_option" variable is used to access the right score depending of the game mode
 _gMonkeyKingSlowBestScoreBCD    .dsb 2        ; Best score (slow mode) of the player in the handheld minigame (BCD format)
