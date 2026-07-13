@@ -305,8 +305,8 @@ angle4          = tmp5+0
 offset          = tmp2+0
 sumOffset       = tmp3
 sourceOffset    = tmp6
-&srcPtr         = tmp0
-&dstPtr         = _ptrDstBottom
+&srcPtr         = tmp0   ; @ptr16
+&dstPtr         = _ptrDstBottom   ; @ptr16
 
 frame_loop
     dec _frameCount

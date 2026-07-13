@@ -1990,8 +1990,8 @@ copy_loop
     .)
 
 ; These are used here, but also in _RestoreBubblesFromHires and _BlitBubbles
-&sourcePtr   = tmp2  ; base address of the source buffer
-&targetPtr   = tmp3  ; base address of the target buffer
+&sourcePtr   = tmp2  ; base address of the source buffer @ptr16
+&targetPtr   = tmp3  ; base address of the target buffer @ptr16
 &bubbleCount = tmp4  ; number of bubbles to blit (1..MAX_BUBBLE_TOTAL)
 
     ; Forward blit: src=_ImageBuffer, dst=$A000

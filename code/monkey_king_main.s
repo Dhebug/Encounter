@@ -44,8 +44,8 @@
 
 _zp_start_
 
-ptr_src         .dsb 2
-ptr_dst         .dsb 2
+ptr_src         .dsb 2   ; @ptr16
+ptr_dst         .dsb 2   ; @ptr16
 
 current_score_bcd .dsb 2
 current_score     .dsb 2

@@ -26,8 +26,8 @@
 
 	.zero
 
-ptr_music           .dsb 2   ; = $02      ; +$03
-pt2_DT              .dsb 2   ;= $04      ; +$05
+ptr_music           .dsb 2   ; = $02      ; +$03 @ptr16
+pt2_DT              .dsb 2   ;= $04      ; +$05 @ptr16
 
 ; could be relocated anywhere (but slower):
 ACCA            .dsb 2   ;= $06      ; save A

@@ -35,8 +35,8 @@ _gSourceStride  .byt 40   ; default for BITMAP; SET_STRIDE overrides for one sho
 
 _BlitSprite
 .(
-sourcePtr   = tmp0
-targetPtr   = tmp1
+sourcePtr   = tmp0   ; @ptr16
+targetPtr   = tmp1   ; @ptr16
 saveY       = tmp2
 
 
@@ -111,8 +111,8 @@ skip
 ; Uses gDrawWidth, gDrawHeight, gSourceStride. Target stride is 40.
 _BlitRectangle
 .(
-sourcePtr   = tmp0
-targetPtr   = tmp1
+sourcePtr   = tmp0   ; @ptr16
+targetPtr   = tmp1   ; @ptr16
 
   lda _gDrawSourceAddress+0
   sta sourcePtr+0
@@ -180,16 +180,16 @@ _TableMask
 ; tmp7  -> fontPtr
 ; reg0  -> targetScanlinePtr
 .(
-baseLinePtr   = tmp0
-messagePtr    = tmp1
+baseLinePtr   = tmp0   ; @ptr16
+messagePtr    = tmp1   ; @ptr16
 x_position    = tmp2
 y_position    = tmp2+1
 width_char    = tmp4
 font_byte     = tmp4+1
-targetPtr     = tmp5
-shiftTablePtr = tmp6
-fontPtr       = tmp7
-scanlinePtr   = reg0
+targetPtr     = tmp5   ; @ptr16
+shiftTablePtr = tmp6   ; @ptr16
+fontPtr       = tmp7   ; @ptr16
+scanlinePtr   = reg0   ; @ptr16
 
 end_of_string
   ; Update the pointer
