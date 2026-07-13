@@ -33,8 +33,8 @@ _gSoundEnabled          .dsb 1         ; 0 or 255  @bool
 _gJoystickType          .dsb 1         ; See enum in lib.h (0=JOYSTICK_INTERFACE_NOTHING, ijk/pase/telestrat/opel/dktronics)  @enum JoystickInterface
 
 ; Note: These need to stay in this order
-_gMonkeyKingSlowBestScoreBCD    .dsb 2
-_gMonkeyKingFastBestScoreBCD    .dsb 2
+_gMonkeyKingSlowBestScoreBCD    .dsb 2   ; @bcd-be
+_gMonkeyKingFastBestScoreBCD    .dsb 2   ; @bcd-be
 _gMonkeyKingSlowSessionBest     .dsb 2
 _gMonkeyKingFastSessionBest     .dsb 2
 _32_Bytes_BufferRemaining

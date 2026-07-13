@@ -34,8 +34,8 @@ typedef struct
     score_entry scores[SCORE_COUNT];   // 19*24=456
     unsigned char achievements[ACHIEVEMENT_BYTE_COUNT];     // Enough for 7*8=56 achievements
     char free_data[56-4-ACHIEVEMENT_BYTE_COUNT-8-5-8-1-2-2];
-    unsigned int  monkey_king_score_fast;
-    unsigned int  monkey_king_score_slow;
+    unsigned int  monkey_king_score_fast;   // @bcd-be
+    unsigned int  monkey_king_score_slow;   // @bcd-be
     JoystickInterface joystick_interface;
     KeyboardLayout    keyboard_layout;
     unsigned char music_enabled;

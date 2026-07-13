@@ -139,8 +139,8 @@ _gSoundEnabled          .dsb 1         ; 0 or 255  @bool
 _gJoystickType          .dsb 1         ; See enum in lib.h (0=JOYSTICK_INTERFACE_NOTHING, ijk/pase/telestrat/opel/dktronics)  @enum JoystickInterface
 
 ; Note: These need to stay in this order, the "menu_option" variable is used to access the right score depending of the game mode
-_gMonkeyKingSlowBestScoreBCD    .dsb 2        ; Best score (slow mode) of the player in the handheld minigame (BCD format)
-_gMonkeyKingFastBestScoreBCD    .dsb 2        ; Best score (fast mode) of the player in the handheld minigame (BCD format)
+_gMonkeyKingSlowBestScoreBCD    .dsb 2        ; Best score (slow mode) of the player in the handheld minigame (BCD format) @bcd-be
+_gMonkeyKingFastBestScoreBCD    .dsb 2        ; Best score (fast mode) of the player in the handheld minigame (BCD format) @bcd-be
 _gMonkeyKingSlowSessionBest     .dsb 2        ; Best score (slow mode) of the player in that session (normal format)
 _gMonkeyKingFastSessionBest     .dsb 2        ; Best score (fast mode) of the player in that session (normal format)
 _32_Bytes_BufferRemaining
