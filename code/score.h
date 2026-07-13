@@ -38,8 +38,8 @@ typedef struct
     unsigned int  monkey_king_score_slow;   // @bcd-be
     JoystickInterface joystick_interface;
     KeyboardLayout    keyboard_layout;
-    unsigned char music_enabled;
-    unsigned char sound_enabled;
+    unsigned char music_enabled;   // @bool
+    unsigned char sound_enabled;   // @bool
     unsigned char launchCount;
     unsigned char end_marker[8];
 } save_game_file;                      // sizeof(save_game_file)=512
