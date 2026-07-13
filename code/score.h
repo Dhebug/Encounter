@@ -1,5 +1,7 @@
 
 #include "game_enums.h"
+#include <lib.h>          // JoystickInterface enum
+#include "params.h"       // KeyboardLayout enum
 
 /*
 ;
@@ -34,8 +36,8 @@ typedef struct
     char free_data[56-4-ACHIEVEMENT_BYTE_COUNT-8-5-8-1-2-2];
     unsigned int  monkey_king_score_fast;
     unsigned int  monkey_king_score_slow;
-    unsigned char joystick_interface;
-    unsigned char keyboard_layout;
+    JoystickInterface joystick_interface;
+    KeyboardLayout    keyboard_layout;
     unsigned char music_enabled;
     unsigned char sound_enabled;
     unsigned char launchCount;
