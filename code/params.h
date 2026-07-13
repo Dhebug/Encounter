@@ -3,9 +3,9 @@
 //
 // Misc settings for the game testing
 //
-//#define ENABLE_SPLASH                   // Comment out to skip the splash screen with the Severn Software and Defence Force logo
-//#define ENABLE_INTRO                    // Comment out to skip the intro
-//#define ENABLE_GAME                     // Comment out to disable the game (and go in the outro immediately)
+#define ENABLE_SPLASH                   // Comment out to skip the splash screen with the Severn Software and Defence Force logo
+#define ENABLE_INTRO                    // Comment out to skip the intro
+#define ENABLE_GAME                     // Comment out to disable the game (and go in the outro immediately)
 #define INTRO_ENABLE_ATTRACT_MODE       // Comment out to skip to the type writer section
 #define INTRO_SHOW_TITLE_PICTURE        // Comment out to hide the title picture
 #define INTRO_SHOW_LEADERBOARD          // Comment out to hide the leaderboard
@@ -42,7 +42,7 @@
 //#define TESTING_MONKEY_KING  // Comment out to play normally
 //#define DISABLE_FADES        // Comment out to enable the fancy fades
 //#define FORCE_JOYSTICK JOYSTICK_INTERFACE_IJK  // Comment out to use the normal settings system
-#define TEST_ENDINGS         // Comment out to enable the normal outro sequence
+//#define TEST_ENDINGS         // Comment out to enable the normal outro sequence
 
 // RControl -> Bank0 & 16
 // LControl -> Bank2 & 16

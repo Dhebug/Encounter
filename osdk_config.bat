@@ -67,8 +67,8 @@ SET EXPORT_HFE_VERSION=1
 SET EXPORT_IMD_VERSION=1
 
 :: Versions we want to build (if undefined, it will only build TEST_LANGUAGE)
-::SET BUILD_LANGUAGES=EN,FR,NO
-::SET BUILD_FREQUENCIES=60HZ,50HZ
+SET BUILD_LANGUAGES=EN,FR,NO
+SET BUILD_FREQUENCIES=60HZ,50HZ
 
 :: Version we want to launch when testing
 SET TEST_LANGUAGE=EN
@@ -87,8 +87,8 @@ SET PRODUCT_TYPE=GAME_RELEASE
 
 :: Module for which we want to enable the debug symbols.
 ::SET TEST_MODULE=SPLASH
-SET TEST_MODULE=INTRO
-::SET TEST_MODULE=GAME
+::SET TEST_MODULE=INTRO
+SET TEST_MODULE=GAME
 ::SET TEST_MODULE=OUTRO
 
 :: Breakpoints for the various modules

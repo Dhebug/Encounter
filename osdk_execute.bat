@@ -14,12 +14,6 @@ SET LANGUAGE=%TEST_LANGUAGE%
 CALL osdk_config.bat
 
 ::
-:: Run the build
-::
-::CALL osdk_build.bat
-::IF ERRORLEVEL 1 GOTO Error
-
-::
 :: Run the emulator using the common batch
 ::
 CALL %OSDK%\bin\execute.bat
