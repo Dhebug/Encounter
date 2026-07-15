@@ -6,7 +6,7 @@
 
     .zero
 
-_gCurrentLocation           .dsb 1
+_gCurrentLocation           .dsb 1   ; Where the player currently is  @enum location_id
 _gCurrentLocationPtr        .dsb 2
 _gSceneImage                .dsb 1
 _gCurrentItemCount          .dsb 1

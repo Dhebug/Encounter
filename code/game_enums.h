@@ -13,59 +13,62 @@
 
 
 // Define the various locations
-#define	e_LOC_MARKETPLACE       0
-#define	e_LOC_DARKALLEY         1
-#define	e_LOC_ROAD              2
-#define	e_LOC_DARKTUNNEL        3
-#define	e_LOC_MAINSTREET        4
-#define	e_LOC_EASTERN_ROAD      5
-#define	e_LOC_INSIDE_PIT        6
-#define	e_LOC_WELL              7
-#define	e_LOC_WOODEDAVENUE      8
-#define	e_LOC_GRAVELDRIVE       9 
-#define	e_LOC_PARKING_PLACE    10
-#define	e_LOC_ZENGARDEN        11
-#define	e_LOC_LAWN             12
-#define	e_LOC_GREENHOUSE       13
-#define	e_LOC_TENNISCOURT      14
-#define	e_LOC_VEGSGARDEN       15
-#define	e_LOC_FISHPND          16
-#define	e_LOC_TILEDPATIO       17
-#define	e_LOC_ORCHARD          18
-#define e_LOC_DARKCELLARROOM   19
-#define	e_LOC_CELLAR           20
-#define	e_LOC_CELLAR_STAIRS    21
-#define	e_LOC_LOUNGE           22
-#define	e_LOC_ENTRANCEHALL     23
-#define	e_LOC_LIBRARY          24
-#define	e_LOC_DININGROOM       25
-#define	e_LOC_LARGE_STAIRCASE  26
-#define	e_LOC_GAMESROOM        27
-#define	e_LOC_SUNLOUNGE        28
-#define	e_LOC_KITCHEN          29
-#define	e_LOC_NARROWPASSAGE    30 
-#define	e_LOC_GUESTBEDROOM     31
-#define	e_LOC_CHILDBEDROOM     32
-#define	e_LOC_MASTERBEDROOM    33
-#define	e_LOC_SHOWERROOM       34
-#define	e_LOC_TINY_WC          35
-#define	e_LOC_EASTGALLERY      36
-#define	e_LOC_BOXROOM          37
-#define	e_LOC_PANIC_ROOM_DOOR  38
-#define	e_LOC_CLASSY_BATHROOM  39
-#define	e_LOC_WESTGALLERY      40
-#define	e_LOC_UP_STAIRS        41
-#define	e_LOC_OUTSIDE_PIT      42
-#define e_LOC_STUDY_ROOM       43
-#define	e_LOC_CELLAR_WINDOW    44
-#define e_LOC_FRONT_ENTRANCE   45
-#define e_LOC_ABANDONED_CAR    46
-#define e_LOC_HOSTAGE_ROOM     47
-#define e_LOC_COUNT_           48
-#define e_LOC_INVENTORY        e_LOC_COUNT_         // Special location for the player's inventory
-#define e_LOC_CURRENT          253                  // For the scripting, so objects can be dumped to where the player is
-#define e_LOC_GONE_FOREVER     254                  // To indicate this item is not available anymore
-#define e_LOC_NONE             255                  // To indicate we can't go in this particular location
+typedef enum
+{
+	e_LOC_MARKETPLACE       = 0,
+	e_LOC_DARKALLEY         = 1,
+	e_LOC_ROAD              = 2,
+	e_LOC_DARKTUNNEL        = 3,
+	e_LOC_MAINSTREET        = 4,
+	e_LOC_EASTERN_ROAD      = 5,
+	e_LOC_INSIDE_PIT        = 6,
+	e_LOC_WELL              = 7,
+	e_LOC_WOODEDAVENUE      = 8,
+	e_LOC_GRAVELDRIVE       = 9, 
+	e_LOC_PARKING_PLACE    = 10,
+	e_LOC_ZENGARDEN        = 11,
+	e_LOC_LAWN             = 12,
+	e_LOC_GREENHOUSE       = 13,
+	e_LOC_TENNISCOURT      = 14,
+	e_LOC_VEGSGARDEN       = 15,
+	e_LOC_FISHPND          = 16,
+	e_LOC_TILEDPATIO       = 17,
+	e_LOC_ORCHARD          = 18,
+	e_LOC_DARKCELLARROOM   = 19,
+	e_LOC_CELLAR           = 20,
+	e_LOC_CELLAR_STAIRS    = 21,
+	e_LOC_LOUNGE           = 22,
+	e_LOC_ENTRANCEHALL     = 23,
+	e_LOC_LIBRARY          = 24,
+	e_LOC_DININGROOM       = 25,
+	e_LOC_LARGE_STAIRCASE  = 26,
+	e_LOC_GAMESROOM        = 27,
+	e_LOC_SUNLOUNGE        = 28,
+	e_LOC_KITCHEN          = 29,
+	e_LOC_NARROWPASSAGE    = 30, 
+	e_LOC_GUESTBEDROOM     = 31,
+	e_LOC_CHILDBEDROOM     = 32,
+	e_LOC_MASTERBEDROOM    = 33,
+	e_LOC_SHOWERROOM       = 34,
+	e_LOC_TINY_WC          = 35,
+	e_LOC_EASTGALLERY      = 36,
+	e_LOC_BOXROOM          = 37,
+	e_LOC_PANIC_ROOM_DOOR  = 38,
+	e_LOC_CLASSY_BATHROOM  = 39,
+	e_LOC_WESTGALLERY      = 40,
+	e_LOC_UP_STAIRS        = 41,
+	e_LOC_OUTSIDE_PIT      = 42,
+	e_LOC_STUDY_ROOM       = 43,
+	e_LOC_CELLAR_WINDOW    = 44,
+	e_LOC_FRONT_ENTRANCE   = 45,
+	e_LOC_ABANDONED_CAR    = 46,
+	e_LOC_HOSTAGE_ROOM     = 47,
+	e_LOC_INVENTORY        = 48,                   // Special location for the player's inventory (sits right after the real locations)
+	e_LOC_COUNT_           = e_LOC_INVENTORY,      // Number of real locations — declared AFTER inventory so the debugger shows 48 as e_LOC_INVENTORY (first name wins)
+	e_LOC_CURRENT          = 253,                  // For the scripting, so objects can be dumped to where the player is
+	e_LOC_GONE_FOREVER     = 254,                  // To indicate this item is not available anymore
+	e_LOC_NONE             = 255                  // To indicate we can't go in this particular location
+} location_id;
 
 
 // Define the various items, followed by instructions to simplify the parser
