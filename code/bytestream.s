@@ -14,10 +14,10 @@ _gDelayStream               .dsb 2
 _gStreamCutScene            .dsb 1   ; 1 = In a cut scene
 _gStreamSkipPoint           .dsb 2   ; Pointer to a label where we can jump if the user presses spaces during a cut scene
 
-_gCurrentItem               .dsb 1   ; Used to handle the e_ITEM_CURRENT value, set by DispatchStream
+_gCurrentItem               .dsb 1   ; Used to handle the e_ITEM_CURRENT value, set by DispatchStream  @enum item_id
 _gStreamItemPtr             .dsb 2   ; Used to store the address of an item of interest (gItems+6*item id)
 _gStreamAssociatedItemPtr   .dsb 2   ; associated item pointer, needs to be behind _gStreamItemPtr in memory
-_gCurrentAssociatedItem     .dsb 1   ; Similar to _gCurrentItem but for containers
+_gCurrentAssociatedItem     .dsb 1   ; Similar to _gCurrentItem but for containers  @enum item_id
 
 _gStreamLocationPtr         .dsb 2   ; Used to store the address of a location of interest (gLocations+10*location id)
 _gStreamNextPtr             .dsb 2   ; Updated after the functions that prints stuff to know how long the string was 

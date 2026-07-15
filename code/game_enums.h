@@ -70,105 +70,108 @@
 
 // Define the various items, followed by instructions to simplify the parser
 // Containers first
-#define	e_ITEM_TobaccoTin    		 0          // an empty tobacco tin
-#define	e_ITEM_Bucket        		 1          // a wooden bucket
-#define	e_ITEM_CardboardBox  		 2          // a cardboard box
-#define	e_ITEM_Net    		         3          // a net
-#define	e_ITEM_PlasticBag    		 4          // a plastic bag
-#define	e_ITEM__Last_Container       4          // ----- END CONTAINERS MARKER
+typedef enum
+{
+	e_ITEM_TobaccoTin    		 = 0,          // an empty tobacco tin
+	e_ITEM_Bucket        		 = 1,          // a wooden bucket
+	e_ITEM_CardboardBox  		 = 2,          // a cardboard box
+	e_ITEM_Net    		         = 3,          // a net
+	e_ITEM_PlasticBag    		 = 4,          // a plastic bag
+	e_ITEM__Last_Container       = 4,          // ----- END CONTAINERS MARKER
 
 // Items requiring containers
-#define	e_ITEM_GunPowder  			 5         // some gunpowder
-#define	e_ITEM_Saltpetre  			 6          // some saltpetre
-#define	e_ITEM_Sulphur               7          // some sulphur
-#define	e_ITEM_Petrol  				 8          // some petrol
-#define	e_ITEM_Water  				 9          // some water
-#define	e_ITEM_LargeDove  			 10         // a large dove
-#define	e_ITEM_PowderMix  			 11         // some gunpowder
-#define	e_ITEM__Last_Transportable   11         // ----- END TRANSPORTABLE MARKER
+	e_ITEM_GunPowder  			 = 5,         // some gunpowder
+	e_ITEM_Saltpetre  			 = 6,          // some saltpetre
+	e_ITEM_Sulphur               = 7,          // some sulphur
+	e_ITEM_Petrol  				 = 8,          // some petrol
+	e_ITEM_Water  				 = 9,          // some water
+	e_ITEM_LargeDove  			 = 10,         // a large dove
+	e_ITEM_PowderMix  			 = 11,         // some gunpowder
+	e_ITEM__Last_Transportable   = 11,         // ----- END TRANSPORTABLE MARKER
 
 // Then normal items
-#define e_ITEM_Television            12         // a television
-#define	e_ITEM_Fridge  			     13         // a fridge
-#define	e_ITEM_SedativePills 		 14         // some sedative pills
-#define e_ITEM_CellarWindow          15         // a cellar window
-#define	e_ITEM_FancyStones			 16         // some fancy stones
-#define	e_ITEM_SilverKnife  		 17         // a silver knife
-#define	e_ITEM_Ladder  				 18         // a ladder
-#define	e_ITEM_MixTape      		 19         // a mix tape
-#define	e_ITEM_Dog  		         20         // a dog
-#define	e_ITEM_Meat  				 21         // a joint of meat
-#define	e_ITEM_Bread  				 22         // some brown bread
-#define	e_ITEM_BlackTape  			 23         // black tape
-#define	e_ITEM_ChemistryBook  		 24         // a chemistry book
-#define	e_ITEM_BoxOfMatches  		 25         // a box of matches
-#define	e_ITEM_SnookerCue  			 26         // a snooker cue
-#define	e_ITEM_Thug  				 27         // a Thug
-#define	e_ITEM_HeavySafe  			 28         // a heavy safe
-#define	e_ITEM_HandWrittenNote  	 29         // a hand written note
-#define	e_ITEM_Rope  				 30         // a length of rope
-#define e_ITEM_HandheldGame          31         // a handheld game
-#define	e_ITEM_ToiletRoll            32         // a roll of toilet tissue~
-#define	e_ITEM_Hose  			     33         // a garden hose
-#define e_ITEM_GameConsole           34         // a game console
-#define e_ITEM_Medicinecabinet       35         // a thick curtain
-#define	e_ITEM_YoungGirl  			 36         // a young girl
-#define	e_ITEM_Fuse  				 37         // a fuse
-#define	e_ITEM_SmallKey				 38         // a small key
-#define	e_ITEM_Newspaper     		 39         // A newspaper
-#define	e_ITEM_Bomb  				 40         // a bomb
-#define	e_ITEM_Pistol 				 41         // a pistol
-#define e_ITEM_Invoice               42         // an invoice letter
-#define	e_ITEM_ChemistryRecipes   	 43         // a sheet of paper with a few recipes on things to build
-#define	e_ITEM_UnitedKingdomMap   	 44         // the map of the UK in the library
-#define e_ITEM_Curtain               45         // a thick curtain
-#define e_ITEM_GunCabinet            46         // a gun cabinet
-#define e_ITEM_DartGun               47         // a dart gun
-#define e_ITEM_AlarmSwitch           48         // a alarm switch
-#define e_ITEM_CarBoot               49         // the car boot
-#define e_ITEM_CarDoor               50         // the car door
-#define e_ITEM_CarTank               51         // the car petrol tank
-#define e_ITEM_MortarAndPestle       52         // a mortar and pestle
-#define e_ITEM_Adhesive              53         // some adhesive
-#define e_ITEM_Acid                  54         // some acid
-#define	e_ITEM_AlarmPanel  		     55         // a locked panel on the wall / an open panel on wall
-#define	e_ITEM_SecurityDoor		     56         // a security door
-#define	e_ITEM_Clay    		         57         // some dried out clay
-#define	e_ITEM_ProtectionSuit	     58         // a protection suit
-#define e_ITEM_HoleInDoor            59         // a hole in the door
-#define e_ITEM_PanicRoomWindow       60         // a high-up window
-#define e_ITEM_FrontDoor             61         // an impressive entrance door
-#define e_ITEM_RoughPlan             62         // a rough plan
-#define e_ITEM_Car                   63         // either "my car" or "a car" depending of the location
-#define e_ITEM_Graffiti              64         // either the graffiti in the tunnel or the dirty alley
-#define e_ITEM_Church                65         // the old church in main street
-#define e_ITEM_Well                  66         // the old well in the forest
-#define e_ITEM_RoadSign              67         // the sign at the chantier entnrace
-#define e_ITEM_Trashcan              68         // the bins in the dirty alley
-#define e_ITEM_Tombstone             69         // the tombstone near the church
-#define e_ITEM_FishPond              70         // the fishpond
-#define e_ITEM_Fish                  71         // a fish
-#define e_ITEM_Apple                 72         // an apple
-#define e_ITEM_Tree                  73         // a tree
-#define e_ITEM_Pit                   74         // a pit
-#define e_ITEM_Heap                  75         // a heap
-#define e_ITEM_NormalWindow          76         // a normal window
-#define e_ITEM_AlarmIndicator        77         // an alarm indicator
-#define e_ITEM_Computer              78         // a desktop computer
-#define e_ITEM_Oric                  79         // a Oric computer
-#define e_ITEM_TVCabinet             80         // a TV cabinet
-#define e_ITEM_Batteries             81         // a couple SR44 batteries
-#define e_ITEM_Drawer                82         // a drawer
-#define e_ITEM_DuneBook              83         // a dune book
-#define e_ITEM_Towel                 84         // a towel
-#define e_ITEM_FabricStrip           85         // a long strip of fabric
+	e_ITEM_Television            = 12,         // a television
+	e_ITEM_Fridge  			     = 13,         // a fridge
+	e_ITEM_SedativePills 		 = 14,         // some sedative pills
+	e_ITEM_CellarWindow          = 15,         // a cellar window
+	e_ITEM_FancyStones			 = 16,         // some fancy stones
+	e_ITEM_SilverKnife  		 = 17,         // a silver knife
+	e_ITEM_Ladder  				 = 18,         // a ladder
+	e_ITEM_MixTape      		 = 19,         // a mix tape
+	e_ITEM_Dog  		         = 20,         // a dog
+	e_ITEM_Meat  				 = 21,         // a joint of meat
+	e_ITEM_Bread  				 = 22,         // some brown bread
+	e_ITEM_BlackTape  			 = 23,         // black tape
+	e_ITEM_ChemistryBook  		 = 24,         // a chemistry book
+	e_ITEM_BoxOfMatches  		 = 25,         // a box of matches
+	e_ITEM_SnookerCue  			 = 26,         // a snooker cue
+	e_ITEM_Thug  				 = 27,         // a Thug
+	e_ITEM_HeavySafe  			 = 28,         // a heavy safe
+	e_ITEM_HandWrittenNote  	 = 29,         // a hand written note
+	e_ITEM_Rope  				 = 30,         // a length of rope
+	e_ITEM_HandheldGame          = 31,         // a handheld game
+	e_ITEM_ToiletRoll            = 32,         // a roll of toilet tissue~
+	e_ITEM_Hose  			     = 33,         // a garden hose
+	e_ITEM_GameConsole           = 34,         // a game console
+	e_ITEM_Medicinecabinet       = 35,         // a thick curtain
+	e_ITEM_YoungGirl  			 = 36,         // a young girl
+	e_ITEM_Fuse  				 = 37,         // a fuse
+	e_ITEM_SmallKey				 = 38,         // a small key
+	e_ITEM_Newspaper     		 = 39,         // A newspaper
+	e_ITEM_Bomb  				 = 40,         // a bomb
+	e_ITEM_Pistol 				 = 41,         // a pistol
+	e_ITEM_Invoice               = 42,         // an invoice letter
+	e_ITEM_ChemistryRecipes   	 = 43,         // a sheet of paper with a few recipes on things to build
+	e_ITEM_UnitedKingdomMap   	 = 44,         // the map of the UK in the library
+	e_ITEM_Curtain               = 45,         // a thick curtain
+	e_ITEM_GunCabinet            = 46,         // a gun cabinet
+	e_ITEM_DartGun               = 47,         // a dart gun
+	e_ITEM_AlarmSwitch           = 48,         // a alarm switch
+	e_ITEM_CarBoot               = 49,         // the car boot
+	e_ITEM_CarDoor               = 50,         // the car door
+	e_ITEM_CarTank               = 51,         // the car petrol tank
+	e_ITEM_MortarAndPestle       = 52,         // a mortar and pestle
+	e_ITEM_Adhesive              = 53,         // some adhesive
+	e_ITEM_Acid                  = 54,         // some acid
+	e_ITEM_AlarmPanel  		     = 55,         // a locked panel on the wall / an open panel on wall
+	e_ITEM_SecurityDoor		     = 56,         // a security door
+	e_ITEM_Clay    		         = 57,         // some dried out clay
+	e_ITEM_ProtectionSuit	     = 58,         // a protection suit
+	e_ITEM_HoleInDoor            = 59,         // a hole in the door
+	e_ITEM_PanicRoomWindow       = 60,         // a high-up window
+	e_ITEM_FrontDoor             = 61,         // an impressive entrance door
+	e_ITEM_RoughPlan             = 62,         // a rough plan
+	e_ITEM_Car                   = 63,         // either "my car" or "a car" depending of the location
+	e_ITEM_Graffiti              = 64,         // either the graffiti in the tunnel or the dirty alley
+	e_ITEM_Church                = 65,         // the old church in main street
+	e_ITEM_Well                  = 66,         // the old well in the forest
+	e_ITEM_RoadSign              = 67,         // the sign at the chantier entnrace
+	e_ITEM_Trashcan              = 68,         // the bins in the dirty alley
+	e_ITEM_Tombstone             = 69,         // the tombstone near the church
+	e_ITEM_FishPond              = 70,         // the fishpond
+	e_ITEM_Fish                  = 71,         // a fish
+	e_ITEM_Apple                 = 72,         // an apple
+	e_ITEM_Tree                  = 73,         // a tree
+	e_ITEM_Pit                   = 74,         // a pit
+	e_ITEM_Heap                  = 75,         // a heap
+	e_ITEM_NormalWindow          = 76,         // a normal window
+	e_ITEM_AlarmIndicator        = 77,         // an alarm indicator
+	e_ITEM_Computer              = 78,         // a desktop computer
+	e_ITEM_Oric                  = 79,         // a Oric computer
+	e_ITEM_TVCabinet             = 80,         // a TV cabinet
+	e_ITEM_Batteries             = 81,         // a couple SR44 batteries
+	e_ITEM_Drawer                = 82,         // a drawer
+	e_ITEM_DuneBook              = 83,         // a dune book
+	e_ITEM_Towel                 = 84,         // a towel
+	e_ITEM_FabricStrip           = 85,         // a long strip of fabric
 #ifdef PRODUCT_TYPE_GAME_DEMO
-#define e_ITEM_DemoMessage           86         // a demo readme message
-#define	e_ITEM_COUNT_ 				 87         //  ----- END MARKER - Free until 127, after are action words
+	e_ITEM_DemoMessage           = 86,         // a demo readme message
+	e_ITEM_COUNT_ 				 = 87,         //  ----- END MARKER - Free until 127, after are action words
 #else
-#define	e_ITEM_COUNT_ 				 86         //  ----- END MARKER - Free until 127, after are action words
+	e_ITEM_COUNT_ 				 = 86,         //  ----- END MARKER - Free until 127, after are action words
 #endif // PRODUCT_TYPE_GAME_DEMO
-#define e_ITEM_CURRENT               e_ITEM_COUNT_    // For the scripting, so the current objects can be accessed from various scripts
+	e_ITEM_CURRENT               = e_ITEM_COUNT_    // For the scripting, so the current objects can be accessed from various scripts
+} item_id;
 // For practical reasons we reuse the item ids in the list of words followed by the actual instructions
 // Directions: These have to be in the same order as the DIRECTIONS enum
 #define	e_WORD_NORTH                 128        // = e_ITEM_COUNT_
