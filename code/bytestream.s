@@ -9,9 +9,9 @@
     .zero 
 
 _gCurrentStream             .dsb 2   ; @stream script_command
-_gCurrentStreamStop         .dsb 1   ; 1 = Stop stream / 2 = Wait / 4 = Stop stream and refresh the scene
+_gCurrentStreamStop         .dsb 1   ; @enum stream_stop_flags  (1=Stop 2=Wait 4=Refresh 8=PartialRefresh, OR'd)
 _gDelayStream               .dsb 2
-_gStreamCutScene            .dsb 1   ; 1 = In a cut scene
+_gStreamCutScene            .dsb 1   ; 1 = In a cut scene @bool
 _gStreamSkipPoint           .dsb 2   ; Pointer to a label where we can jump if the user presses spaces during a cut scene
 
 _gCurrentItem               .dsb 1   ; Used to handle the e_ITEM_CURRENT value, set by DispatchStream  @enum item_id
@@ -764,7 +764,7 @@ _auto_conditionCheckPlayerLocation
 ; .byt COMMAND_JUMP,<label,>label
 +_ByteStreamCommand_JUMP
     ldy #0
-    lda (_gCurrentStream),y
+    lda (_gCurrentStream),y       ; @word @stream script_command
     tax                           ; Temporary so we don't change the stream pointer while using it
     iny
     lda (_gCurrentStream),y

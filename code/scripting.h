@@ -257,11 +257,15 @@ typedef enum
 #define TEXT_END                 255
 #define TEXT_CRLF                254
 
-// End command
-#define FLAG_END_STREAM          1
-#define FLAG_WAIT                2
-#define FLAG_REFRESH_SCENE       4
-#define FLAG_PARTIAL_REFRESH     8
+// Stream-stop flags: OR'd together in _gCurrentStreamStop to end/pause a stream.
+typedef enum
+{
+	FLAG_IS_RUNNING          = 0,
+	FLAG_END_STREAM          = 1,
+	FLAG_WAIT                = 2,
+	FLAG_REFRESH_SCENE       = 4,
+	FLAG_PARTIAL_REFRESH     = 8
+} stream_stop_flags;
 
 
 // Value mapping
