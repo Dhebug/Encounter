@@ -8,7 +8,7 @@
 
     .zero 
 
-_gCurrentStream             .dsb 2
+_gCurrentStream             .dsb 2   ; @stream script_command
 _gCurrentStreamStop         .dsb 1   ; 1 = Stop stream / 2 = Wait / 4 = Stop stream and refresh the scene
 _gDelayStream               .dsb 2
 _gStreamCutScene            .dsb 1   ; 1 = In a cut scene
@@ -736,7 +736,7 @@ common
     eor #OPCODE_BEQ-OPCODE_BNE               //  0b100000
     sta _auto_conditionCheckItemFlag+0       // Item flags check is inverted
     ldy #2
-    lda (_gCurrentStream),y
+    lda (_gCurrentStream),y       ; @enum operator_id
     bne checkItemFlag
 
 checkItemLocation                // OPERATOR_CHECK_ITEM_LOCATION 0 

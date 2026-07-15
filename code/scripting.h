@@ -5,66 +5,79 @@
 #define DELAY_FIRST_BUBBLE      25
 #define DELAY_INFO_MESSAGE      50*4
 
-// Command opcodes
-#define COMMAND_END             0
-#define COMMAND_RECTANGLE       1
-#define COMMAND_FILL_RECTANGLE  2
-#define COMMAND_TEXT            3
-#define COMMAND_WHITE_BUBBLE    4
-#define COMMAND_BLACK_BUBBLE    5
-#define COMMAND_WAIT            6
-#define COMMAND_BITMAP          7
-#define COMMAND_FADE_BUFFER     8
-#define COMMAND_JUMP            9      // Really, that's a GOTO :p
-#define COMMAND_JUMP_IF_TRUE    10
-#define COMMAND_JUMP_IF_FALSE   11
-#define COMMAND_INFO_MESSAGE    12 
-#define COMMAND_DISPLAY_IMAGE   13
-#define COMMAND_DISPLAY_IMAGE_ONLY 14
-#define COMMAND_END_AND_REFRESH 15
-#define COMMAND_ERROR_MESSAGE   16
-#define COMMAND_SET_ITEM_LOCATION   17
-#define COMMAND_SET_ITEM_FLAGS  18
-#define COMMAND_UNSET_ITEM_FLAGS 19
-#define COMMAND_SET_ITEM_DESCRIPTION 20
-#define COMMAND_SET_LOCATION_DIRECTION 21
-#define COMMAND_UNLOCK_ACHIEVEMENT 22
-#define COMMAND_INCREASE_SCORE  23
-#define COMMAND_GAME_OVER       24
-#define COMMAND_CLEAR_FULL_TEXT_AREA 25
-#define COMMAND_SET_SCENE_IMAGE 26
-#define COMMAND_DISPLAY_IMAGE_NOBLIT 27
-#define COMMAND_CLEAR_TEXT_AREA 28
-#define COMMAND_GOSUB           29
-#define COMMAND_RETURN          30
-#define COMMAND_DO_ONCE         31
-#define COMMAND_SET_CUT_SCENE   32
-#define COMMAND_PLAY_SOUND      33
-#define COMMAND_WAIT_RANDOM     34
-#define COMMAND_START_CLOCK     35
-#define COMMAND_STOP_CLOCK      36
-#define COMMAND_END_AND_PARTIAL_REFRESH 37
-#define COMMAND_LOAD_MUSIC      38
-#define COMMAND_STOP_MUSIC      39
-#define COMMAND_WAIT_KEYPRESS   40
-#define COMMAND_QUICK_MESSAGE   41
-#define COMMAND_SET_SKIP_POINT  42
-#define COMMAND_SET_PLAYER_LOCATION 43
-#define COMMAND_SET_CURRENT_ITEM 44
-#define COMMAND_CALL_NATIVE     45
-#define COMMAND_COMBINE_ITEMS   46
-#define COMMAND_KEYPRESS_MESSAGE 47
-#define COMMAND_CLEAR_BUBBLES   48
-#define COMMAND_SET_STRIDE      49
-#define COMMAND_DISPLAY_IMAGE_NO_CLEAR_TEXT 50
-#define _COMMAND_COUNT          51
+// Command opcodes.
+// The @params comments describe each command's byte-stream parameters for the
+// debugger's stream visualizer (see @stream on _gCurrentStream). Tokens: an enum
+// type name (decoded by name), byte (raw 8-bit), word (16-bit LE / address),
+// str (inline NUL-terminated string), end (terminates the linear preview:
+// stream-enders and jumps). These are debugger metadata only; they must contain
+// ONLY tokens (no prose) and must match the byte layout the handler consumes.
+typedef enum
+{
+	COMMAND_END             = 0,      // @params end
+	COMMAND_RECTANGLE       = 1,      // @params byte byte byte byte byte
+	COMMAND_FILL_RECTANGLE  = 2,      // @params byte byte byte byte byte
+	COMMAND_TEXT            = 3,      // @params byte byte byte str
+	COMMAND_WHITE_BUBBLE    = 4,      // @params byte end
+	COMMAND_BLACK_BUBBLE    = 5,      // @params byte end
+	COMMAND_WAIT            = 6,      // @params byte
+	COMMAND_BITMAP          = 7,      // @params byte byte byte word word
+	COMMAND_FADE_BUFFER     = 8,      // @params
+	COMMAND_JUMP            = 9,      // @params word end
+	COMMAND_JUMP_IF_TRUE    = 10,     // @params word cmd:operator_id
+	COMMAND_JUMP_IF_FALSE   = 11,     // @params word cmd:operator_id
+	COMMAND_INFO_MESSAGE    = 12,     // @params str
+	COMMAND_DISPLAY_IMAGE   = 13,     // @params byte
+	COMMAND_DISPLAY_IMAGE_ONLY = 14,  // @params byte
+	COMMAND_END_AND_REFRESH = 15,     // @params end
+	COMMAND_ERROR_MESSAGE   = 16,     // @params str
+	COMMAND_SET_ITEM_LOCATION   = 17, // @params item_id location_id
+	COMMAND_SET_ITEM_FLAGS  = 18,     // @params item_id item_flags
+	COMMAND_UNSET_ITEM_FLAGS = 19,    // @params item_id item_flags
+	COMMAND_SET_ITEM_DESCRIPTION = 20,// @params item_id str
+	COMMAND_SET_LOCATION_DIRECTION = 21, // @params location_id direction_id location_id
+	COMMAND_UNLOCK_ACHIEVEMENT = 22,  // @params achievement
+	COMMAND_INCREASE_SCORE  = 23,     // @params word
+	COMMAND_GAME_OVER       = 24,     // @params byte
+	COMMAND_CLEAR_FULL_TEXT_AREA = 25,// @params byte
+	COMMAND_SET_SCENE_IMAGE = 26,     // @params byte
+	COMMAND_DISPLAY_IMAGE_NOBLIT = 27,// @params byte
+	COMMAND_CLEAR_TEXT_AREA = 28,     // @params byte
+	COMMAND_GOSUB           = 29,     // @params word
+	COMMAND_RETURN          = 30,     // @params end
+	COMMAND_DO_ONCE         = 31,     // @params byte word
+	COMMAND_SET_CUT_SCENE   = 32,     // @params byte
+	COMMAND_PLAY_SOUND      = 33,     // @params word
+	COMMAND_WAIT_RANDOM     = 34,     // @params byte byte
+	COMMAND_START_CLOCK     = 35,     // @params
+	COMMAND_STOP_CLOCK      = 36,     // @params
+	COMMAND_END_AND_PARTIAL_REFRESH = 37, // @params end
+	COMMAND_LOAD_MUSIC      = 38,     // @params byte
+	COMMAND_STOP_MUSIC      = 39,     // @params
+	COMMAND_WAIT_KEYPRESS   = 40,     // @params
+	COMMAND_QUICK_MESSAGE   = 41,     // @params str
+	COMMAND_SET_SKIP_POINT  = 42,     // @params word
+	COMMAND_SET_PLAYER_LOCATION = 43, // @params location_id
+	COMMAND_SET_CURRENT_ITEM = 44,    // @params item_id
+	COMMAND_CALL_NATIVE     = 45,     // @params word
+	COMMAND_COMBINE_ITEMS   = 46,     // @params item_id item_id item_id item_id
+	COMMAND_KEYPRESS_MESSAGE = 47,    // @params str
+	COMMAND_CLEAR_BUBBLES   = 48,     // @params
+	COMMAND_SET_STRIDE      = 49,     // @params byte
+	COMMAND_DISPLAY_IMAGE_NO_CLEAR_TEXT = 50, // @params byte
+	_COMMAND_COUNT          = 51
+} script_command;
 
-// Operator opcodes
-#define OPERATOR_CHECK_ITEM_LOCATION   0
-#define OPERATOR_CHECK_ITEM_FLAG       1
-#define OPERATOR_CHECK_PLAYER_LOCATION 2
-#define OPERATOR_CHECK_ITEM_CONTAINER  3
-#define OPERATOR_CHECK_ADDRESS_VALUE   4
+// Operator opcodes (the condition byte + operands after a JUMP_IF_* label).
+// @params describe each operator's operands for the debugger stream visualizer.
+typedef enum
+{
+	OPERATOR_CHECK_ITEM_LOCATION   = 0,   // @params item_id location_id
+	OPERATOR_CHECK_ITEM_FLAG       = 1,   // @params item_id item_flags
+	OPERATOR_CHECK_PLAYER_LOCATION = 2,   // @params location_id
+	OPERATOR_CHECK_ITEM_CONTAINER  = 3,   // @params item_id item_id
+	OPERATOR_CHECK_ADDRESS_VALUE   = 4    // @params word byte
+} operator_id;
 
 #define CHECK_ITEM_LOCATION(item,location)   OPERATOR_CHECK_ITEM_LOCATION,item,location
 #define CHECK_ITEM_FLAG(item,flag)           OPERATOR_CHECK_ITEM_FLAG,item,flag
