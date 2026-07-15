@@ -32,8 +32,8 @@ typedef struct
 {
 	const char* description;        	// +0 Full description of the object in the world
 	location_id location;           	// +2 Where the object is in the world
-	unsigned char associated_item;      // +3 For the item<->container association
-    unsigned char flags;            	// +4 Special flags on what can be done with the item
+	item_id associated_item;        	// +3 For the item<->container association
+    item_flags flags;               	// +4 Special flags on what can be done with the item
     unsigned char usable_containers;	// +5 Bit masks representing the possible containers to store the item
 } item;
 

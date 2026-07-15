@@ -204,15 +204,18 @@ typedef enum
 #define e_WORD_SKIP                  149  // Special command to modify the behavior of the system
 
 // Flags for the items
-#define ITEM_FLAG_DEFAULT 			0    // Nothing special
-#define ITEM_FLAG_IS_CONTAINER 		1    // This item is a container
-#define ITEM_FLAG_VISIBLE_IN_SCENE	2    // Item has a visible sprite in its location scene, requires full refresh on take/drop
-#define ITEM_FLAG_IMMOVABLE			4    // Impossible to move for various reasons
-#define ITEM_FLAG_LOCKED            8    // For item which are locked
-#define ITEM_FLAG_DISABLED         16    // Used to indicate that something is not active anymore (ex: Dog, Thug )
-#define ITEM_FLAG_ATTACHED         32    // Used to indicate that this item is attached to something (ex: Rope with the tree or window)
-#define ITEM_FLAG_CLOSED           64    // For items that can be opened and closed
-#define ITEM_FLAG_TRANSFORMED     128    // For items that get transformed (drugged meat)
+typedef enum
+{
+	ITEM_FLAG_DEFAULT 			= 0,    // Nothing special
+	ITEM_FLAG_IS_CONTAINER 		= 1,    // This item is a container
+	ITEM_FLAG_VISIBLE_IN_SCENE	= 2,    // Item has a visible sprite in its location scene, requires full refresh on take/drop
+	ITEM_FLAG_IMMOVABLE			= 4,    // Impossible to move for various reasons
+	ITEM_FLAG_LOCKED            = 8,    // For item which are locked
+	ITEM_FLAG_DISABLED         = 16,    // Used to indicate that something is not active anymore (ex: Dog, Thug )
+	ITEM_FLAG_ATTACHED         = 32,    // Used to indicate that this item is attached to something (ex: Rope with the tree or window)
+	ITEM_FLAG_CLOSED           = 64,    // For items that can be opened and closed
+	ITEM_FLAG_TRANSFORMED     = 128     // For items that get transformed (drugged meat)
+} item_flags;
 
 // Achievements
 typedef enum

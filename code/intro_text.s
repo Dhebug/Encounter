@@ -9,7 +9,7 @@
 ;
 ; Title screen
 ;
-_Text_KeyControls
+_Text_KeyControls               ; @str 255
 #ifdef LANGUAGE_FR
     .byt 16+3,5,12,"ESC pour jouer   <-> pour naviguer  "
 #elif defined(LANGUAGE_NO)
@@ -18,7 +18,7 @@ _Text_KeyControls
     .byt 16+3,5,12,"Press ESC to play or <-> to browse   "
 #endif
     .byt TEXT_END
-_Text_TitleCopyright
+_Text_TitleCopyright            ; @str 255
     .byt 16+3,4,"  Encounter ",96," 1983 Severn Software",TEXT_CRLF
 #ifdef LANGUAGE_FR
     .byt 16+3,4,"Améliorations ",96," 2024-26 Defence-Force"

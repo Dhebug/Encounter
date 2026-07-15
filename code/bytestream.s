@@ -15,8 +15,8 @@ _gStreamCutScene            .dsb 1   ; 1 = In a cut scene
 _gStreamSkipPoint           .dsb 2   ; Pointer to a label where we can jump if the user presses spaces during a cut scene
 
 _gCurrentItem               .dsb 1   ; Used to handle the e_ITEM_CURRENT value, set by DispatchStream  @enum item_id
-_gStreamItemPtr             .dsb 2   ; Used to store the address of an item of interest (gItems+6*item id)
-_gStreamAssociatedItemPtr   .dsb 2   ; associated item pointer, needs to be behind _gStreamItemPtr in memory
+_gStreamItemPtr             .dsb 2   ; Used to store the address of an item of interest (gItems+6*item id)  @ptr16 item
+_gStreamAssociatedItemPtr   .dsb 2   ; associated item pointer, needs to be behind _gStreamItemPtr in memory  @ptr16 item
 _gCurrentAssociatedItem     .dsb 1   ; Similar to _gCurrentItem but for containers  @enum item_id
 
 _gStreamLocationPtr         .dsb 2   ; Used to store the address of a location of interest (gLocations+10*location id)
@@ -372,7 +372,7 @@ skip
 
 _ByteStreamFetchLocationID
 .(
-    lda (_gCurrentStream),y      // location ID
+    lda (_gCurrentStream),y      // location ID @enum location_id
     cmp #e_LOC_CURRENT
     bne keep_location_id
 use_current_location_id    
@@ -387,7 +387,7 @@ keep_location_id
 ; Then uses the value to compute the _gStreamItemPtr pointer
 _ByteStreamFetchItemID
 .(
-    lda (_gCurrentStream),y      // item ID
+    lda (_gCurrentStream),y      // item ID @enum item_id
     cmp #e_ITEM_CURRENT
     bne keep_item_id
 use_current_item_id    
@@ -776,7 +776,7 @@ checkItemContainer
     ; check =  (gItems[itemId].flags & flagId);
     iny
     jsr _ByteStreamFetchItemID
-    lda (_gCurrentStream),y      // flag ID
+    lda (_gCurrentStream),y      // container item ID (compared to associated_item)  @enum item_id
     ldy #3
     cmp (_gStreamItemPtr),y      // gItems->associated_item (+3)
 _auto_conditionCheckItemContainer
@@ -793,7 +793,7 @@ checkItemFlag                    // OPERATOR_CHECK_ITEM_FLAG 1
     ; check =  (gItems[itemId].flags & flagId);
     iny
     jsr _ByteStreamFetchItemID
-    lda (_gCurrentStream),y      // flag ID
+    lda (_gCurrentStream),y      // flag ID  @enum item_flags
     ldy #4
     and (_gStreamItemPtr),y      // gItems->flags (+4)
 _auto_conditionCheckItemFlag
@@ -854,7 +854,7 @@ _ByteStreamCommand_SET_ITEM_LOCATION
 .(
     ldy #0
     jsr _ByteStreamFetchItemID
-    lda (_gCurrentStream),y      // location id
+    lda (_gCurrentStream),y      // location id  @enum location_id
     cmp #e_LOC_CURRENT
     bne store_location
     lda _gCurrentLocation        // Use the current player location
@@ -913,7 +913,7 @@ destinationID         = tmp4
     ldy #2
     jsr _CombineProcessSourceItem   ; Third source item
     ldy #3
-    lda (_gCurrentStream),y         ; Target item ID
+    lda (_gCurrentStream),y         ; Target item ID  @enum item_id
     sta destinationID
 
     lda destinationContainer        ; If one of the source items was in a container, we try to reuse it to store the result...
@@ -988,8 +988,8 @@ end_process_source_item
  .(
     ldy #0
     jsr _ByteStreamFetchItemID
-    lda (_gCurrentStream),y      // flag mask
-    ldy #4                       
+    lda (_gCurrentStream),y      // flag mask  @enum item_flags
+    ldy #4
     ora (_gStreamItemPtr),y      // gItems->flags (+4) |= flag mask
     sta (_gStreamItemPtr),y      // gItems->flags (+4) |= flag mask
 
@@ -1002,8 +1002,8 @@ end_process_source_item
  .(
     ldy #0
     jsr _ByteStreamFetchItemID
-    lda (_gCurrentStream),y      // flag mask
-    ldy #4                       
+    lda (_gCurrentStream),y      // flag mask (inverted: bits to KEEP)  @enum item_flags
+    ldy #4
     and (_gStreamItemPtr),y      // gItems->flags (+4) &= flag mask
     sta (_gStreamItemPtr),y      // gItems->flags (+4) |= flag mask
 
@@ -1030,7 +1030,7 @@ _ByteStreamCommand_SET_ITEM_DESCRIPTION
     ; Find the null terminator
     ldy #0
 search_loop
-    lda (_gCurrentStream),y      // item ID
+    lda (_gCurrentStream),y      // item ID  @enum item_id
     beq found_zero
     iny
     bne search_loop
@@ -1068,7 +1068,7 @@ _ByteStreamCommand_SET_SCENE_IMAGE
 _ByteStreamCommand_SET_LOCATION_DIRECTION
 .(
     ldy #0
-    lda (_gCurrentStream),y      // location ID
+    lda (_gCurrentStream),y      // location ID  @enum location_id
     jsr _ByteStreamComputeLocationPtr
 
     iny
@@ -1093,7 +1093,7 @@ _ByteStreamCommand_SET_LOCATION_DIRECTION
 _ByteStreamCommand_UNLOCK_ACHIEVEMENT
 .(
     ldy #0
-    lda (_gCurrentStream),y             // Achievement value
+    lda (_gCurrentStream),y             // Achievement value  @enum achievement
     sta _param0
     jsr _UnlockAchievementAsm
 
