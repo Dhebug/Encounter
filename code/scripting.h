@@ -38,7 +38,7 @@ typedef enum
 	COMMAND_SET_LOCATION_DIRECTION = 21, // @params location_id direction_id location_id
 	COMMAND_UNLOCK_ACHIEVEMENT = 22,  // @params achievement
 	COMMAND_INCREASE_SCORE  = 23,     // @params word
-	COMMAND_GAME_OVER       = 24,     // @params byte
+	COMMAND_GAME_OVER       = 24,     // @params game_over_condition
 	COMMAND_CLEAR_FULL_TEXT_AREA = 25,// @params byte
 	COMMAND_SET_SCENE_IMAGE = 26,     // @params byte
 	COMMAND_DISPLAY_IMAGE_NOBLIT = 27,// @params byte
