@@ -7,7 +7,7 @@
     .zero
 
 _gCurrentLocation           .dsb 1   ; Where the player currently is  @enum location_id
-_gCurrentLocationPtr        .dsb 2
+_gCurrentLocationPtr        .dsb 2   ; @ptr16 location
 _gSceneImage                .dsb 1
 _gCurrentItemCount          .dsb 1
 _gInventoryOffset           .dsb 1
@@ -1712,11 +1712,11 @@ _AddItemEntry
 _PlayerMove
 .(
     sec
-    lda _gWordBuffer               ; Get the keyword (it's assumed that it's one of the 6 possible directions)
+    lda _gWordBuffer               ; Get the keyword (it's assumed that it's one of the 6 possible directions) @enum word_id
     sbc #e_WORD_NORTH
 
     tay
-    lda (_gCurrentLocationPtr),y   ; Get the target location for this direction
+    lda (_gCurrentLocationPtr),y   ; Get the target location for this direction @enum location_id
     cmp #e_LOC_NONE                ; Does it actually exist?
     beq wrong_direction
 

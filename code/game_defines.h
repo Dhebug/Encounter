@@ -22,9 +22,9 @@ extern char gInventoryMaxOffset;
 // - Down
 // 43*6=258 bytes if we store each of the directions
 
-typedef struct 
+typedef struct
 {
-    unsigned char directions[e_DIRECTION_COUNT_];   // The six possible directions (NSEWUP)
+    location_id directions[e_DIRECTION_COUNT_];     // The six possible directions (NSEWUP): destination location, or e_LOC_NONE
 	const char* script;                             // Additional list of commands to add elements to the graphical view (speech bubble, etc...)
 } location;
 
@@ -37,10 +37,10 @@ typedef struct
     unsigned char usable_containers;	// +5 Bit masks representing the possible containers to store the item
 } item;
 
-typedef struct 
+typedef struct
 {
 	const char* word;				// How it's actually written (ex: "Take")
-    unsigned char id;				// The matching id           (ex: e_WORD_TAKE)
+    unsigned char id;				// The matching id           (ex: e_WORD_TAKE) @enum word_id|item_id
 } keyword;
 
 
@@ -48,7 +48,7 @@ typedef void (*callback)();
 
 typedef struct
 {
-    unsigned char id;				// The id of the instruction (ex: e_WORD_TAKE)
+    word_id id;						// The id of the instruction (ex: e_WORD_TAKE)
     unsigned char flag;             // See: FLAG_MAPPING_DEFAULT, FLAG_MAPPING_STREAM in scripting.h
     union 
     {
@@ -60,7 +60,7 @@ typedef struct
 
 typedef struct
 {
-    unsigned char id;				// The id of the item (ex: e_ITEM_Newspaper)
+    item_id id;						// The id of the item (ex: e_ITEM_Newspaper)
     void* stream;                   // Pointer to a stream
 } stream_mapping;
 

@@ -19,7 +19,7 @@ _gStreamItemPtr             .dsb 2   ; Used to store the address of an item of i
 _gStreamAssociatedItemPtr   .dsb 2   ; associated item pointer, needs to be behind _gStreamItemPtr in memory  @ptr16 item
 _gCurrentAssociatedItem     .dsb 1   ; Similar to _gCurrentItem but for containers  @enum item_id
 
-_gStreamLocationPtr         .dsb 2   ; Used to store the address of a location of interest (gLocations+10*location id)
+_gStreamLocationPtr         .dsb 2   ; Used to store the address of a location of interest (gLocations+10*location id) @ptr16 location
 _gStreamNextPtr             .dsb 2   ; Updated after the functions that prints stuff to know how long the string was 
 _gStreamReturnPtr           .dsb 2   ; The ONE level of subfunction we are allowed to call using GOSUB and RETURN
 
@@ -221,12 +221,12 @@ check_partial_refresh
 _DispatchStream
 .(
     ; Store the item id into "CurrentItem"
-    lda _param0
+    lda _param0         ; @enum item_id
     sta _gCurrentItem
 
 search_loop
     ldy #0
-    lda (_param1),y     ; Check the ID in the table
+    lda (_param1),y     ; Check the ID in the table  @enum item_id
     cmp _param0         ; Does that match the ID we are looking for?
     beq matched
     cmp #MAPPING_REDIRECT  ; Redirect: retry with a different table?
@@ -1072,11 +1072,11 @@ _ByteStreamCommand_SET_LOCATION_DIRECTION
     jsr _ByteStreamComputeLocationPtr
 
     iny
-    lda (_gCurrentStream),y      // Direction to update
+    lda (_gCurrentStream),y      // Direction to update  @enum direction_id
     sta tmp0
 
     iny
-    lda (_gCurrentStream),y      // New value for this direction
+    lda (_gCurrentStream),y      // New destination location for this direction  @enum location_id
 
     ldy tmp0
     sta (_gStreamLocationPtr),y  // _gStreamLocationPtr->directions[requested direction] (+0) = new value

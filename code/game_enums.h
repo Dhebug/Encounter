@@ -2,14 +2,17 @@
 #define GAME_ENUMS_H
 
 
-// The various locations: These have to be in the same order as the e_WORD_xxx directions
-#define e_DIRECTION_NORTH  0
-#define e_DIRECTION_SOUTH  1
-#define e_DIRECTION_EAST   2
-#define e_DIRECTION_WEST   3
-#define e_DIRECTION_UP     4   // Seldomly used (to go to the house upper floor and cellar)
-#define e_DIRECTION_DOWN   5   // Seldomly used (to go to the house upper floor and cellar)
-#define e_DIRECTION_COUNT_ 6 
+// The various directions: These have to be in the same order as the e_WORD_xxx directions
+typedef enum
+{
+	e_DIRECTION_NORTH  = 0,
+	e_DIRECTION_SOUTH  = 1,
+	e_DIRECTION_EAST   = 2,
+	e_DIRECTION_WEST   = 3,
+	e_DIRECTION_UP     = 4,   // Seldomly used (to go to the house upper floor and cellar)
+	e_DIRECTION_DOWN   = 5,   // Seldomly used (to go to the house upper floor and cellar)
+	e_DIRECTION_COUNT_ = 6
+} direction_id;
 
 
 // Define the various locations
@@ -176,32 +179,35 @@ typedef enum
 	e_ITEM_CURRENT               = e_ITEM_COUNT_    // For the scripting, so the current objects can be accessed from various scripts
 } item_id;
 // For practical reasons we reuse the item ids in the list of words followed by the actual instructions
-// Directions: These have to be in the same order as the DIRECTIONS enum
-#define	e_WORD_NORTH                 128        // = e_ITEM_COUNT_
-#define	e_WORD_SOUTH                 129
-#define	e_WORD_EAST                  130
-#define	e_WORD_WEST                  131
-#define	e_WORD_UP                    132
-#define	e_WORD_DOWN                  133
-// In-game instructions
-#define	e_WORD_TAKE                  134
-#define	e_WORD_DROP                  135
-#define	e_WORD_USE                   136
-#define	e_WORD_COMBINE               137
-#define	e_WORD_OPEN                  138
-#define	e_WORD_CLOSE                 139
-#define	e_WORD_READ                  140
-#define	e_WORD_LOOK                  141
-#define	e_WORD_FRISK                 142
-#define	e_WORD_SEARCH                143
-#define	e_WORD_THROW                 144
-// Meta instructions
-#define	e_WORD_QUIT                  145
-#define e_WORD_HELP                  146
-#define	e_WORD_COUNT_                147
-// Additional values for the parser
-#define	e_WORD_CONTINUE              148
-#define e_WORD_SKIP                  149  // Special command to modify the behavior of the system
+typedef enum
+{
+	// Directions: These have to be in the same order as the DIRECTIONS enum
+	e_WORD_NORTH                 = 128,        // Word ids start at 128, right above the item id range (items stay < 128)
+	e_WORD_SOUTH                 = 129,
+	e_WORD_EAST                  = 130,
+	e_WORD_WEST                  = 131,
+	e_WORD_UP                    = 132,
+	e_WORD_DOWN                  = 133,
+	// In-game instructions
+	e_WORD_TAKE                  = 134,
+	e_WORD_DROP                  = 135,
+	e_WORD_USE                   = 136,
+	e_WORD_COMBINE               = 137,
+	e_WORD_OPEN                  = 138,
+	e_WORD_CLOSE                 = 139,
+	e_WORD_READ                  = 140,
+	e_WORD_LOOK                  = 141,
+	e_WORD_FRISK                 = 142,
+	e_WORD_SEARCH                = 143,
+	e_WORD_THROW                 = 144,
+	// Meta instructions
+	e_WORD_QUIT                  = 145,
+	e_WORD_HELP                  = 146,
+	e_WORD_COUNT_                = 147,
+	// Additional values for the parser
+	e_WORD_CONTINUE              = 148,
+	e_WORD_SKIP                  = 149  // Special command to modify the behavior of the system
+} word_id;
 
 // Flags for the items
 typedef enum

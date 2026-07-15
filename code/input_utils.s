@@ -12,7 +12,7 @@ _gAnswerProcessingCallback .dsb 2
 _gInputShift        .dsb 1
 _gInputErrorCounter .dsb 1
 _gInputDone         .dsb 1
-_gWordBuffer        .dsb MAX_WORDS 	; One byte identifier of each of the identified words
+_gWordBuffer        .dsb MAX_WORDS 	; One byte identifier of each of the identified words (verb, then items) @enum word_id|item_id
 
     .text
 
