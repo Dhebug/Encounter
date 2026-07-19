@@ -2,10 +2,12 @@
 /*
  * Example Oric automation script for Encounter.
  *
- * Run it from VS Code: start a debug session (F5), then run the command
- * "Oric: Run Automation Script…" and pick this file. It drives the LIVE session, so it
- * plays in the Oric Screen View; progress + pass/fail appear in the "Oric Automation"
- * output channel; screenshots land in automation/out/. Stop it with "Oric: Stop Automation Script".
+ * Run it from VS Code: the command "Oric: Run Automation Script…" — pick this file. If no
+ * debug session is open it STARTS one for you (the F5 equivalent, using the project's
+ * oric-debug launch config) and waits until it's live; an already-running session is reused.
+ * It drives the LIVE session, so it plays in the Oric Screen View; progress + pass/fail appear
+ * in the "Oric Automation" output channel; screenshots land in automation/out/. Stop it with
+ * "Oric: Stop Automation Script".
  *
  * A script is:  module.exports = async (t) => { ... }
  * Game-specific building blocks live in ./encounter.js (shared by every script here);
@@ -36,21 +38,98 @@ module.exports = async (t) => {
     t.log('Starting automated playthrough');
     // await t.warp(true);                       // fast-forward the whole run
 
-    // Wait until the game sets the starting location, verify it, snapshot the screen.
-    await enc.waitLocation(t, 'e_LOC_ENTRANCEHALL');
-    await enc.assertLocation(t, 'boots into the entrance', 'e_LOC_ENTRANCEHALL');
-    t.screenshot('01-entrance');
+    // Let the machine boot until an overlay is actually active — right after a cold F5 the
+    // module is briefly unknown (null) until the splash stamps itself. (Skip/shorten this if
+    // you always start from an already-running session.)
+    t.log('module: ' + await t.waitModuleKnown());
 
-    // Climb the stairs — one reusable call: it waits for the parser prompt to be ready,
-    // logs the command, and types "u" + Return at a human pace (see enc.command).
-    await enc.command(t, 'u');
-    await enc.waitLocation(t, 'e_LOC_LARGE_STAIRCASE');
-    await enc.assertLocation(t, 'the U command climbs to the staircase', 'e_LOC_LARGE_STAIRCASE');
-    t.screenshot('02-staircase');
+    // Get to the game from wherever we started — explicit, one obvious action per overlay.
+    // (Modules: Splash, Intro, Game, Outro, King.) Each `if` re-reads t.module() and, after
+    // a skip key, waits for the overlay to actually switch before the next check. Edit freely:
+    // e.g. to TEST the intro instead of skipping it, replace its branch with intro checks.
+    if (await t.module() === 'Splash') 
+    { 
+        t.log('In Splash -> Exiting');
+        await t.warp(true); 
+        await t.press('SPACE'); 
+        await t.waitModuleChange('Splash'); 
+        await t.warp(false);
+    }
 
-    // The dog attacks — wait for the game-over flag.
-    t.log('Waiting for GameOver');
-    await t.waitFor('gGameOverCondition != 0');
+    if (await t.module() === 'Outro')  
+    { 
+        t.log('In Outro -> Exiting');
+        await t.press('SPACE'); 
+        await t.warp(true); 
+        await t.waitModuleChange('Outro'); 
+        await t.warp(false);
+    }
+
+    if (await t.module() === 'Intro')
+    {
+        t.log('In Intro -> Exiting');
+        // Attract mode samples the keyboard only between pages, so a single press can be
+        // missed — MASH each key until the game reacts (press(..., {until}) does exactly that,
+        // at normal speed so the press isn't collapsed by warp).
+        // 1) ESC until the intro acknowledges and starts the game (gGameStarting -> 1).
+        await t.press('ESC', { until: async () => (await t.read('gGameStarting', 1))[0] === 1 || (await t.module()) !== 'Intro' });
+        // 2) SPACE until the typewriter intro sequence ends and the Game overlay loads.
+        await t.press('SPACE', { until: async () => (await t.module()) !== 'Intro' });
+    }
+
+    const mod = await t.module();
+    if (mod !== 'Game') 
+    {
+        throw new Error('Game module not active (in ' + mod + ')');
+    }
+    else
+    {
+        t.log('In Game -> skipping the presentation');
+        await t.warp(true); 
+        await t.waitFor('_gStreamCutScene != 0');
+        await t.waitFor('_gStreamCutScene == 0');
+        await enc.waitLocation(t, 'e_LOC_MARKETPLACE');
+        t.log('Marketplace');
+        await t.warp(false);
+        //await t.runFrames(250)  
+        await enc.command(t, 'TAKE BAG');
+        //await t.runFrames(250)  
+        await enc.command(t, 'DROP NEWSPAPER');
+        //await t.runFrames(250)  
+        await enc.command(t, 'DROP PLAN');
+        //await t.runFrames(250)  
+        await enc.command(t, 'N');
+        //await t.runFrames(250)  
+        await enc.assertLocation(t, 'In the tunnel?', 'e_LOC_DARKTUNNEL');        
+        await enc.command(t, 'TAKE DEPOSIT');
+        await enc.command(t, 'BAG');
+        await enc.command(t, 'N');
+        await enc.assertLocation(t, 'In the forest?', 'e_LOC_WOODEDAVENUE');        
+        await enc.command(t, 'W');
+        await enc.assertLocation(t, 'The old well?', 'e_LOC_WELL');        
+        await enc.command(t, 'TAKE ROPE');
+        await enc.command(t, 'E');
+        await enc.assertLocation(t, 'In the forest?', 'e_LOC_WOODEDAVENUE');        
+
+        /*
+        // --- Game is active: the actual test ------------------------------------------------
+        // Wait until the game sets the starting location, verify it, snapshot the screen.
+        await enc.waitLocation(t, 'e_LOC_ENTRANCEHALL');
+        await enc.assertLocation(t, 'boots into the entrance', 'e_LOC_ENTRANCEHALL');
+        t.screenshot('01-entrance');
+
+        // Climb the stairs — one reusable call: it waits for the parser prompt to be ready,
+        // logs the command, and types "u" + Return at a human pace (see enc.command).
+        await enc.command(t, 'u');
+        await enc.waitLocation(t, 'e_LOC_LARGE_STAIRCASE');
+        await enc.assertLocation(t, 'the U command climbs to the staircase', 'e_LOC_LARGE_STAIRCASE');
+        t.screenshot('02-staircase');
+
+        // The dog attacks — wait for the game-over flag.
+        t.log('Waiting for GameOver');
+        await t.waitFor('gGameOverCondition != 0');
+        */
+    }
 
     // Longer parser commands work the same way, e.g.:
     //   await enc.command(t, 'take bag');
