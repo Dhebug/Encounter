@@ -6,10 +6,22 @@
         "loader_api.h": "c"
     },
     "cmake.configureOnOpen": false,
+    "workbench.editor.autoLockGroups": {
+        "mainThreadWebview-oricScreenView": true,
+        "terminalEditor": true
+    },
     "workbench.colorCustomizations": {
         "activityBar.background": "#243121",
         "titleBar.activeBackground": "#33452E",
-        "titleBar.activeForeground": "#FAFCFA"
+        "titleBar.activeForeground": "#FAFCFA",
+        "titleBar.inactiveBackground": "#243121",
+        "titleBar.inactiveForeground": "#FAFCFA",
+        "statusBar.background": "#243121",
+        "statusBar.foreground": "#FAFCFA",
+        "statusBar.debuggingBackground": "#243121",
+        "statusBar.debuggingForeground": "#FAFCFA",
+        "statusBar.noFolderBackground": "#243121",
+        "statusBar.noFolderForeground": "#FAFCFA"
     },
     "VSCodeCounter.languages":{
         "data":{
