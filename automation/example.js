@@ -32,9 +32,18 @@
  *   await enc.assertLocation(t, label, 'e_LOC_...')   checkpoint the current location
  */
 
-const enc = require('./encounter');
+const enc = require('./lib/encounter');   // utility helpers live in automation/lib/ (not standalone scripts)
 
-module.exports = async (t) => {
+// How the ▶ Run button gets a session — metadata at the TOP, via the object form:
+module.exports = {
+    session: 'any',            // reuse the running debug session, else launch one
+    config: 'Build & Run',     // when launching, use this config (runs, not paused) — no picker prompt
+    // Other choices: session 'existing' (utility — run in the CURRENT session, never launch)
+    //                session 'fresh'    (always launch a new emulator; confirm a restart if one runs)
+    run,                       // the playthrough (defined below — function declarations hoist)
+};
+
+async function run(t) {
     t.log('Starting automated playthrough');
     // await t.warp(true);                       // fast-forward the whole run
 
@@ -136,4 +145,4 @@ module.exports = async (t) => {
     //   await enc.command(t, 'go north');
 
     t.log('example playthrough complete');
-};
+}
