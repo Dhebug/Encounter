@@ -16,11 +16,24 @@ echo.
 echo %ESC%[1mBuild started: %date% %time%%ESC%[0m
 set ENCOUNTER_BUILD_START=%time%
 
+SET OSDKBRIEF=NOPAUSE
+
 ::
 :: Initial check.
 :: Verify if the SDK is correctly configured
 ::
 IF "%OSDK%"=="" GOTO ErCfg
+
+::
+:: Verify the OSDK is recent enough for this project.
+:: The actual version comparison lives in %OSDK%\bin\checkversion.bat (added in
+:: OSDK %OSDK_REQUIRED%). An OSDK too old to contain it cannot report a version, so it
+:: is treated as too old. A missing feature means the build would not work -> hard stop.
+::
+SET OSDK_REQUIRED=2.0
+IF NOT EXIST "%OSDK%\bin\checkversion.bat" GOTO ErVersion
+CALL "%OSDK%\bin\checkversion.bat" %OSDK_REQUIRED%
+IF ERRORLEVEL 1 GOTO ErVersion
 
 ::
 :: Set the build parameters
@@ -77,6 +90,29 @@ if NOT "%TEST_BUILT%"=="XX" (
 :: Build successfull!
 ECHO.
 goto End
+
+
+::
+:: Outputs an error message
+::
+:ErCfg
+ECHO == ERROR ==
+ECHO The Oric SDK was not configured properly
+ECHO You should have a OSDK environment variable setted to the location of the SDK
+IF "%OSDKBRIEF%"=="" PAUSE
+GOTO End
+
+
+::
+:: Outputs a version error message
+::
+:ErVersion
+ECHO == ERROR ==
+ECHO This project requires OSDK %OSDK_REQUIRED% or newer.
+ECHO Your OSDK is too old, or cannot report its version.
+ECHO Update your OSDK, or verify %OSDK%\bin\checkversion.bat is present.
+IF "%OSDKBRIEF%"=="" PAUSE
+GOTO End
 
 
 :Error
