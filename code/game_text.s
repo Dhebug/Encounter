@@ -587,6 +587,7 @@ girl_not_here
         GOSUB(_WatchSetup)
 
 end_intro_sequence        
+        SET_SKIP_POINT(0)              ; Clear the intro skip point: otherwise a later cut-scene WAIT + keypress jumps the stream back into the market script (market-hang bug)
         STOP_MUSIC()                   ; To ensure sounds are back if we cut before the music ended... (Need to fix that more cleanly, so many hacks now!)
         ; Back to the market place
         DISPLAY_IMAGE_NOBLIT(LOADER_PICTURE_LOCATIONS_START)
