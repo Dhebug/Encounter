@@ -84,7 +84,7 @@ ECHO %ESC%[95m== Building final floppy ==%ESC%[0m
 IF ERRORLEVEL 1 GOTO FloppyBuilderError
 type ..\build\floppy_builder_error.txt
 :: Copy disk to stable name for VS Code debug launcher
-copy ..\build\%OSDKDISK% ..\build\debug.dsk >NUL
+::copy ..\build\%OSDKDISK% ..\build\debug.dsk >NUL
 
 IF "%FINAL_TARGET_DISK%"=="" GOTO EndCopy
 ECHO Copying ..\build\%OSDKDISK% to %FINAL_TARGET_DISK%\%OSDKDISK%
