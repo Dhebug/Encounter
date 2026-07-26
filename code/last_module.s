@@ -27,7 +27,11 @@ _EndText
 ;_free_to_use_text = osdk_end+1 ; *+256
 
     .bss
-* = _EndText           ; By default we make the BSS start immediately after the TEXT section
+; XA 2.0 auto-chains .bss to start right after the whole .text section (the
+; on-demand library modules included), so no explicit "* = end-of-text" marker
+; is needed. The natural .bss run below (stack) lands above the code; the
+; explicit "* = $XXXX" overlay/screen placements further down take over from
+; there and are left untouched by the auto-chaining.
 _StartBSS
 
 #define OSDK_CUSTOM_STACK 
@@ -231,3 +235,4 @@ _free_to_use_overlay
 #error - Music file is larger than reserved buffer size
 #else
 #endif
+#endif // MODULE_GAME

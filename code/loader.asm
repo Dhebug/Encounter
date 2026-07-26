@@ -918,9 +918,7 @@ _EndLoaderCode
 
 _Vectors
 
-#if ( _Vectors <> $FFF1 )
-#error - Vector address is incorrect, loader will crash
-#else
+.asserteq _Vectors, $FFF1, "Vector address is incorrect, loader will crash"
 
 ;
 ; API variables — 9 bytes packed at $FFF1-$FFF9
@@ -944,9 +942,7 @@ _LoaderApiAddressHigh       .byt >LOADER_KERNEL_PROGRAM_ADDRESS     ; $FFF9
 ;
 ; These three HAVE to be at these precise adresses, they map to hardware registers
 ;
-#if ( * <> $FFFA )
-#error - Vector address is incorrect, loader will crash
-#else
+.asserteq *, $FFFA, "Vector address is incorrect, loader will crash"
 
 _VectorNMI          .word IrqDoNothing              ; $FFFA-$FFFB - NMI Vector (Usually points to $0247)
 _VectorReset        .word IrqDoNothing              ; $FFFC-$FFFD - RESET Vector (Usually points to $F88F)
@@ -957,7 +953,6 @@ _VectorIRQ          .word _IrqHandler                ; $FFFE-$FFFF - IRQ Vector 
 #print (_Vectors - _EndLoaderCode)
 #if ( (_Vectors - _EndLoaderCode) < 0 )
 #error - Loader ran out of memory, loader will crash
-#endif
 #endif
 #endif
 

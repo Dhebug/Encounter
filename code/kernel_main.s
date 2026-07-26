@@ -22,8 +22,12 @@ _param2                 .dsb 2
 ; Shared library imports
 ; ============================================
 // These are parts of the OSDK libraries used by all four modules of the game
-// By importing them inside the kernel we avoid wasting room on disk
-#pragma osdk import _memset _memcpy mul16i mul16u
+// By importing them inside the kernel we avoid wasting room on disk.
+// enter/leave (the C stack-frame helpers) moved from the always-linked header.s
+// to an on-demand library (lib/frame.s) in OSDK 2.0, so the resident kernel must
+// import them explicitly - otherwise the overlays can't resolve their frame
+// prologue/epilogue and the link fails with "Label 'enter'/'leave' not defined".
+#pragma osdk import _memset _memcpy mul16i mul16u enter leave
 
 ; ============================================
 ; Kernel Entry Point
