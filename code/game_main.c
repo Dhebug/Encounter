@@ -124,7 +124,7 @@ WORDS AskInputCallback()
 // MARK:Drop Item
 void DropItem()
 {
-    unsigned char itemId = gWordBuffer[1];
+    item_id itemId = gWordBuffer[1];    
 	if ( (itemId>=e_ITEM_COUNT_) || (gItems[itemId].location!=e_LOC_INVENTORY) )
 	{
 		PrintErrorMessage(gTextErrorDropNotHave);  // "You can only drop something you have"
@@ -132,7 +132,7 @@ void DropItem()
 	else
 	{
 		item* itemPtr=&gItems[itemId];
-        unsigned char linkedItemId = itemPtr->associated_item;
+        item_id linkedItemId = itemPtr->associated_item;
 
         ClearMessageWindow(16+4);
 

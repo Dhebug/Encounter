@@ -1,4 +1,20 @@
 {
+    // Oric debugging for Encounter.
+    //
+    // NOTE: VS Code has no native "variables" block for custom key-value reuse in
+    // launch.json (only "inputs", which is for prompts/commands). So shared values
+    // are written inline using built-in variables (${env:OSDK}, ${workspaceFolder})
+    // in each config. This is verbose but the only thing VS Code actually expands.
+    //
+    // The build target is NOT named here: with no "output"/"diskImage", the debug
+    // adapter auto-detects the build output in build/ (newest .dsk, else newest
+    // .tap). Encounter builds one .dsk per active config (the active language is
+    // whichever SET TEST_LANGUAGE= line wins in osdk_config.bat), and that build is
+    // the newest .dsk — so auto-detection lands on the active one.
+    //
+    // "sources" + "extensions" + "exclude" scope the staleness check to real source
+    // files AND the build scripts: editing any .c/.s/.h/.asm under code/, or any
+    // .bat at the root (config/build/makedata changes), triggers a rebuild.
     "version": "0.2.0",
     "configurations": [
         {
@@ -6,7 +22,6 @@
             "request": "launch",
             "name": "Build & Debug",
             "emulatorPath": "${env:OSDK}/Oricutron/Oricutron.exe",
-            "diskImage": "${workspaceFolder}/build/debug.dsk",
             "emulatorArgs": ["-m", "atmos", "-R", "soft", "--scanlines", "off"],
             "port": 6510,
             "symbolFile": "${workspaceFolder}/build/symbols_ext_combined",
@@ -14,8 +29,9 @@
             "build": {
                 "command": "osdk_build.bat",
                 "cwd": "${workspaceFolder}",
-                "output": "${workspaceFolder}/build/debug.dsk",
-                "sources": ["${workspaceFolder}/code"]
+                "sources": ["${workspaceFolder}/code", "${workspaceFolder}"],
+                "extensions": ["c", "s", "h", "asm", "bat"],
+                "exclude": [".git", "build", "node_modules", "documentation", "screenshots", "packaging", "publishing", "misc_information", "automation", "bin", "data"]
             }
         },
         {
@@ -23,7 +39,6 @@
             "request": "launch",
             "name": "Build & Run",
             "emulatorPath": "${env:OSDK}/Oricutron/Oricutron.exe",
-            "diskImage": "${workspaceFolder}/build/debug.dsk",
             "emulatorArgs": ["-m", "atmos", "-R", "soft", "--scanlines", "off"],
             "port": 6510,
             "symbolFile": "${workspaceFolder}/build/symbols_ext_combined",
@@ -31,8 +46,9 @@
             "build": {
                 "command": "osdk_build.bat",
                 "cwd": "${workspaceFolder}",
-                "output": "${workspaceFolder}/build/debug.dsk",
-                "sources": ["${workspaceFolder}/code"]
+                "sources": ["${workspaceFolder}/code", "${workspaceFolder}"],
+                "extensions": ["c", "s", "h", "asm", "bat"],
+                "exclude": [".git", "build", "node_modules", "documentation", "screenshots", "packaging", "publishing", "misc_information", "automation", "bin", "data"]
             }
         },
         {
