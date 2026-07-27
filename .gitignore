@@ -15,6 +15,8 @@ code/monkey_king_sprites.s
 # Local debug/automation tooling — machine-specific or generated, never shared
 # .mcp.json hardcodes this machine's osdk-debug extension path
 .mcp.json
+# AI collaboration bridge handshake — holds this session's local port
+.oric-bridge.json
 # Oricutron session snapshots (local state)
 .oric-snapshots/
 # manual emulator screen captures

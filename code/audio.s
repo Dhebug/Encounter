@@ -396,7 +396,6 @@ _PsgSetRegister
     stx	via_porta	; Write register value directly from X
     ora	#$20		; $CC|$20=$EC  BDIR = write mode
     sta	via_pcr
-
     lda	_SoundPsgTemp	; Restore idle state
     sta	via_pcr
 

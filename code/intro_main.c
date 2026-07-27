@@ -472,6 +472,7 @@ int DisplayAchievements()
             {
                 unlockedCount++;
             }
+            gPrintAddress[-1]=(entry&1)?7:16+4;    // Column 0 carries the line's blue paper; column 20 restores the white ink that the left entry's terminator (OSDK 2.0 sprintf writes a 0 = ink black) destroyed
             sprintf(gPrintAddress,"%s",achievementMessage);
             gPrintAddress+=20;
             achievementMask <<= 1;

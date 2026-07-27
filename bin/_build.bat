@@ -83,8 +83,12 @@ ECHO %ESC%[95m== Building final floppy ==%ESC%[0m
 %osdk%\bin\FloppyBuilder build floppybuilderscript.txt >..\build\floppy_builder_error.txt
 IF ERRORLEVEL 1 GOTO FloppyBuilderError
 type ..\build\floppy_builder_error.txt
-:: Copy disk to stable name for VS Code debug launcher
-::copy ..\build\%OSDKDISK% ..\build\debug.dsk >NUL
+
+:: The debugger launches this copy, never the build output itself. Oricutron keeps the
+:: mounted image in memory and writes it back when the program saves (high scores), so
+:: launching the build output directly lets a running session overwrite the disk a
+:: rebuild just produced - leaving the previous program next to the current symbols.
+copy ..\build\%OSDKDISK% ..\build\debug.dsk >NUL
 
 IF "%FINAL_TARGET_DISK%"=="" GOTO EndCopy
 ECHO Copying ..\build\%OSDKDISK% to %FINAL_TARGET_DISK%\%OSDKDISK%
