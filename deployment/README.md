@@ -121,6 +121,13 @@ All **TODO**.
 `steam_appid.txt` and the emulator's scratch files (`stdout.txt`, `stderr.txt`,
 `printer_out.txt`, `screenshot*.bmp`), and refresh the three text files from this repository.
 
+`steam_appid.txt` is worth understanding in both directions. Without it, a Steam build started
+outside the Steam client cannot tell Steam which application it is, `SteamAPI_InitEx` fails, and the
+launcher reports that achievements and Cloud saves are disabled -- so it has to be present, holding
+the AppID, to debug locally. It must equally never be shipped: in a released build it would override
+the identity Steam assigns, so dropping it is part of assembling a payload rather than an
+afterthought.
+
 
 ## Running order
 
