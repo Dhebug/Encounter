@@ -1,0 +1,22 @@
+#
+# Copy to local.settings and fill in. NEVER commit local.settings: it names internal machines and
+# accounts, and this repository is published.
+#
+# The Windows machine orchestrates; the other two hosts are reached from it.
+#
+
+# macOS build host
+MAC_HOST=mac-hostname-or-address
+MAC_USER=account-name
+MAC_KEY=~/.ssh/your_deploy_key
+
+# Linux build host. A container or WSL distro with an old glibc, see the README.
+LINUX_BUILD=name-of-the-wsl-distro-or-container
+
+# Where the projects that produce the artefacts are checked out
+ORICUTRON_REPO=X:/path/to/oricutron
+LAUNCHER_REPO=X:/path/to/GameLauncher
+
+# Butler and SteamCMD, for publishing
+BUTLER=X:/path/to/butler.exe
+STEAMCMD=X:/path/to/steamcmd.exe
