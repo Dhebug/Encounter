@@ -1,0 +1,7 @@
+# Shell scripts must stay LF. bash refuses a script with CRLF line endings outright, with an error
+# that names the interpreter rather than the line endings:
+#
+#     bash: line 1: #!/usr/bin/env: No such file or directory
+#
+# The deployment scripts are run inside WSL from this Windows checkout, so this is not theoretical.
+*.sh text eol=lf
