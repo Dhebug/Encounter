@@ -1,17 +1,12 @@
 # Encounter deployment
 
-Builds every shipped artefact from source and assembles the store payloads, replacing the manual
-copying, the `Clean*ContentFolder.bat` files and the by-hand steps in the launcher's README.
-
-`../publishing/` holds store and marketing material. This folder holds the machinery.
-
-Nothing here is written yet: this is the design and the running order. Sections marked **TODO**
-are not implemented.
+Assembles the store payloads from the content baseline and the two build projects' binaries, and
+uploads them.
 
 
 ## What gets shipped
 
-Three axes over one shared payload:
+Three axes over one payload:
 
 | Axis | Values |
 |------|--------|
@@ -19,40 +14,40 @@ Three axes over one shared payload:
 | Platform | Windows, Linux, macOS |
 | Edition | main, demo |
 
-The demo is the same launcher and the same emulator as the main game, differing only in which
-disk image is included, plus a short "about this demo" note. It is not a separate pipeline.
+The demo is the same launcher and the same emulator, differing only in which disk image it carries.
 
-macOS shipping is **undecided**: Steam requires notarisation, which requires a paid Apple
-Developer ID, so the choice is between paying for it and not shipping macOS. See *Code signing*
-below. Counting macOS on Steam only, that is ten payloads: Steam x 3 platforms x 2 editions,
-Itch x 2 platforms x 2 editions.
-
-The physical edition DLC (Steam 4190940) is separate and stays manual for now.
+Itch currently has the `windows`, `windows_demo` and `linux` channels. The physical edition DLC
+(Steam 4190940) is separate and stays manual.
 
 
-## Where things are built
+## How a payload is composed
 
-No single machine can build all of it, so one host orchestrates the other two. All three are
-already working.
+    common/  +  a launcher for this platform and store
+             +  an emulator for this platform
+             +  whatever else this target needs
+    =  a published payload
 
-| Target | Host | Notes |
-|--------|------|-------|
-| Windows | this PC, MSVC | native |
-| Linux | WSL, **Ubuntu 22.04 container** | not Debian 13, see *glibc* below |
-| macOS arm64 + Intel | a Mac on the local network, reached over SSH | both slices come from the arm machine, merged with `lipo` |
+**`common/` holds everything shared by every version of the game**: the disk images, the emulator's
+data, and the text files. It is copied wholesale, so adding a file to a release means putting it in
+`common/` rather than editing a script.
 
-Host names, account names, addresses and key paths are **deliberately not recorded in this
-repository**. They live in `local.settings`, which is git-ignored: copy `local.settings.example`
-and fill it in. Nothing in here should ever carry an internal address or account name, since this
-repository is published.
+Everything else is per target:
 
-The Mac needs the Xcode command line tools; the build script installs a user-local CMake if the
-machine has none.
+| Part | Comes from | Varies by |
+|------|------------|-----------|
+| Launcher | `D:/Git/GameLauncher/artifacts/<platform>-<store>/` | platform, store |
+| Emulator | `E:/git/oricutron/artifacts/<platform>-<arch>-sdl2/` | platform, architecture |
+| Steam runtime library | the launcher project's artifacts, beside the launcher | platform, store |
+| `.itch.toml` | generated during assembly | store |
+| Which disk images are taken from `common/Game/` | main or demo | edition |
+
+The version number is read from the disk image filenames, so `EncounterHD-EN-50HZ-v1.4.0.dsk`
+publishes as 1.4.0.
 
 
 ## Layout
 
-Each project owns the builds it produces. This folder consumes them and owns only the assembly.
+Each project owns the builds it produces. This folder consumes them and owns the assembly.
 
 ```
 E:/git/oricutron/artifacts/            <- the emulator project's own output
@@ -61,178 +56,122 @@ E:/git/oricutron/artifacts/            <- the emulator project's own output
 
 D:/Git/GameLauncher/artifacts/         <- the launcher project's own output
   {windows,linux,macos}-{steam,itch}/
-  manifest.json
 
 deployment/                            <- here
-  base/                                payload common to every target, including the emulator
-                                       data (ROMs, images) and the game's oricutron.cfg
-  staging/<version>/<store>-<platform>-<edition>/
+  common/                              the shared content
+  staging/<store>-<platform>-<edition>/
   logs/
 ```
 
-Both `artifacts/` folders are build output, not source, and are **git-ignored**: binaries do not
-belong in a repository, and the three build hosts collect their results onto the orchestrating
-machine anyway. Oricutron's is ignored through `.git/info/exclude`, which is per-clone and never
-committed, so that repository stays untouched.
+`common/`, `staging/` and both `artifacts/` folders are git-ignored, so the content and the binaries
+are not in version control.
 
-`staging/` is what gets uploaded, kept separate so a payload can be reassembled without
-rebuilding and one build can serve several editions.
+`staging/` is scratch space for the payload being assembled now, and carries no version in its path.
+Git and the stores are what remember versions.
 
 
-## Sources of truth
+## Where the binaries are built
 
-| Content | Comes from |
-|---------|------------|
-| `Version History.txt`, `ReadMe.txt`, `LisezMoi.txt` | this repository's root |
-| Disk images | `../build/EncounterHD-*.dsk` |
-| Emulator binary | `E:\git\oricutronrtifacts\`, built by that project for every platform |
-| Launcher binary | `D:\Git\GameLauncherrtifacts\`, built by that project per platform and store |
-| Emulator data (ROMs, images, disks) | `base/`, from an official Oricutron distribution, see below |
-| `oricutron.cfg` | `base/`: the game's own, which differs from Oricutron's stock one |
+No single machine builds all of it, so one host drives the other two.
 
-**The emulator is never taken from `%OSDK%\Oricutron`.** That folder is the OSDK's own deployment
-target: fetching from it would make an Encounter release depend on whatever state the OSDK happens
-to be in. Every platform's emulator is built here from a pinned Oricutron commit, Windows included.
+| Binary | Host | Rebuild with | How it works |
+|--------|------|--------------|--------------|
+| Launcher, every platform and store | this PC, driving WSL and the Mac | `cmake --build build --target BuildAllPlatforms` | `BUILDING.md` in the launcher repository |
+| Emulator | per platform | `Build-Emulator.ps1` (**TODO**) | that script, once it exists |
 
-**The ROM images are not in the Oricutron repository.** Git carries only the `.sym` and `.pch`
-files, so a build from source produces a binary that exits immediately with
-`Unable to open 'roms/basic11b.rom'` and friends. The `.rom` files come with official Oricutron
-distributions; the currently shipped `Emulator/` folder is the known-good copy. An emulator payload
-is therefore *our binary* plus *that data*, and the data needs its own pinned source rather than
-being assumed to come out of the repository.
+Both write into their own project's `artifacts/` folder, which is what assembly reads.
 
-The game build should deposit the disk images and `Version History.txt` where the assembly step
-expects them, so a release never depends on remembering to copy them. **TODO**
+The Mac's address, account and key come from the `MAC_BUILD_HOST`, `MAC_BUILD_USER` and `MAC_BUILD_KEY`
+environment variables, which the launcher's CMake reads when it configures — this repository is
+published, so they stay out of it. Every other path the scripts need is a parameter with a default, so
+they run with no configuration here and can be pointed elsewhere with a switch.
+
+Oricutron is built from a pinned commit copied out of its worktree, and the hash goes in
+`manifest.json`. Build fixes go through a change request to that project.
 
 
 ## Scripts
 
-All **TODO**.
+| Script | Does | State |
+|--------|------|-------|
+| `New-Release.ps1 -Platform ... -Store ... [-Edition ...]` | assembles `common/` + the two binaries into `staging/` | works |
+| `New-Archive.ps1 -Platform ... -Store ...` | packs `staging/` into a tar.gz carrying real Unix permissions, to hand a build to someone directly | works |
+| `New-Archive.sh` | the Linux half of the above, run inside WSL by it | works |
+| `Publish-Release.ps1 -Platform ... -Store ... [-Live]` | uploads to Itch with Butler | Itch works, Steam **TODO** |
+| `DeploymentHelpers.ps1` | dot-sourced by the others; the version rule lives here | works |
+| `Build-Emulator.ps1 -Platform ...` | builds a pinned static SDL2, then Oricutron against it | **TODO** |
+| `Release.ps1` | interactive menu over the above | **TODO** |
 
-| Script | Does |
-|--------|------|
-| `Build-Emulator.ps1 -Platform windows\|linux\|macos` | builds a pinned static SDL2, then Oricutron against it |
-| `Build-Launcher.ps1 -Platform ... -Store steam\|itch` | invokes the right host's toolchain |
-| `New-Release.ps1 -Version x.y.z` | assembles `base` + emulator + launcher into `staging/`, per target |
-| `Publish-Release.ps1 -Target ... [-WhatIf]` | Butler for Itch, SteamCMD for Steam |
-| `Release.ps1` | interactive menu over the above |
+`New-Release.ps1` rebuilds the staging folder from empty each time, so a payload contains what this
+assembly put there.
 
-`New-Release.ps1` also does what the `Clean*ContentFolder.bat` files do today: drop
-`steam_appid.txt` and the emulator's scratch files (`stdout.txt`, `stderr.txt`,
-`printer_out.txt`, `screenshot*.bmp`), and refresh the three text files from this repository.
+**`Publish-Release.ps1` uploads only with `-Live`.** By default it prints the command it would run and
+stops without contacting itch.io; `-DryRun` additionally asks butler what it would push. `butler push`
+publishes the moment it finishes and a build can only be replaced, not withdrawn, so the default is
+inert on purpose.
 
-`steam_appid.txt` is worth understanding in both directions. Without it, a Steam build started
-outside the Steam client cannot tell Steam which application it is, `SteamAPI_InitEx` fails, and the
-launcher reports that achievements and Cloud saves are disabled -- so it has to be present, holding
-the AppID, to debug locally. It must equally never be shipped: in a released build it would override
-the identity Steam assigns, so dropping it is part of assembling a payload rather than an
-afterthought.
+### Making a release
 
-
-## Running order
-
-1. **Emulator builds, for all three platforms.** Windows is included: its emulator has to come
-   from our own build too, not from the OSDK. macOS is **done** -- see `E:\git\oricutronrtifacts\macos-arm64-sdl2\`.
-
-   Once a Windows build carrying `--title` and `--icon` is in the shipped payload, the launcher's
-   `ORICUTRON_HAS_TITLE` and `ORICUTRON_HAS_ICON` gates can both be switched on and the
-   `EnumWindows` / `SetWindowText` / `WM_SETICON` thread deleted. The gates describe what the
-   *deployed* emulator understands, so they must not be flipped before that.
-2. **Launcher builds** for all five platform/store combinations. Needs the Steamworks SDK
-   present on each host; the Mac's Steam target is currently disabled because
-   `STEAMWORKS_SDK_DIR` still points at a Windows path.
-3. **Assembly**, retiring the `.bat` files and the manual copying.
-4. **Publishing**, last and behind `-WhatIf`. `butler push` goes live immediately; a Steam
-   upload still has to be set live by hand, which is a useful brake.
-
-### Where Linux stands, 2026-07-30
-
-Both Linux artefacts are built and self-contained, from Ubuntu 22.04:
-
-| | size | requires |
-|---|---|---|
-| launcher | 11 MB | `GLIBC_2.35`, and no libstdc++ version at all |
-| emulator | 4.3 MB | `GLIBC_2.34`, SDL2 linked in, audio backends dlopened |
-
-A payload assembled from the two projects' `artifacts/` folders plus the shared data runs: both
-binaries start, and the emulator needs no audio workaround. Being built from `9b7ad9f` it carries
-`--title` and `--icon`, and reports that commit in its build name.
-
-Remaining for Linux: the Steam variant, which needs the Steamworks SDK inside the build container.
+1. Update `common/` with the tested content for this version.
+2. Build the emulator for each platform, into that project's `artifacts/`.
+3. Build the launcher for each platform and store:
+   `cmake --build build --target BuildAllPlatforms`.
+4. `New-Release.ps1` per target.
+5. `Publish-Release.ps1 -Live` per target. Steam uploads still go through the SteamPipe GUI, and a
+   Steam build has to be set live by hand afterwards, which is a useful brake.
 
 
-## Decisions already taken
+## Itch
 
-**SDL2 only.** SDL 1.2 is dead upstream, its Oricutron build segfaults during startup on a
-current Linux desktop, and it is unlikely to build for arm64 macOS at all. The existing Windows
-SDL1 binary stays as a frozen artefact because that is what ships today and works. This is what
-took the emulator matrix from eight builds to three.
+Channel names follow the platform, with `_demo` appended for the demo, matching the existing
+`windows` and `windows_demo`. Itch reads the platform from the channel name.
 
-**Oricutron is read-only.** It is never modified, and it is built from a pinned commit copied out
-of the worktree, never from the live tree: another agent works in that repository, so building
-from it directly would be both irreproducible and a way to trip over each other. The commit hash
-goes in `manifest.json`. If a build fix is ever needed, it is a change request, not a patch.
+`butler push --fix-permissions` marks the Linux and macOS executables, which is what makes a payload
+assembled on Windows runnable elsewhere: NTFS carries no executable bit.
 
-Its `Makefile` already takes `PLATFORM=` and `SDL_LIB=sdl2` and honours `SDL_CFLAGS`, with a
-pkg-config fallback, so a vendored static SDL2 can be handed to it without touching anything.
+Every Itch payload carries a `.itch.toml` naming the launcher as its `play` action, so the itch app
+starts the launcher rather than offering a choice between it and the emulator.
 
-**Static linking, and what it does not buy.** Worth taking: static SDL2, and
-`-static-libstdc++ -static-libgcc` for the Linux launcher, which removes the `GLIBCXX`
-requirement entirely. It does *not* make a Linux binary self-contained: SDL2 `dlopen`s its audio
-backend, so `libpulse` or `libasound` still has to exist on the player's machine, and a fully
-static glibc would break `dlopen` altogether. macOS cannot statically link system frameworks.
 
-**SDL2's audio backends have to exist at its build time, or the game ships silent.** SDL2 decides
-which backends to compile in when *it* is configured, from the development headers present on the
-build machine, and dlopens the chosen one at run time. Built in a container without
-`libasound2-dev` and `libpulse-dev` it ends up with **only the dummy driver**, and the emulator then
-fails with `SDL init failed: dsp: No such audio device` on every machine, not only in WSL. That was
-mistaken for a WSL quirk once, and would have shipped a game with no sound at all.
+## Steam
 
-So the build container needs `libasound2-dev`, `libpulse-dev`, `libpipewire-0.3-dev` and
-`libjack-jackd2-dev` installed *before* SDL2 is built, and the result is worth verifying rather than
-assuming:
+`steam_appid.txt` holds the AppID and belongs beside the launcher **while debugging**: without it a
+Steam build started outside the Steam client cannot tell Steam which application it is,
+`SteamAPI_InitEx` fails, and the launcher reports achievements and Cloud saves as disabled. A released
+build takes its identity from Steam itself, so assembly leaves the file out.
 
-    strings <binary> | grep -qx pulseaudio && echo present
-
-They are dlopened, so the shipped binary still carries no hard dependency on them; the player's
-desktop provides whichever it has.
-
-**glibc sets the Linux floor.** Symbol versioning is one-directional: a binary built against a
-newer glibc refuses to start on an older one, while the reverse is fine. Built on Debian 13
-(glibc 2.41) the launcher requires `GLIBC_2.38`, which does not exist on Ubuntu 22.04 LTS (2.35)
-or Debian 12 (2.36). Hence building the release in an Ubuntu 22.04 container: the floor drops to
-2.35 and one binary then covers every current desktop distribution. WSL Debian stays fine for
-development.
-
-The GTK3 stack is linked dynamically and must not be bundled; every desktop distribution has it.
-
-**Code signing is required for Steam, so macOS needs an Apple Developer ID.** The Steamworks
-platform documentation states: *"Starting October 14th, 2019 Steam will require all new macOS
-Applications to be 64-bit and notarized by Apple."* Notarisation requires a Developer ID
-Application certificate, which requires Apple Developer Program membership at $99/year.
-
-This overturns an earlier assumption recorded here, that shipping on Steam avoided the
-certificate. That reasoning was about the wrong thing: it considered only whether Gatekeeper
-would fire, given that Steam's downloads do not carry the quarantine attribute. Valve's
-requirement is policy and applies regardless.
-
-What notarising actually involves, when it is decided:
+macOS on Steam needs notarisation, which needs a paid Apple Developer ID at $99/year — Steam requires
+all new macOS applications to be 64-bit and notarised. When that is decided, notarising means:
 
 - a Developer ID Application certificate in the Mac's keychain
-- signing with the **hardened runtime**, plus the two entitlements Steamworks calls for so the
-  Steam overlay can inject: `com.apple.security.cs.disable-library-validation` and
+- signing with the hardened runtime, plus the two entitlements Steamworks asks for so the overlay can
+  inject: `com.apple.security.cs.disable-library-validation` and
   `com.apple.security.cs.allow-dyld-environment-variables`
-- signing **every** executable shipped, the emulator inside `Encounter.app` included, and signing
-  after `lipo` so the universal binary is what carries the signature
+- signing every executable shipped, including the emulator inside the bundle, after `lipo` so the
+  universal binary carries the signature
 - `xcrun notarytool submit`, then `xcrun stapler staple`
 
-On Apple silicon every binary also needs at least an ad-hoc signature simply to execute, which
-clang applies at link time; that part already works and is why local builds run.
+On Apple silicon every binary needs at least an ad-hoc signature to execute at all, which clang
+applies at link time; that is why local builds run today.
 
-So the macOS decision is now between paying $99/year and not shipping macOS at all. Paying also
-removes the reason macOS was limited to Steam, since a notarised build is equally fine on Itch.
 
-**Universal macOS binary.** Recommended before any macOS release. Rosetta only translates x64 to
-arm, never the reverse, so an arm64-only build cannot start at all on an Intel Mac. One line,
-`CMAKE_OSX_ARCHITECTURES "x86_64;arm64"`, at the cost of building wxWidgets twice.
+## Still to do
+
+- **Steam publishing** from `Publish-Release.ps1`; SteamPipe by hand until then.
+- **`Build-Emulator.ps1`**, building a pinned static SDL2 and then Oricutron against it. One
+  constraint worth knowing before starting: SDL2 fixes its audio backends when *SDL2* is configured,
+  from the development headers present then, so the build environment needs `libasound2-dev`,
+  `libpulse-dev`, `libpipewire-0.3-dev` and `libjack-jackd2-dev` in place first or the result plays no
+  sound anywhere. `strings <binary> | grep -qx pulseaudio` confirms it. Oricutron's `Makefile` takes
+  `PLATFORM=` and `SDL_LIB=sdl2` and honours `SDL_CFLAGS`, so a vendored SDL2 can be handed to it
+  as is.
+- **Windows Oricutron** built from our own pinned commit like the other two. Once a build carrying
+  `--title` is in the shipped Windows payload, `ORICUTRON_HAS_TITLE` can be turned on there and the
+  `EnumWindows` / `SetWindowText` thread deleted; the gate describes what the deployed emulator
+  understands. `--icon` additionally needs an uncompressed square BMP shipped beside the emulator.
+- **macOS**: the notarisation decision, and `CMAKE_OSX_ARCHITECTURES "x86_64;arm64"` for a universal
+  binary, since Rosetta translates x64 to arm and not the reverse.
+- **The game build** depositing disk images and `Version History.txt` where assembly can pick them up,
+  so a release does not depend on remembering to copy them into `common/`.
+- **A `.desktop` file** in the Linux payload, which is the only way to give the launcher a window icon
+  under Wayland.
