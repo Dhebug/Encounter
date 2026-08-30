@@ -84,7 +84,6 @@ copy build\symbols+..\build\symbols_Loader+..\build\symbols_Kernel ..\build\symb
 copy build\symbols_ext ..\build\symbols_ext_SplashProgram >NUL 2>NUL
 IF "%TEST_MODULE%"=="SPLASH" COPY build\symbols+..\build\symbols_Loader+..\build\symbols_Kernel %OSDK%\Oricutron\symbols >NUL
 IF "%TEST_MODULE%"=="SPLASH" COPY ..\build\symbols_ext_Loader+..\build\symbols_ext_Kernel+..\build\symbols_ext_SplashProgram ..\build\symbols_debug >NUL
-IF "%TEST_MODULE%"=="SPLASH" SET BREAKPOINTS=%BREAKPOINTS_SPLASH%
 :EndSplash
 
 
@@ -107,7 +106,6 @@ copy build\symbols+..\build\symbols_Loader+..\build\symbols_Kernel ..\build\symb
 copy build\symbols_ext ..\build\symbols_ext_IntroProgram >NUL 2>NUL
 IF "%TEST_MODULE%"=="INTRO" COPY build\symbols+..\build\symbols_Loader+..\build\symbols_Kernel %OSDK%\Oricutron\symbols >NUL
 IF "%TEST_MODULE%"=="INTRO" COPY ..\build\symbols_ext_Loader+..\build\symbols_ext_Kernel+..\build\symbols_ext_IntroProgram ..\build\symbols_debug >NUL
-IF "%TEST_MODULE%"=="INTRO" SET BREAKPOINTS=%BREAKPOINTS_INTRO%
 :EndIntro
 
 
@@ -130,7 +128,6 @@ copy build\symbols+..\build\symbols_Loader+..\build\symbols_Kernel ..\build\symb
 copy build\symbols_ext ..\build\symbols_ext_OutroProgram >NUL 2>NUL
 IF "%TEST_MODULE%"=="OUTRO" COPY build\symbols+..\build\symbols_Loader+..\build\symbols_Kernel %OSDK%\Oricutron\symbols >NUL
 IF "%TEST_MODULE%"=="OUTRO" COPY ..\build\symbols_ext_Loader+..\build\symbols_ext_Kernel+..\build\symbols_ext_OutroProgram ..\build\symbols_debug >NUL
-IF "%TEST_MODULE%"=="OUTRO" SET BREAKPOINTS=%BREAKPOINTS_OUTRO%
 :EndOutro
 
 
@@ -154,7 +151,6 @@ copy build\symbols+..\build\symbols_Loader+..\build\symbols_Kernel ..\build\symb
 copy build\symbols_ext ..\build\symbols_ext_GameProgram >NUL 2>NUL
 IF "%TEST_MODULE%"=="GAME" COPY ..\build\symbols_GameProgram %OSDK%\Oricutron\symbols >NUL
 IF "%TEST_MODULE%"=="GAME" COPY ..\build\symbols_ext_Loader+..\build\symbols_ext_Kernel+..\build\symbols_ext_GameProgram ..\build\symbols_debug >NUL
-IF "%TEST_MODULE%"=="GAME" SET BREAKPOINTS=%BREAKPOINTS_GAME%
 :EndGame
 
 
@@ -187,32 +183,24 @@ copy build\symbols_ext ..\build\symbols_ext_MonkeyKing >NUL 2>NUL
 :: _Minigame call. The #MODULE ids below MUST match those stamps. Missing per-module
 :: files (partial "test" builds) are skipped so the combined file still builds.
 ::
-type ..\build\symbols_ext_Loader > ..\build\symbols_ext_combined
-type ..\build\symbols_ext_Kernel >> ..\build\symbols_ext_combined
-if exist ..\build\symbols_ext_SplashProgram echo #MODULE 0 Splash>> ..\build\symbols_ext_combined
-if exist ..\build\symbols_ext_SplashProgram type ..\build\symbols_ext_SplashProgram >> ..\build\symbols_ext_combined
-if exist ..\build\symbols_ext_IntroProgram echo #MODULE 1 Intro>> ..\build\symbols_ext_combined
-if exist ..\build\symbols_ext_IntroProgram type ..\build\symbols_ext_IntroProgram >> ..\build\symbols_ext_combined
-if exist ..\build\symbols_ext_GameProgram echo #MODULE 2 Game>> ..\build\symbols_ext_combined
-if exist ..\build\symbols_ext_GameProgram type ..\build\symbols_ext_GameProgram >> ..\build\symbols_ext_combined
-if exist ..\build\symbols_ext_OutroProgram echo #MODULE 3 Outro>> ..\build\symbols_ext_combined
-if exist ..\build\symbols_ext_OutroProgram type ..\build\symbols_ext_OutroProgram >> ..\build\symbols_ext_combined
-if exist ..\build\symbols_ext_MonkeyKing echo #MODULE 4 King>> ..\build\symbols_ext_combined
-if exist ..\build\symbols_ext_MonkeyKing type ..\build\symbols_ext_MonkeyKing >> ..\build\symbols_ext_combined
-
-::
-:: Generate the breakpoint file is necessary:
-:: Each of the symbols mentionned in the BREAKPOINTS variable is exported in a text file
-:: each line contains a single entry starting by "bs" (Breakpoint Set) followed by the symbol namme.
-::
-setlocal EnableDelayedExpansion
-(for %%a in (%BREAKPOINTS%) do (
-  set "out=%%~a"  
-  echo bs !out:@= !
-))> %OSDK%\Oricutron\Breakpoints.txt
-type %OSDK%\Oricutron\Breakpoints.txt
-endlocal
-set OSDKBREAKPOINTS=:Breakpoints.txt
+IF "%DISPLAYINFO%"=="1" (
+ECHO.
+ECHO %ESC%[92m== Generating Symbols ==%ESC%[0m
+(
+type ..\build\symbols_ext_Loader 
+type ..\build\symbols_ext_Kernel 
+if exist ..\build\symbols_ext_SplashProgram echo #MODULE 0 Splash
+if exist ..\build\symbols_ext_SplashProgram type ..\build\symbols_ext_SplashProgram
+if exist ..\build\symbols_ext_IntroProgram echo #MODULE 1 Intro
+if exist ..\build\symbols_ext_IntroProgram type ..\build\symbols_ext_IntroProgram
+if exist ..\build\symbols_ext_GameProgram echo #MODULE 2 Game
+if exist ..\build\symbols_ext_GameProgram type ..\build\symbols_ext_GameProgram
+if exist ..\build\symbols_ext_OutroProgram echo #MODULE 3 Outro
+if exist ..\build\symbols_ext_OutroProgram type ..\build\symbols_ext_OutroProgram
+if exist ..\build\symbols_ext_MonkeyKing echo #MODULE 4 King
+if exist ..\build\symbols_ext_MonkeyKing type ..\build\symbols_ext_MonkeyKing
+) > ..\build\symbols_ext_combined
+)
 
 :: Call FloppyBuilder once to create loader.cod
 %osdk%\bin\FloppyBuilder build floppybuilderscript.txt >..\build\floppy_builder_error.txt
