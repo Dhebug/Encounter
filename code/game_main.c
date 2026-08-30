@@ -260,7 +260,7 @@ void main()
 	Initializations();	
 
 #ifdef ENABLE_GAME
-    gStatusMessageLocation = (unsigned char*)0xbb80+40*21;
+    gStatusMessageLocation = (char*)0xbb80+40*21;
     gInputMaxSize = 35;
     gAnswerProcessingCallback = ProcessAnswer;
     WaitReleasedKey();
@@ -273,7 +273,7 @@ void main()
 #endif
 
     // Clear the bottom of the screen
-    memset(0xbb80+40*17,16+0,40*11);        // Bottom half
+    memset((char*)0xbb80+40*17,16+0,40*11);        // Bottom half
     poke(0xbb80+40*16+1,3);                 // Highlighte the score
     
 	// Just to let the last click sound to keep playing

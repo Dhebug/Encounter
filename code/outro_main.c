@@ -402,7 +402,7 @@ void HandleHighScore()
 			}
 
 			// Ask the player their name
-            gStatusMessageLocation = (unsigned char*)0xbb80+40*25;
+            gStatusMessageLocation = (char*)0xbb80+40*25;
             SetKeyboardLayout();
             PrintKeyboardMenu();
             WaitReleasedKey();
@@ -536,7 +536,7 @@ void main()
     LoadFileAt(OUTRO_SPRITE_PHOTOS,ThirdImageBuffer);  // Photos + glass of whisky
     LoadFileAt(LOADER_MUSIC_TYPEWRITER,TypewriterMusic);    
 
-    memset(0xbb80+40*16+15,16+0,10);        // Erase the bottom \/ of the arrow block
+    memset((char*)0xbb80+40*16+15,16+0,10);        // Erase the bottom \/ of the arrow block
 	BlitBufferToHiresWindow();              // Show the empty desk
 
 #ifndef TEST_MODE
@@ -647,7 +647,7 @@ void main()
     }
 
 EndCredits:
-    memset(0xbb80+40*16,' ',40*12);   // erase the bottom part of the screen
+    memset((char*)0xbb80+40*16,' ',40*12);   // erase the bottom part of the screen
 
     memset(ImageBuffer,64,40*128);    // Erase the image in the view
     BlitBufferToHiresWindowNoFrameNoArrows();
