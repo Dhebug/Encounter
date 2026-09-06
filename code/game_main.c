@@ -182,13 +182,6 @@ WORDS ProcessAnswer()
 
 
 
-void DrawArrowsBottom()
-{
-    // The redefined characters to draw the bottom part of the directional arrows \v/
-	poke(0xbb80+16*40+16,9);                      // ALT charset
-	memcpy((char*)0xbb80+16*40+17,";<=>?@",6);
-}
-
 void LoadFonts()
 {
 	LoadFileAt(LOADER_FONT_6x8,0xb500);
@@ -242,7 +235,8 @@ void Initializations()
     gInventoryOffset = 0;
     gActionMenuCount = 0;
 
-    DrawArrowsBottom();
+    // The redefined characters to draw the bottom part of the directional arrows \v/
+	memcpy((char*)0xbb80+16*40+15,gTextBottomArrow,8);
 
 #ifdef ENABLE_GAME
 	LoadScene();

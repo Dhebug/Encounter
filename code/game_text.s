@@ -36,7 +36,7 @@ _gTextAskInput              .byt "Bon, par ou commencer...",0
 _gTextNothingHere           .byt 3,"Il n'y a rien d'important ici",0
 _gTextCanSee                .byt "Je vois ",0
 _gTextAnd                   .byt " et",0
-_gTextScore                 .byt 5,"Score: %d",7,0
+_gTextScore                 .byt 5,"Score: %d",0
 _gTextCarryInWhat           .byt "Transporter dans quoi ?",0
 _gTextUseShiftToHighlight   .byt TEXT_CRLF,TEXT_CRLF
                             .byt "Sélection par menu:",3,"ESPACE",7,"ou",3,"bouton",TEXT_CRLF
@@ -49,7 +49,7 @@ _gTextAskInput              .byt "Greit, hvor begynner jeg...",0
 _gTextNothingHere           .byt 3,"Det er ingenting interessant her",0
 _gTextCanSee                .byt "Jeg ser ",0
 _gTextAnd                   .byt " og",0
-_gTextScore                 .byt 5,"Poeng: %d",7,0
+_gTextScore                 .byt 5,"Poeng: %d",0
 _gTextCarryInWhat           .byt "Bær det i hva?",0
 _gTextUseShiftToHighlight   .byt TEXT_CRLF,TEXT_CRLF
                             .byt "Menyvalg:",3,"MELLOMROM",7,"eller",3,"knappen",TEXT_CRLF
@@ -61,7 +61,7 @@ _gTextAskInput              .byt "Right, where do I start...",0
 _gTextNothingHere           .byt 3,"There is nothing of interest here",0
 _gTextCanSee                .byt "I can see ",0
 _gTextAnd                   .byt " and",0
-_gTextScore                 .byt 5,"Score: %d",7,0
+_gTextScore                 .byt 5,"Score: %d",0
 _gTextCarryInWhat           .byt "Carry it in what?",0
 _gTextUseShiftToHighlight   .byt TEXT_CRLF,TEXT_CRLF,
                             .byt "Keywords selection menu:",3,"SPACE",7,"or",3,"fire",TEXT_CRLF
@@ -70,6 +70,9 @@ _gTextUseShiftToHighlight   .byt TEXT_CRLF,TEXT_CRLF,
                             .byt "Vertical motion:",3,"CTRL",7,"plus",3,"UP",7,"or",3,"DOWN",TEXT_CRLF
                             .byt "Highlight usable items:",3,"SHIFT",0
 #endif
+
+_gTextBottomArrow           .byt 7,9,";<=>?@"     // White INK + ALT charset + bottom arrow redefined characters
+
 _EndMessagesAndPrompts
 
 // Error messages 

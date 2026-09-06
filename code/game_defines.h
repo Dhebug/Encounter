@@ -82,6 +82,8 @@ extern const char gTextCanSee[];                // "I can see"
 extern const char gTextScore[];                 // "Score:"
 extern const char gTextCarryInWhat[];           // "Carry it in what?"
 
+extern const char gTextBottomArrow[];           // Bottom part of the directional arrow
+
 // Error messages 
 extern const char gTextErrorInvalidDirection[]; // "I can't go that way"
 extern const char gTextErrorAlreadyHaveItem[];  // "I already have that"
