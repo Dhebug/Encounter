@@ -49,7 +49,7 @@
 :: 1.3.0 - So many changes!
 :: 1.3.1 - Quite a few changes resulting of the game tests and review by YagmanX and MattBrush
 :: 1.4.0 - Optimizations, visible in-game objects, new interactions
-:: 1.4.1 -
+:: 1.4.1 - Back to market bug fix and OSDK 2.0 refactoring
 ::
 ::SET OSDK=D:\Git\osdk-compiler\osdk\main\Osdk\_final_
 
@@ -100,7 +100,7 @@ SET OSDKNAME=%BASENAME%-%TEST_LANGUAGE%-%TEST_FREQUENCY%
 IF "%PRODUCT_TYPE%"=="GAME_DEMO"    SET OSDKDISK=%OSDKNAME%-Demo-v%VERSION%.dsk
 IF "%PRODUCT_TYPE%"=="GAME_RELEASE" SET OSDKDISK=%OSDKNAME%-v%VERSION%.dsk
 IF "%PRODUCT_TYPE%"=="TEST_MODE"    SET OSDKDISK=%OSDKNAME%-Test-v%VERSION%.dsk
-SET OSDKCOMP=-O2
+SET OSDKCOMP=-O3
 SET OSDKDEBUG=-g1
 SET OSDKMACRO=-O
 SET OSDKVERBOSITY=1

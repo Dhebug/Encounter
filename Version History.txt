@@ -436,4 +436,6 @@
 - Restructured the code to use the new modular kernel system
 
 1.4.1
+- Bug Fix: The apparently random teleportation to the market place should not happen anymore.
 - Internal: Updated the loader system to use direct linkage (imported from Cybernova)
+- Internal: The project has been adapted to use the OSDK 2.0 toolchain

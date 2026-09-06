@@ -23,3 +23,13 @@ code/monkey_king_sprites.s
 screenshots/
 # automation-run screen captures
 automation/out/
+
+# Assembled payloads, and the content they are built from: the game's own disk images, and Oric ROMs
+# we cannot redistribute. This repository is published, and none of it belongs in git.
+/deployment/staging/
+/deployment/logs/
+/deployment/common/
+misc_information/Encounter notes
+misc_information/trailer.txt
+misc_information/issues.txt
+misc_information/mix_tape.txt

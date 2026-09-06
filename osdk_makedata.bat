@@ -257,7 +257,7 @@ SET CONVERT=CALL bin\_ArkosConv
 %CONVERT% music_jingle splash_music
 %CONVERT% music_intro intro_music
 
-:: These are exported as binary files and loaded dynamicaly by the scripting system
+:: These are exported as binary files and loaded dynamically by the scripting system
 :: The export address should be double checked with the map file
 SET TARGET=build\files
 SET TARGET_EXTENSION=.mus

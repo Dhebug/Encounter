@@ -11,17 +11,17 @@
         "terminalEditor": true
     },
     "workbench.colorCustomizations": {
-        "activityBar.background": "#243121",
-        "titleBar.activeBackground": "#33452E",
-        "titleBar.activeForeground": "#FAFCFA",
-        "titleBar.inactiveBackground": "#243121",
-        "titleBar.inactiveForeground": "#FAFCFA",
-        "statusBar.background": "#243121",
-        "statusBar.foreground": "#FAFCFA",
-        "statusBar.debuggingBackground": "#243121",
-        "statusBar.debuggingForeground": "#FAFCFA",
-        "statusBar.noFolderBackground": "#243121",
-        "statusBar.noFolderForeground": "#FAFCFA"
+        "activityBar.background": "#580D3B",
+        "titleBar.activeBackground": "#7B1252",
+        "titleBar.activeForeground": "#FFFCFD",
+        "titleBar.inactiveBackground": "#580D3B",
+        "titleBar.inactiveForeground": "#FFFCFD",
+        "statusBar.background": "#580D3B",
+        "statusBar.foreground": "#FFFCFD",
+        "statusBar.debuggingBackground": "#580D3B",
+        "statusBar.debuggingForeground": "#FFFCFD",
+        "statusBar.noFolderBackground": "#580D3B",
+        "statusBar.noFolderForeground": "#FFFCFD"
     },
     "VSCodeCounter.languages":{
         "data":{
