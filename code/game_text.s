@@ -1466,7 +1466,7 @@ _gDescriptionLibrary
 .(
     ; Is the Chemistry book still in the library
     IF_TRUE(CHECK_ITEM_LOCATION(e_ITEM_ChemistryBook,e_LOC_LIBRARY),show_book)
-        BLIT_BLOCK(LOADER_SPRITE_ITEMS,3,23)                     ; Draw the Book
+        BLIT_BLOCK(LOADER_SPRITE_ITEMS,3,9)                     ; Draw the Book
                 _IMAGE(15,14)
                 _BUFFER(28,83)
     ENDIF(show_book)
