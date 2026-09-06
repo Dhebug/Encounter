@@ -647,12 +647,12 @@ _ByteStreamCommand_LOAD_MUSIC
     
     ; Load the requested bitmap
     stx _gCurrentMusicFileIndex
-    stx _LoaderApiEntryIndex
+    stx _LoaderEntryIndex
     lda #<_ArkosMusic
-    sta _LoaderApiAddressLow
+    sta _LoaderAddressLow
     lda #>_ArkosMusic
-    sta _LoaderApiAddressHigh
-    jsr _LoaderApiLoadFileFromDirectory    
+    sta _LoaderAddressHigh
+    jsr _LoadFileFromDirectory    
 
 music_already_loaded
     lda _gMusicEnabled
@@ -1053,10 +1053,10 @@ _ByteStreamCommand_SET_SCENE_IMAGE
 
     ; TODO: In theory should implement that so we don't have double loading
     ;LoadFileAt(gSceneImage,ImageBuffer);	
-    lda _gSceneImage:sta _LoaderApiEntryIndex
-    lda #<_ImageBuffer:sta _LoaderApiAddressLow
-    lda #>_ImageBuffer:sta _LoaderApiAddressHigh
-    jsr _LoaderApiLoadFileFromDirectory
+    lda _gSceneImage:sta _LoaderEntryIndex
+    lda #<_ImageBuffer:sta _LoaderAddressLow
+    lda #>_ImageBuffer:sta _LoaderAddressHigh
+    jsr _LoadFileFromDirectory
 
     lda #1
     jmp _ByteStreamMoveByA
@@ -1632,12 +1632,12 @@ _ByteStreamCommand_DISPLAY_IMAGE_NOBLIT
 	; unsigned char loaderId = *gCurrentStream++;
     ; LoadFileAt(loaderId,ImageBuffer);
     jsr _ByteStreamGetNextByte
-    stx _LoaderApiEntryIndex
+    stx _LoaderEntryIndex
     lda #<_ImageBuffer
-    sta _LoaderApiAddressLow
+    sta _LoaderAddressLow
     lda #>_ImageBuffer
-    sta _LoaderApiAddressHigh
-    jmp _LoaderApiLoadFileFromDirectory
+    sta _LoaderAddressHigh
+    jmp _LoadFileFromDirectory
 .)
 
 
@@ -1681,12 +1681,12 @@ _ByteStreamCommand_BITMAP
     
     ; Load the requested bitmap
     stx _gCurrentSpriteSheetIndex
-    stx _LoaderApiEntryIndex
+    stx _LoaderEntryIndex
     lda #<_SecondImageBuffer
-    sta _LoaderApiAddressLow
+    sta _LoaderAddressLow
     lda #>_SecondImageBuffer
-    sta _LoaderApiAddressHigh
-    jsr _LoaderApiLoadFileFromDirectory    
+    sta _LoaderAddressHigh
+    jsr _LoadFileFromDirectory    
 
 image_already_loaded
     ; Load the coordinates and draw the sprite

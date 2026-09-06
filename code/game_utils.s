@@ -2348,12 +2348,12 @@ _PlayMonkeyKing
 
     ; Load the HIRES picture (8000 bytes)      
     ldx #LOADER_MONKEY_KING_HIRES
-    stx _LoaderApiEntryIndex
+    stx _LoaderEntryIndex
     lda #<_ImageBuffer
-    sta _LoaderApiAddressLow
+    sta _LoaderAddressLow
     lda #>_ImageBuffer
-    sta _LoaderApiAddressHigh
-    jsr _LoaderApiLoadFileFromDirectory    
+    sta _LoaderAddressHigh
+    jsr _LoadFileFromDirectory    
     
     ; Copy the image
     jsr _BlitBufferToHiresWindowInternal        ; Copy the top 5120 bytes with the image content
@@ -2383,12 +2383,12 @@ loop_1
 
     ; LOADER_MONKEY_KING - About 4721 bytes
     ldx #LOADER_MONKEY_KING
-    stx _LoaderApiEntryIndex
+    stx _LoaderEntryIndex
     lda #<_Minigame
-    sta _LoaderApiAddressLow
+    sta _LoaderAddressLow
     lda #>_Minigame
-    sta _LoaderApiAddressHigh
-    jsr _LoaderApiLoadFileFromDirectory
+    sta _LoaderAddressHigh
+    jsr _LoadFileFromDirectory
 
     ; Debugger: MonkeyKing is bare-linked (no CRT), so it carries no module-id
     ; stamp of its own. Mark module 4 (King) active for its symbols at $D6A0+ over

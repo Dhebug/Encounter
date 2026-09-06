@@ -436,4 +436,4 @@
 - Restructured the code to use the new modular kernel system
 
 1.4.1
-- 
+- Internal: Updated the loader system to use direct linkage (imported from Cybernova)

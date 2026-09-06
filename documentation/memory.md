@@ -156,27 +156,7 @@ _32_Bytes_BufferRemaining
 By having the current score and the achievement info in higher memory, the main game does not have to keep the entire high score file in memory at all time, it is loaded or saved only in the intro and outro modules.
 
 ## Loader API
-Since the loader module is installed in memory during the boot sequence and never moves, the simplest way to implement an API to perform disk operation was to reserve some addresses directly at the end of the module at fixed locations. These are defined in the [loader api](../code/loader_api.s) file.
-```c
-_LoaderApiSaveData       =$FFEC  
-
-_LoaderApiFileStartSector=$FFEF
-_LoaderApiFileStartTrack =$FFF0
-
-_LoaderApiFileSize       =$FFF1
-_LoaderApiFileSizeLow    =$FFF1
-_LoaderApiFileSizeHigh   =$FFF2
-
-_LoaderApiJump           =$FFF3
-_LoaderApiAddress        =$FFF4
-_LoaderApiAddressLow     =$FFF4
-_LoaderApiAddressHigh    =$FFF5
-
-_LoaderFDCRegisterOffset =$FFF6
-
-_LoaderApiLoadFile       =$FFF7
-```
-Since the addresses are fixed in memory, there is no need for relocation or fancy bindings, the lodding/saving code just writes the values at these fixes addresses and call the various vectors, like "LoadFile" (jsr $FFF7) and "SaveData" (jsr $FFEC).
+Before the generalized modular system, the loader internals were exposed through an API mapped at a fixed address using some trampoline, but the system has been improved and can now directly call the loader code and modify the loader functions which has the advantage of making the loader smaller.
 
 ## Modules memory layout
 Each of the module has their own memory layout, most automatically laid out by the linker and assembler when assembling together all the zero page[^3], text, data and  bss sections.

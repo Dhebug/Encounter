@@ -47,12 +47,12 @@ _KernelEntry
 #else
     lda #LOADER_GAME_PROGRAM
 #endif
-    sta _LoaderApiEntryIndex
+    sta _LoaderEntryIndex
     lda #<_KernelEndText
-    sta _LoaderApiAddressLow
+    sta _LoaderAddressLow
     lda #>_KernelEndText
-    sta _LoaderApiAddressHigh
-    jmp _LoaderApiInitializeFileFromDirectory
+    sta _LoaderAddressHigh
+    jmp _InitializeFileFromDirectory
 
 ; ============================================
 ; IRQ install / restore
@@ -154,7 +154,7 @@ InterruptHandler
     jsr _DoNothing
 
     ; Call the loader "RGB flash" disk access indicator
-    jsr _LoaderApiLoadingAnimation
+    jsr _RefreshAccessIndicator
 
 skip_50hz_task
 
