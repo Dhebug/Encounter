@@ -49,11 +49,11 @@
 :: 1.3.0 - So many changes!
 :: 1.3.1 - Quite a few changes resulting of the game tests and review by YagmanX and MattBrush
 :: 1.4.0 - Optimizations, visible in-game objects, new interactions
-:: 1.4.1 - Back to market bug fix and OSDK 2.0 refactoring
+:: 1.5.0 - Back to market bug fix and OSDK 2.0 refactoring
 ::
 ::SET OSDK=D:\Git\osdk-compiler\osdk\main\Osdk\_final_
 
-SET VERSION=1.4.1
+SET VERSION=1.5.0
 SET BASENAME=EncounterHD
 
 :: Disk geometry parameters: These are passed to the floppy builder and will impact the floppy disk format.
@@ -69,8 +69,8 @@ SET EXPORT_HFE_VERSION=1
 SET EXPORT_IMD_VERSION=1
 
 :: Versions we want to build (if undefined, it will only build TEST_LANGUAGE)
-::SET BUILD_LANGUAGES=EN,FR,NO
-::SET BUILD_FREQUENCIES=60HZ,50HZ
+SET BUILD_LANGUAGES=EN,FR,NO
+SET BUILD_FREQUENCIES=60HZ,50HZ
 
 :: Version we want to launch when testing
 SET TEST_LANGUAGE=FR
@@ -101,7 +101,7 @@ IF "%PRODUCT_TYPE%"=="GAME_DEMO"    SET OSDKDISK=%OSDKNAME%-Demo-v%VERSION%.dsk
 IF "%PRODUCT_TYPE%"=="GAME_RELEASE" SET OSDKDISK=%OSDKNAME%-v%VERSION%.dsk
 IF "%PRODUCT_TYPE%"=="TEST_MODE"    SET OSDKDISK=%OSDKNAME%-Test-v%VERSION%.dsk
 SET OSDKCOMP=-O3
-SET OSDKDEBUG=-g1
+::SET OSDKDEBUG=-g1
 SET OSDKMACRO=-O
 SET OSDKVERBOSITY=1
 

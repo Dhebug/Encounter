@@ -435,7 +435,7 @@
 - Improvement: Optimized the splash animation at the start of the game
 - Restructured the code to use the new modular kernel system
 
-1.4.1
+1.5.0
 - Bug Fix: The apparently random teleportation to the market place should not happen anymore.
 - Bug Fix: The book in the library had some visual glitch introduced in version 1.4.0 when the new items were added
 - Internal: Updated the loader system to use direct linkage (imported from Cybernova)
